@@ -60,6 +60,7 @@ public class TestDataSource extends AbstractDataSource {
 		/*Each dataset is an AbstractDataSet.*/
 		p.add(inventory());
 		p.add(virtualMachine());
+		p.add(live());
 		
 		return p;
 		
