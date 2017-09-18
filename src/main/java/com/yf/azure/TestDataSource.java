@@ -259,13 +259,12 @@ public class TestDataSource extends AbstractDataSource {
 				int arrSize,arrs = 0;
 				String token = new String(loadBlob("accessToken"));
 				new VirtualMachine();
-				String VMachine = VirtualMachine.getvmDetails(token);
+				String VMachine = VirtualMachine.getDetails(token);
 				//String VMetrics = VirtualMachine.getvm(token); 
 				JsonElement je = new JsonParser().parse(VMachine);
 				JsonObject jo = je.getAsJsonObject();
 				JsonArray ja= jo.getAsJsonArray("vmdetails");
 				arrSize = ja.size();
-				System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhh"+arrSize);
 				saveBlob("VMACHINE", VMachine.getBytes());
 				String nodeData = new String(loadBlob("VMACHINE"));
 				Configuration conf = Configuration.defaultConfiguration()
