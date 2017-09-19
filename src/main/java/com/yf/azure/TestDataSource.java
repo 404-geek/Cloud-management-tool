@@ -291,13 +291,7 @@ public class TestDataSource extends AbstractDataSource {
 						} else if (columns.get(j).getColumnName().equals("Location")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Location']");
 							data[i][j] = val.toString();
-
-						} else if (columns.get(j).getColumnName().equals("TimeStamp")) {
-							val = tt.read("$.['vmdetails'].[" + i + "].['TimeStamp']");
-							String time = val.toString();
-
-						}
-						else if (columns.get(j).getColumnName().equals("TimeStamp"))
+						}else if (columns.get(j).getColumnName().equals("TimeStamp"))
 						{
 							val = tt.read("$.['vmdetails'].["+i+"].['TimeStamp']");
 							String inpt = val.toString();
