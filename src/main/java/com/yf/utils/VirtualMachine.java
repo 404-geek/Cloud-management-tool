@@ -17,6 +17,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.hof.pool.jdbc.metadata.NuoDBMetaData;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,7 +25,7 @@ import okhttp3.Response;
 
 public class VirtualMachine {
 	static Logger LOGGER = Logger.getLogger(VirtualMachine.class.getName());
-
+    static int numdays = 14;
 	public static int[] getIndex(String token) {
 		String[] type = Resources.getType(token);
 		int i, k = 0;
@@ -35,18 +36,17 @@ public class VirtualMachine {
 				k++;
 			}
 		}
-		return ind;
+		return ind; 
 	}
 
-	public static String getvm(String token) {
+	public static String getvm(String token,String resid) {
 		String req = "";
 		final String CONTENT = "application/json";
 		int index[] = getIndex(token);
 		for (int i = 0; i < index.length; i++) {
-			String resid = Resources.getResid(token, index[i]);
 			String tok = "Bearer " + token;
 			LocalDate currentDate = LocalDate.now();
-			LocalDate day = LocalDate.now().minus(14, ChronoUnit.DAYS);
+			LocalDate day = LocalDate.now().minus(numdays, ChronoUnit.DAYS);
 			OkHttpClient client = new OkHttpClient();
 			Request request = new Request.Builder()
 					.url("https://management.azure.com"+resid+"/providers/microsoft.insights/metrics?api-version=2016-09-01&$filter=(name.value eq 'Percentage CPU' or name.value eq 'Network In' or name.value eq 'Network Out' or name.value eq 'Disk Read Bytes' or name.value eq 'Disk Write Bytes' or name.value eq 'Disk Read Operations/Sec' or name.value eq 'Disk Write Operations/Sec') and timeGrain eq duration'PT1H' and startTime eq "+day+" and endTime eq "+currentDate)
@@ -110,6 +110,8 @@ public class VirtualMachine {
 					jo.addProperty("VMSize", vmSz);
 					jo.addProperty("Location",loc);
 					jo.addProperty("Timestamp",ja.get(j).getAsJsonObject().get("timeStamp").getAsString());
+					
+					
 					try{
 					jo.addProperty("Average",ja.get(j).getAsJsonObject().get("average").getAsBigDecimal());
 					}
