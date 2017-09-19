@@ -1,27 +1,33 @@
 package com.yf.utils;
 
+import java.io.PrintStream;
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 
-public class Test {
-
-	public static void main(String [] args) {
-		// TODO Auto-generated method stub
-	SimpleDateFormat sdfgmt = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS'Z'");
-        sdfgmt.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-        SimpleDateFormat sdfmad = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-        sdfmad.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
-
-        String inpt = "2017-09-19T23:00:00Z";
-        try {
-			System.out.println(sdfmad.format(sdfgmt.parse(inpt)));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+public class Test
+{
+  public static void main(String[] args)
+  {
+    DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    
+    Date date = null;
+    try
+    {
+      date = utcFormat.parse("2017-09-14T10:00:00Z");
+    }
+    catch (ParseException e)
+    {
+      e.printStackTrace();
+    }
+    DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    pstFormat.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+    Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
+    
+    System.out.println(ts);
+  }
 }
-}
-

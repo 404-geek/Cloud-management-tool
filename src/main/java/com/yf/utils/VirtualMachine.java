@@ -1,97 +1,134 @@
 package com.yf.utils;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.hof.pool.jdbc.metadata.NuoDBMetaData;
-
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Request.Builder;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class VirtualMachine {
 	static Logger LOGGER = Logger.getLogger(VirtualMachine.class.getName());
 	static int numdays = 14;
 
-	public static int[] getIndex(String token) {
+	public static ArrayList<Integer> getIndex(String token) {
 		String[] type = Resources.getType(token);
-		int i, k = 0;
-		int ind[] = new int[2];
+		int i = 0;
+		ArrayList<Integer> list = new ArrayList();
 		for (i = 0; i < type.length; i++) {
 			if (type[i].equals("Microsoft.Compute/virtualMachines")) {
-				ind[k] = i;
-				k++;
+				list.add(Integer.valueOf(i));
 			}
 		}
-		return ind;
+		return list;
 	}
 
 	public static String[] getvm(String token, String resid) {
-		final String CONTENT = "application/json";
-		int index[] = getIndex(token);
-		String req[] = new String[7];
-		for (int i = 0; i < index.length; i++) {
-			String tok = "Bearer " + token;
-			LocalDate currentDate = LocalDate.now();
-			LocalDate day = LocalDate.now().minus(numdays, ChronoUnit.DAYS);
-			OkHttpClient client = new OkHttpClient();
-			Request request = new Request.Builder()
-					.url("https://management.azure.com" + resid
-							+ "/providers/microsoft.insights/metrics?api-version=2016-09-01&$filter=(name.value eq 'Percentage CPU' or name.value eq 'Network In' or name.value eq 'Network Out' or name.value eq 'Disk Read Bytes' or name.value eq 'Disk Write Bytes' or name.value eq 'Disk Read Operations/Sec' or name.value eq 'Disk Write Operations/Sec') and timeGrain eq duration'PT1H' and startTime eq "
-							+ day + " and endTime eq " + currentDate)
-					.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
-			try {
-				Response response = client.newCall(request).execute();
-				JsonElement je = new JsonParser().parse(response.body().string());
-				JsonObject jo = je.getAsJsonObject();
-				JsonArray ja1 = jo.getAsJsonArray("value");
-				for (int j = 0; j < ja1.size(); j++) {
-					JsonArray ja = jo.getAsJsonArray("value").get(j).getAsJsonObject().getAsJsonArray("data");
-					req[j] = ja.toString();
-				}
-			} catch (Exception e) {
-				return null;
+		String CONTENT = "application/json";
+		String[] req = new String[7];
+		int k = 0;
+		String tok = "Bearer " + token;
+		LocalDate currentDate = LocalDate.now();
+		LocalDate day = LocalDate.now().minus(numdays, ChronoUnit.DAYS);
+		OkHttpClient client = new OkHttpClient();
+
+		Request request = new Request.Builder()
+				.url("https://management.azure.com" + resid
+						+ "/providers/microsoft.insights/metrics?api-version=2016-09-01&$filter=(name.value eq 'Percentage CPU' or name.value eq 'Network In' or name.value eq 'Network Out' or name.value eq 'Disk Read Bytes' or name.value eq 'Disk Write Bytes' or name.value eq 'Disk Read Operations/Sec' or name.value eq 'Disk Write Operations/Sec') and timeGrain eq duration'PT1H' and startTime eq "
+						+ day + " and endTime eq " + currentDate)
+				.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
+		try {
+			Response response = client.newCall(request).execute();
+			JsonElement je = new JsonParser().parse(response.body().string());
+			JsonObject jo = je.getAsJsonObject();
+			JsonArray ja1 = jo.getAsJsonArray("value");
+			for (int j = 0; j < ja1.size(); j++) {
+				JsonArray ja = jo.getAsJsonArray("value").get(j).getAsJsonObject().getAsJsonArray("data");
+				req[(k++)] = ja.toString();
 			}
+		} catch (Exception e) {
+			return null;
 		}
+		int j;
+		return req;
+	}
+
+	public static String[] getvmLive(String token, String resid) {
+		String CONTENT = "application/json";
+		String[] req = new String[7];
+		int k = 0;
+		String tok = "Bearer " + token;
+		LocalDate currentDate = LocalDate.now();
+		LocalDate day = LocalDate.now().plus(1L, ChronoUnit.DAYS);
+		OkHttpClient client = new OkHttpClient();
+
+		Request request = new Request.Builder()
+				.url("https://management.azure.com" + resid
+						+ "/providers/microsoft.insights/metrics?api-version=2016-09-01&$filter=(name.value eq 'Percentage CPU' or name.value eq 'Network In' or name.value eq 'Network Out' or name.value eq 'Disk Read Bytes' or name.value eq 'Disk Write Bytes' or name.value eq 'Disk Read Operations/Sec' or name.value eq 'Disk Write Operations/Sec') and timeGrain eq duration'PT1H' and startTime eq "
+						+ currentDate + " and endTime eq " + day)
+				.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
+		try {
+			Response response = client.newCall(request).execute();
+			JsonElement je = new JsonParser().parse(response.body().string());
+			JsonObject jo = je.getAsJsonObject();
+			JsonArray ja1 = jo.getAsJsonArray("value");
+			for (int j = 0; j < ja1.size(); j++) {
+				JsonArray ja = jo.getAsJsonArray("value").get(j).getAsJsonObject().getAsJsonArray("data");
+				req[(k++)] = ja.toString();
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		int j;
 		return req;
 	}
 
 	public static String getDetails(String token) {
-		final String CONTENT = "application/json";
-		JsonArray jaf = new JsonArray();
-		int index[] = getIndex(token);
-		for (int i = 0; i < index.length; i++) {
-			String resid = Resources.getResid(token, index[i]);
+		String CONTENT = "application/json";
+		ArrayList<Integer> index = getIndex(token);
+		JsonArray ja1 = new JsonArray();
+		for (int i = 0; i < index.size(); i++) {
+			String resid = Resources.getResid(token, ((Integer) index.get(i)).intValue());
 			String tok = "Bearer " + token;
 
 			OkHttpClient client = new OkHttpClient();
+
 			Request request = new Request.Builder()
 					.url("https://management.azure.com" + resid + "?api-version=2017-03-30")
-					.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
+					.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
 			try {
 				Response response = client.newCall(request).execute();
 
 				Gson gson = new GsonBuilder().create();
 
-				JsonObject job = gson.fromJson(response.body().string(), JsonObject.class);
+				JsonObject job = (JsonObject) gson.fromJson(response.body().string(), JsonObject.class);
 				JsonObject obj = job.get("properties").getAsJsonObject();
+
 				JsonObject obj3 = job.get("properties").getAsJsonObject().getAsJsonObject().get("storageProfile")
 						.getAsJsonObject().get("osDisk").getAsJsonObject().get("managedDisk").getAsJsonObject();
 				JsonObject obj1 = job.get("properties").getAsJsonObject().get("hardwareProfile").getAsJsonObject();
+
 				JsonObject obj2 = job.get("properties").getAsJsonObject().getAsJsonObject().get("storageProfile")
 						.getAsJsonObject().get("osDisk").getAsJsonObject();
 				String vm = obj.get("vmId").getAsString();
@@ -104,130 +141,105 @@ public class VirtualMachine {
 				while (m.find()) {
 					str = m.group(1);
 				}
-				String[] par = getvm(token, resid);
-				JsonElement percpu = new JsonParser().parse(par[0]);
-				JsonArray ja = percpu.getAsJsonArray();
-				JsonElement netin = new JsonParser().parse(par[1]);
-				JsonArray ja1 = netin.getAsJsonArray();
-				JsonElement netout = new JsonParser().parse(par[2]);
-				JsonArray ja2 = netout.getAsJsonArray();
-				JsonElement diskread = new JsonParser().parse(par[3]);
-				JsonArray ja3 = diskread.getAsJsonArray();
-				JsonElement diskwrite = new JsonParser().parse(par[4]);
-				JsonArray ja4 = diskwrite.getAsJsonArray();
-				JsonElement diskrop = new JsonParser().parse(par[5]);
-				JsonArray ja5 = diskrop.getAsJsonArray();
-				JsonElement diskwop = new JsonParser().parse(par[6]);
-				JsonArray ja6 = diskwop.getAsJsonArray();
-				for (int k = 0; k < numdays * 24; k++) {
+				String[] det = getvm(token, resid);
+				JsonElement je = new JsonParser().parse(det[0]);
+				JsonArray percentageCPU = je.getAsJsonArray();
+				je = new JsonParser().parse(det[1]);
+				JsonArray NetworkIN = je.getAsJsonArray();
+				je = new JsonParser().parse(det[2]);
+				JsonArray NetworkOut = je.getAsJsonArray();
+				je = new JsonParser().parse(det[3]);
+				JsonArray DiskReadBytes = je.getAsJsonArray();
+				je = new JsonParser().parse(det[4]);
+				JsonArray DiskWriteBytes = je.getAsJsonArray();
+				je = new JsonParser().parse(det[5]);
+				JsonArray DiskReadOp = je.getAsJsonArray();
+				je = new JsonParser().parse(det[6]);
+				JsonArray DiskWriteOp = je.getAsJsonArray();
+				for (int j = 0; j < numdays * 24; j++) {
 					JsonObject jo = new JsonObject();
 					jo.addProperty("VmID", vm);
 					jo.addProperty("Resource Type", str);
 					jo.addProperty("OS type", os);
 					jo.addProperty("VMSize", vmSz);
 					jo.addProperty("Location", loc);
-					jo.addProperty("Timestamp", ja.get(k).getAsJsonObject().get("timeStamp").getAsString());
+					jo.addProperty("Timestamp", percentageCPU.get(j).getAsJsonObject().get("timeStamp").getAsString());
 					try {
-						jo.addProperty("PercentageCPU", ja.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+						jo.addProperty("Percentage CPU",
+								percentageCPU.get(j).getAsJsonObject().get("average").getAsBigDecimal());
 					} catch (Exception e) {
-						jo.addProperty("PercentageCPU", 0);
+						jo.addProperty("Percentage CPU", Integer.valueOf(0));
 					}
 					try {
-						jo.addProperty("Network In", ja1.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+						jo.addProperty("NetworkIN",
+								NetworkIN.get(j).getAsJsonObject().get("average").getAsBigDecimal());
 					} catch (Exception e) {
-						jo.addProperty("Network In", 0);
+						jo.addProperty("NetworkIN", Integer.valueOf(0));
 					}
 					try {
-						jo.addProperty("Network Out", ja2.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+						jo.addProperty("NetworkOut",
+								NetworkOut.get(j).getAsJsonObject().get("average").getAsBigDecimal());
 					} catch (Exception e) {
-						jo.addProperty("Network Out", 0);
+						jo.addProperty("NetworkOut", Integer.valueOf(0));
 					}
 					try {
 						jo.addProperty("Disk Read Bytes",
-								ja3.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+								DiskReadBytes.get(j).getAsJsonObject().get("average").getAsBigDecimal());
 					} catch (Exception e) {
-						jo.addProperty("Disk Read Bytes", 0);
+						jo.addProperty("Disk Read Bytes", Integer.valueOf(0));
 					}
 					try {
 						jo.addProperty("Disk Write Bytes",
-								ja4.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+								DiskWriteBytes.get(j).getAsJsonObject().get("average").getAsBigDecimal());
 					} catch (Exception e) {
-						jo.addProperty("Disk Write Bytes", 0);
+						jo.addProperty("Disk Write Bytes", Integer.valueOf(0));
 					}
 					try {
-						jo.addProperty("Disk Read Operations",
-								ja5.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+						jo.addProperty("Disk Read Operation",
+								DiskReadOp.get(j).getAsJsonObject().get("average").getAsBigDecimal());
 					} catch (Exception e) {
-						jo.addProperty("Disk Read Operations", 0);
+						jo.addProperty("Disk Read Operation", Integer.valueOf(0));
 					}
 					try {
-						jo.addProperty("Disk Write Operations",
-								ja6.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+						jo.addProperty("Disk Write Operation",
+								DiskWriteOp.get(j).getAsJsonObject().get("average").getAsBigDecimal());
 					} catch (Exception e) {
-						jo.addProperty("Disk Write Operations", 0);
+						jo.addProperty("Disk Write Operation", Integer.valueOf(0));
 					}
-					jaf.add(jo);
-				}
-
-			} catch (Exception e) {
-				return null;
-			}
-		}
-		return jaf.toString();
-	}
-
-	public static String[] getvmLive(String token, String resid) {
-		final String CONTENT = "application/json";
-		int index[] = getIndex(token);
-		String req[] = new String[7];
-		for (int i = 0; i < index.length; i++) {
-			String tok = "Bearer " + token;
-			LocalDate currentDate = LocalDate.now();
-			LocalDate day = LocalDate.now().plus(1, ChronoUnit.DAYS);
-			OkHttpClient client = new OkHttpClient();
-			Request request = new Request.Builder()
-					.url("https://management.azure.com" + resid
-							+ "/providers/microsoft.insights/metrics?api-version=2016-09-01&$filter=(name.value eq 'Percentage CPU' or name.value eq 'Network In' or name.value eq 'Network Out' or name.value eq 'Disk Read Bytes' or name.value eq 'Disk Write Bytes' or name.value eq 'Disk Read Operations/Sec' or name.value eq 'Disk Write Operations/Sec') and timeGrain eq duration'PT1H' and startTime eq "
-							+ currentDate + " and endTime eq " + day)
-					.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
-			try {
-				Response response = client.newCall(request).execute();
-				JsonElement je = new JsonParser().parse(response.body().string());
-				JsonObject jo = je.getAsJsonObject();
-				JsonArray ja1 = jo.getAsJsonArray("value");
-				for (int j = 0; j < ja1.size(); j++) {
-					JsonArray ja = jo.getAsJsonArray("value").get(j).getAsJsonObject().getAsJsonArray("data");
-					req[j] = ja.toString();
+					ja1.add(jo);
 				}
 			} catch (Exception e) {
 				return null;
 			}
 		}
-		return req;
+		return ja1.toString();
 	}
 
-	public static String getDetailsLive(String token) {
-		final String CONTENT = "application/json";
-		JsonArray jaf = new JsonArray();
-		int index[] = getIndex(token);
-		for (int i = 0; i < index.length; i++) {
-			String resid = Resources.getResid(token, index[i]);
+	public static String getLiveDetails(String token) {
+		String CONTENT = "application/json";
+		ArrayList<Integer> index = getIndex(token);
+		JsonArray ja1 = new JsonArray();
+		for (int i = 0; i < index.size(); i++) {
+			String resid = Resources.getResid(token, ((Integer) index.get(i)).intValue());
 			String tok = "Bearer " + token;
 
 			OkHttpClient client = new OkHttpClient();
+
 			Request request = new Request.Builder()
 					.url("https://management.azure.com" + resid + "?api-version=2017-03-30")
-					.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
+					.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
 			try {
 				Response response = client.newCall(request).execute();
 
 				Gson gson = new GsonBuilder().create();
 
-				JsonObject job = gson.fromJson(response.body().string(), JsonObject.class);
+				JsonObject job = (JsonObject) gson.fromJson(response.body().string(), JsonObject.class);
 				JsonObject obj = job.get("properties").getAsJsonObject();
+
 				JsonObject obj3 = job.get("properties").getAsJsonObject().getAsJsonObject().get("storageProfile")
 						.getAsJsonObject().get("osDisk").getAsJsonObject().get("managedDisk").getAsJsonObject();
 				JsonObject obj1 = job.get("properties").getAsJsonObject().get("hardwareProfile").getAsJsonObject();
+
 				JsonObject obj2 = job.get("properties").getAsJsonObject().getAsJsonObject().get("storageProfile")
 						.getAsJsonObject().get("osDisk").getAsJsonObject();
 				String vm = obj.get("vmId").getAsString();
@@ -240,76 +252,96 @@ public class VirtualMachine {
 				while (m.find()) {
 					str = m.group(1);
 				}
-				String[] par = getvmLive(token, resid);
-				JsonElement percpu = new JsonParser().parse(par[0]);
-				JsonArray ja = percpu.getAsJsonArray();
-				JsonElement netin = new JsonParser().parse(par[1]);
-				JsonArray ja1 = netin.getAsJsonArray();
-				JsonElement netout = new JsonParser().parse(par[2]);
-				JsonArray ja2 = netout.getAsJsonArray();
-				JsonElement diskread = new JsonParser().parse(par[3]);
-				JsonArray ja3 = diskread.getAsJsonArray();
-				JsonElement diskwrite = new JsonParser().parse(par[4]);
-				JsonArray ja4 = diskwrite.getAsJsonArray();
-				JsonElement diskrop = new JsonParser().parse(par[5]);
-				JsonArray ja5 = diskrop.getAsJsonArray();
-				JsonElement diskwop = new JsonParser().parse(par[6]);
-				JsonArray ja6 = diskwop.getAsJsonArray();
-				for (int k = 0; k < 24; k++) {
-					JsonObject jo = new JsonObject();
-					jo.addProperty("VmID", vm);
-					jo.addProperty("Resource Type", str);
-					jo.addProperty("OS type", os);
-					jo.addProperty("VMSize", vmSz);
-					jo.addProperty("Location", loc);
-					jo.addProperty("Timestamp", ja.get(k).getAsJsonObject().get("timeStamp").getAsString());
-					try {
-						jo.addProperty("PercentageCPU", ja.get(k).getAsJsonObject().get("average").getAsBigDecimal());
-					} catch (Exception e) {
-						jo.addProperty("PercentageCPU", 0);
-					}
-					try {
-						jo.addProperty("Network In", ja1.get(k).getAsJsonObject().get("average").getAsBigDecimal());
-					} catch (Exception e) {
-						jo.addProperty("Network In", 0);
-					}
-					try {
-						jo.addProperty("Network Out", ja2.get(k).getAsJsonObject().get("average").getAsBigDecimal());
-					} catch (Exception e) {
-						jo.addProperty("Network Out", 0);
-					}
-					try {
-						jo.addProperty("Disk Read Bytes",
-								ja3.get(k).getAsJsonObject().get("average").getAsBigDecimal());
-					} catch (Exception e) {
-						jo.addProperty("Disk Read Bytes", 0);
-					}
-					try {
-						jo.addProperty("Disk Write Bytes",
-								ja4.get(k).getAsJsonObject().get("average").getAsBigDecimal());
-					} catch (Exception e) {
-						jo.addProperty("Disk Write Bytes", 0);
-					}
-					try {
-						jo.addProperty("Disk Read Operations",
-								ja5.get(k).getAsJsonObject().get("average").getAsBigDecimal());
-					} catch (Exception e) {
-						jo.addProperty("Disk Read Operations", 0);
-					}
-					try {
-						jo.addProperty("Disk Write Operations",
-								ja6.get(k).getAsJsonObject().get("average").getAsBigDecimal());
-					} catch (Exception e) {
-						jo.addProperty("Disk Write Operations", 0);
-					}
-					jaf.add(jo);
-				}
+				String[] det = getvmLive(token, resid);
+				JsonElement je = new JsonParser().parse(det[0]);
+				JsonArray percentageCPU = je.getAsJsonArray();
+				je = new JsonParser().parse(det[1]);
+				JsonArray NetworkIN = je.getAsJsonArray();
+				je = new JsonParser().parse(det[2]);
+				JsonArray NetworkOut = je.getAsJsonArray();
+				je = new JsonParser().parse(det[3]);
+				JsonArray DiskReadBytes = je.getAsJsonArray();
+				je = new JsonParser().parse(det[4]);
+				JsonArray DiskWriteBytes = je.getAsJsonArray();
+				je = new JsonParser().parse(det[5]);
+				JsonArray DiskReadOp = je.getAsJsonArray();
+				je = new JsonParser().parse(det[6]);
+				JsonArray DiskWriteOp = je.getAsJsonArray();
+				ArrayList<Integer> list = new ArrayList();
+				for (int j = 0; j < 24; j++) {
+					String per = percentageCPU.get(j).getAsJsonObject().get("timeStamp").getAsString();
+					DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+					utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
+					Date date = null;
+					try {
+						date = utcFormat.parse(per);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					pstFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+					Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
+					LocalDateTime ldt = LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC);
+					Timestamp current = Timestamp.valueOf(ldt);
+					if (ts.before(current)) {
+						list.add(Integer.valueOf(j));
+					}
+				}
+				int size = list.size() - 1;
+				JsonObject jo = new JsonObject();
+				jo.addProperty("VmID", vm);
+				jo.addProperty("Resource Type", str);
+				jo.addProperty("OS type", os);
+				jo.addProperty("VMSize", vmSz);
+				jo.addProperty("Location", loc);
+				jo.addProperty("Timestamp", percentageCPU.get(size).getAsJsonObject().get("timeStamp").getAsString());
+				try {
+					jo.addProperty("Percentage CPU",
+							percentageCPU.get(size).getAsJsonObject().get("average").getAsBigDecimal());
+				} catch (Exception e) {
+					jo.addProperty("Percentage CPU", Integer.valueOf(0));
+				}
+				try {
+					jo.addProperty("NetworkIN", NetworkIN.get(size).getAsJsonObject().get("average").getAsBigDecimal());
+				} catch (Exception e) {
+					jo.addProperty("NetworkIN", Integer.valueOf(0));
+				}
+				try {
+					jo.addProperty("NetworkOut",
+							NetworkOut.get(size).getAsJsonObject().get("average").getAsBigDecimal());
+				} catch (Exception e) {
+					jo.addProperty("NetworkOut", Integer.valueOf(0));
+				}
+				try {
+					jo.addProperty("Disk Read Bytes",
+							DiskReadBytes.get(size).getAsJsonObject().get("average").getAsBigDecimal());
+				} catch (Exception e) {
+					jo.addProperty("Disk Read Bytes", Integer.valueOf(0));
+				}
+				try {
+					jo.addProperty("Disk Write Bytes",
+							DiskWriteBytes.get(size).getAsJsonObject().get("average").getAsBigDecimal());
+				} catch (Exception e) {
+					jo.addProperty("Disk Write Bytes", Integer.valueOf(0));
+				}
+				try {
+					jo.addProperty("Disk Read Operation",
+							DiskReadOp.get(size).getAsJsonObject().get("average").getAsBigDecimal());
+				} catch (Exception e) {
+					jo.addProperty("Disk Read Operation", Integer.valueOf(0));
+				}
+				try {
+					jo.addProperty("Disk Write Operation",
+							DiskWriteOp.get(size).getAsJsonObject().get("average").getAsBigDecimal());
+				} catch (Exception e) {
+					jo.addProperty("Disk Write Operation", Integer.valueOf(0));
+				}
+				ja1.add(jo);
 			} catch (Exception e) {
 				return null;
 			}
 		}
-		return jaf.toString();
+		return ja1.toString();
 	}
-
 }
