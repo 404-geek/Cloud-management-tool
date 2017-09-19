@@ -42,7 +42,7 @@ public class Refresher {
 		
 	    catch (Exception e) {
 
-		return "";
+		return null;
 
 		}
 		}
