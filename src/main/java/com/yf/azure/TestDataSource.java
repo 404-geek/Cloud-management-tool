@@ -222,7 +222,6 @@ public class TestDataSource extends AbstractDataSource {
 				cm.add(new ColumnMetaData("Disk Read Operations", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Disk Write Operations", DataType.NUMERIC));
 
-
 				return cm;
 			}
 
@@ -259,8 +258,8 @@ public class TestDataSource extends AbstractDataSource {
 				JsonObject jo = je.getAsJsonObject();
 				JsonArray ja = jo.getAsJsonArray("value");
 				arrSize = ja.size();
-				saveBlob("INVENTORY", Inventory.getBytes());
-				String nodeData = new String(loadBlob("INVENTORY"));
+				saveBlob("VMACHINELIVE", Inventory.getBytes());
+				String nodeData = new String(loadBlob("VMACHINELIVE"));
 				Configuration conf = Configuration.defaultConfiguration().addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL)
 						.addOptions(Option.SUPPRESS_EXCEPTIONS);
 				DocumentContext tt = JsonPath.using(conf).parse(nodeData);
@@ -291,40 +290,39 @@ public class TestDataSource extends AbstractDataSource {
 						} else if (columns.get(j).getColumnName().equals("Location")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Location']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("TimeStamp"))
-						{
-							val = tt.read("$.['vmdetails'].["+i+"].['TimeStamp']");
+						} else if (columns.get(j).getColumnName().equals("TimeStamp")) {
+							val = tt.read("$.['vmdetails'].[" + i + "].['TimeStamp']");
 							String inpt = val.toString();
 							SimpleDateFormat sdfgmt = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS'Z'");
-        						sdfgmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+							sdfgmt.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        						SimpleDateFormat sdfmad = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-        						sdfmad.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
-       							System.out.println("Asia/Kolkata:  " + sdfmad.format(sdfgmt.parse(inpt)));
-							
-						}else if (columns.get(j).getColumnName().equals("Percentage CPU")) {
+							SimpleDateFormat sdfmad = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+							sdfmad.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+							System.out.println("Asia/Kolkata:  " + sdfmad.format(sdfgmt.parse(inpt)));
+
+						} else if (columns.get(j).getColumnName().equals("Percentage CPU")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Percentage CPU']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Network IN")) {
+						} else if (columns.get(j).getColumnName().equals("Network IN")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Network IN']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Network Out")){
+						} else if (columns.get(j).getColumnName().equals("Network Out")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Network Out']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Disk Read")){
+						} else if (columns.get(j).getColumnName().equals("Disk Read")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Read']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Disk Write")){
+						} else if (columns.get(j).getColumnName().equals("Disk Write")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Write']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Disk Read Operations")){
+						} else if (columns.get(j).getColumnName().equals("Disk Read Operations")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Read Operations']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Disk Write Operations")){
+						} else if (columns.get(j).getColumnName().equals("Disk Write Operations")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Write Operations']");
 							data[i][j] = val.toString();
 						}
-							
+
 					}
 				}
 
@@ -444,32 +442,32 @@ public class TestDataSource extends AbstractDataSource {
 						} else if (columns.get(j).getColumnName().equals("Location")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Location']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("TimeStamp")) {
+						} else if (columns.get(j).getColumnName().equals("TimeStamp")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['TimeStamp']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Percentage CPU")) {
+						} else if (columns.get(j).getColumnName().equals("Percentage CPU")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Percentage CPU']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Network IN")) {
+						} else if (columns.get(j).getColumnName().equals("Network IN")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Network IN']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Network Out")){
+						} else if (columns.get(j).getColumnName().equals("Network Out")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Network Out']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Disk Read")){
+						} else if (columns.get(j).getColumnName().equals("Disk Read")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Read']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Disk Write")){
+						} else if (columns.get(j).getColumnName().equals("Disk Write")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Write']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Disk Read Operations")){
+						} else if (columns.get(j).getColumnName().equals("Disk Read Operations")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Read Operations']");
 							data[i][j] = val.toString();
-						}else if (columns.get(j).getColumnName().equals("Disk Write Operations")){
+						} else if (columns.get(j).getColumnName().equals("Disk Write Operations")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Write Operations']");
 							data[i][j] = val.toString();
 						}
-						
+
 					}
 				}
 

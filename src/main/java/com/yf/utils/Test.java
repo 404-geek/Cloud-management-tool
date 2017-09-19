@@ -1,24 +1,8 @@
 package com.yf.utils;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 public class Test {
 
@@ -30,8 +14,13 @@ public class Test {
         SimpleDateFormat sdfmad = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
         sdfmad.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
 
-        //String inpt = "2017-09-19T23:00:00Z";
-        System.out.println("Asia/Kolkata:  " + sdfmad.format(sdfgmt.parse(inpt)));
+        String inpt = "2017-09-19T23:00:00Z";
+        try {
+			System.out.println(sdfmad.format(sdfgmt.parse(inpt)));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 }
 }
