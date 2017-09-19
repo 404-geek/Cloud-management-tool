@@ -10,7 +10,7 @@ import com.hof.util.UtilString;
 import com.yf.utils.AzureAuth;
 
 public class TestSourceMetaData extends JDBCMetaData {
-
+ArrayList<String> list=Timezone.getTimeZone();
 	public TestSourceMetaData() {
 
 		super();
@@ -37,11 +37,13 @@ public class TestSourceMetaData extends JDBCMetaData {
 		 * In this function need to define the list of parameters that are
 		 * required for the authentication
 		 */
-		addParameter(pq);
-		addParameter(new Parameter("CODE", "Enter Authentication Code","Enter the Authentication Code recieved from Azure", TYPE_NUMERIC, DISPLAY_PASSWORD, null, true));
-		pq = new Parameter("ValidateToken", "Validate Token", "Validate the token", TYPE_TEXT, DISPLAY_BUTTON, null, true);
-		pq.addOption("BUTTONTEXT", "Validate Authentication Code");
-        addParameter(pq);
+		Parameter pq1 = new Parameter("SELECTCOR", "TimeZone Selector", "Click here to select TimeZone", TYPE_UNKNOWN,
+				DISPLAY_URLBUTTON, null, true 
+			for (String id : list) {
+			pq1.addOption(id);
+		}
+					      
+		
         
   
 	}
