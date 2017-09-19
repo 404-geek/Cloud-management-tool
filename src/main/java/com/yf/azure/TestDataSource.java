@@ -124,22 +124,22 @@ public class TestDataSource extends AbstractDataSource {
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("VmID")) {
-							val = tt.read("$.[" + i + "].['VmID']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['VmID']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Type")) {
-							val = tt.read("$.[" + i + "].['Resource Type']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Resource Type']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("OS Type")) {
-							val = tt.read("$.[" + i + "].['OS type']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['OS type']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("VM Size")) {
-							val = tt.read("$.[" + i + "].['VMSize']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['VMSize']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Location")) {
-							val = tt.read("$.[" + i + "].['Location']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Location']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp(UTC)")) {
-							val = tt.read("$.[" + i + "].['Timestamp']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
 							SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 							try {
@@ -151,7 +151,7 @@ public class TestDataSource extends AbstractDataSource {
 							}
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName()
 								.equals("Timestamp(" + zone + ")")) {
-							val = tt.read("$.[" + i + "].['Timestamp']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
 							DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 							utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -167,25 +167,25 @@ public class TestDataSource extends AbstractDataSource {
 							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
 							data[i][j] = ts;
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage CPU")) {
-							val = tt.read("$.[" + i + "].['Percentage CPU']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Percentage CPU']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Network In")) {
-							val = tt.read("$.[" + i + "].['NetworkIN']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['NetworkIN']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Network Out")) {
-							val = tt.read("$.[" + i + "].['NetworkOut']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['NetworkOut']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Disk Read Bytes")) {
-							val = tt.read("$.[" + i + "].['Disk Read Bytes']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Disk Read Bytes']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Disk Write Bytes")) {
-							val = tt.read("$.[" + i + "].['Disk Write Bytes']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Disk Write Bytes']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Disk Read Operations")) {
-							val = tt.read("$.[" + i + "].['Disk Read Operation']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Disk Read Operation']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Disk Write Operations")) {
-							val = tt.read("$.[" + i + "].['Disk Write Operation']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Disk Write Operation']");
 							data[i][j] = new BigDecimal(val.toString());
 						}
 					}
@@ -252,19 +252,19 @@ public class TestDataSource extends AbstractDataSource {
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("id")) {
-							val = tt.read("$.['value'].[" + i + "].['id']", new Predicate[0]);
+							val = tt.read("$.['value'].[" + i + "].['id']" );
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("name")) {
-							val = tt.read("$.['value'].[" + i + "].['name']", new Predicate[0]);
+							val = tt.read("$.['value'].[" + i + "].['name']" );
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("type")) {
-							val = tt.read("$.['value'].[" + i + "].['type']", new Predicate[0]);
+							val = tt.read("$.['value'].[" + i + "].['type']" );
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("location")) {
-							val = tt.read("$.['value'].[" + i + "].['location']", new Predicate[0]);
+							val = tt.read("$.['value'].[" + i + "].['location']" );
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Group String")) {
-							val = tt.read("$.['value'].[" + i + "].['id']", new Predicate[0]);
+							val = tt.read("$.['value'].[" + i + "].['id']" );
 							data[i][j] = val.toString();
 							String str = val.toString();
 							Pattern pat = Pattern.compile("resourceGroups/(.*?)/providers");
@@ -346,22 +346,22 @@ public class TestDataSource extends AbstractDataSource {
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("VmID")) {
-							val = tt.read("$.[" + i + "].['VmID']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['VmID']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Type")) {
-							val = tt.read("$.[" + i + "].['Resource Type']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Resource Type']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("OS Type")) {
-							val = tt.read("$.[" + i + "].['OS type']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['OS type']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("VM Size")) {
-							val = tt.read("$.[" + i + "].['VMSize']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['VMSize']" );
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Location")) {
-							val = tt.read("$.[" + i + "].['Location']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Location']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp(UTC)")) {
-							val = tt.read("$.[" + i + "].['Timestamp']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
 							SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 							try {
@@ -373,7 +373,7 @@ public class TestDataSource extends AbstractDataSource {
 							}
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName()
 								.equals("Timestamp(" + zone + ")")) {
-							val = tt.read("$.[" + i + "].['Timestamp']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
 							DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 							utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -389,25 +389,25 @@ public class TestDataSource extends AbstractDataSource {
 							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
 							data[i][j] = ts;
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage CPU")) {
-							val = tt.read("$.[" + i + "].['Percentage CPU']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Percentage CPU']" );
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Network In")) {
-							val = tt.read("$.[" + i + "].['NetworkIN']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['NetworkIN']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Network Out")) {
-							val = tt.read("$.[" + i + "].['NetworkOut']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['NetworkOut']" );
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Disk Read Bytes")) {
-							val = tt.read("$.[" + i + "].['Disk Read Bytes']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Disk Read Bytes']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Disk Write Bytes")) {
-							val = tt.read("$.[" + i + "].['Disk Write Bytes']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Disk Write Bytes']" );
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Disk Read Operations")) {
-							val = tt.read("$.[" + i + "].['Disk Read Operation']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Disk Read Operation']" );
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Disk Write Operations")) {
-							val = tt.read("$.[" + i + "].['Disk Write Operation']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Disk Write Operation']" );
 							data[i][j] = new BigDecimal(val.toString());
 						}
 					}
@@ -475,30 +475,30 @@ public class TestDataSource extends AbstractDataSource {
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource ID")) {
-							val = tt.read("$.[" + i + "].['Resource ID']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Resource ID']" );
 							data[i][j] = val.toString();
 						}
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Group")) {
-							val = tt.read("$.[" + i + "].['Resource Group']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Resource Group']" );
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage DTU")) {
-							val = tt.read("$.[" + i + "].['DTU Percentage']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['DTU Percentage']");
 							data[i][j] = new Float(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Database Name")) {
-							val = tt.read("$.[" + i + "].['Resource ID']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Resource ID']" );
 							String str = val.toString();
 							data[i][j] = str.substring(str.lastIndexOf("/") + 1);
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("CPU percentage")) {
-							val = tt.read("$.[" + i + "].['CPU percentage']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['CPU percentage']" );
 							data[i][j] = new Float(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Log IO percentage")) {
-							val = tt.read("$.[" + i + "].['Log IO percentage']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Log IO percentage']" );
 							data[i][j] = new Float(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Data IO percentage")) {
-							val = tt.read("$.[" + i + "].['Data IO percentage']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Data IO percentage']" );
 							data[i][j] = new Float(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp")) {
-							val = tt.read("$.[" + i + "].['Timestamp']", new Predicate[0]);
+							val = tt.read("$.[" + i + "].['Timestamp']" );
 							String timestamp = val.toString();
 							SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 							format.setTimeZone(TimeZone.getTimeZone("Asia/Calcutta"));
