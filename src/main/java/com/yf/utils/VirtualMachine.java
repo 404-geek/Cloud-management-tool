@@ -73,8 +73,6 @@ public class VirtualMachine {
 	public static String getDetails(String token) {
 		final String CONTENT = "application/json";
 		int index[] = getIndex(token);
-
-		JsonArray ja1 = new JsonArray();
 		for (int i = 0; i < index.length; i++) {
 			String resid = Resources.getResid(token, index[i]);
 			String tok = "Bearer " + token;
@@ -106,25 +104,71 @@ public class VirtualMachine {
 					str = m.group(1);
 				}
 				String[] par = getvm(token, resid);
-				for (int j = 0; j < par.length; j++) {
-					JsonElement je = new JsonParser().parse(par[j]);
-					JsonArray ja = je.getAsJsonArray();
-					for (int k = 0; k < numdays * 24; k++) {
-						JsonObject jo = new JsonObject();
-						jo.addProperty("VmID", vm);
-						jo.addProperty("Resource Type", str);
-						jo.addProperty("OS type", os);
-						jo.addProperty("VMSize", vmSz);
-						jo.addProperty("Location", loc);
-						jo.addProperty("Timestamp", ja.get(k).getAsJsonObject().get("timeStamp").getAsString());
-						try {
-							jo.addProperty("Average", ja.get(k).getAsJsonObject().get("average").getAsBigDecimal());
-						} catch (Exception e) {
-							jo.addProperty("Average", 0);
-						}
-						ja1.add(jo);
+				JsonElement percpu = new JsonParser().parse(par[0]);
+				JsonArray ja = percpu.getAsJsonArray();
+				JsonElement netin = new JsonParser().parse(par[1]);
+				JsonArray ja1 = netin.getAsJsonArray();
+				JsonElement netout = new JsonParser().parse(par[2]);
+				JsonArray ja2 = netout.getAsJsonArray();
+				JsonElement diskread = new JsonParser().parse(par[3]);
+				JsonArray ja3 = diskread.getAsJsonArray();
+				JsonElement diskwrite = new JsonParser().parse(par[4]);
+				JsonArray ja4 = diskwrite.getAsJsonArray();
+				JsonElement diskrop = new JsonParser().parse(par[5]);
+				JsonArray ja5 = diskrop.getAsJsonArray();
+				JsonElement diskwop = new JsonParser().parse(par[6]);
+				JsonArray ja6 = diskwop.getAsJsonArray();
+				for (int k = 0; k < numdays * 24; k++) {
+					JsonObject jo = new JsonObject();
+					jo.addProperty("VmID", vm);
+					jo.addProperty("Resource Type", str);
+					jo.addProperty("OS type", os);
+					jo.addProperty("VMSize", vmSz);
+					jo.addProperty("Location", loc);
+					jo.addProperty("Timestamp", ja.get(k).getAsJsonObject().get("timeStamp").getAsString());
+					try {
+						jo.addProperty("PercentageCPU", ja.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+					} catch (Exception e) {
+						jo.addProperty("PercentageCPU", 0);
 					}
+					try {
+						jo.addProperty("Network In", ja1.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+					} catch (Exception e) {
+						jo.addProperty("Network In", 0);
+					}
+					try {
+						jo.addProperty("Network Out", ja2.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+					} catch (Exception e) {
+						jo.addProperty("Network Out", 0);
+					}
+					try {
+						jo.addProperty("", ja3.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+					} catch (Exception e) {
+						jo.addProperty("Average", 0);
+					}
+					try {
+						jo.addProperty("PercentageCPU", ja4.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+					} catch (Exception e) {
+						jo.addProperty("Average", 0);
+					}
+					try {
+						jo.addProperty("PercentageCPU", ja.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+					} catch (Exception e) {
+						jo.addProperty("Average", 0);
+					}
+					try {
+						jo.addProperty("PercentageCPU", ja5.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+					} catch (Exception e) {
+						jo.addProperty("Average", 0);
+					}
+					try {
+						jo.addProperty("PercentageCPU", ja5.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+					} catch (Exception e) {
+						jo.addProperty("Average", 0);
+					}
+					ja1.add(jo);
 				}
+
 			}
 
 			catch (Exception e) {
