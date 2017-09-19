@@ -291,10 +291,23 @@ public class TestDataSource extends AbstractDataSource {
 						} else if (columns.get(j).getColumnName().equals("Location")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Location']");
 							data[i][j] = val.toString();
+
 						} else if (columns.get(j).getColumnName().equals("TimeStamp")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['TimeStamp']");
 							String time = val.toString();
 
+						}
+						else if (columns.get(j).getColumnName().equals("TimeStamp"))
+						{
+							val = tt.read("$.['vmdetails'].["+i+"].['TimeStamp']");
+							String inpt = val.toString();
+							SimpleDateFormat sdfgmt = new SimpleDateFormat("YYYY-MM-DD'T'HH:MM:SS'Z'");
+        						sdfgmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        						SimpleDateFormat sdfmad = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+        						sdfmad.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+       							System.out.println("Asia/Kolkata:  " + sdfmad.format(sdfgmt.parse(inpt)));
+							
 						}
 					}
 				}
