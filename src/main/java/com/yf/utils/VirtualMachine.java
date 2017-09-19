@@ -25,7 +25,8 @@ import okhttp3.Response;
 
 public class VirtualMachine {
 	static Logger LOGGER = Logger.getLogger(VirtualMachine.class.getName());
-    static int numdays = 14;
+	static int numdays = 14;
+
 	public static int[] getIndex(String token) {
 		String[] type = Resources.getType(token);
 		int i, k = 0;
@@ -36,29 +37,32 @@ public class VirtualMachine {
 				k++;
 			}
 		}
-		return ind; 
+		return ind;
 	}
 
-	public static String getvm(String token,String resid) {
-		String req = "";
+	public static String[] getvm(String token, String resid) {
 		final String CONTENT = "application/json";
 		int index[] = getIndex(token);
+		String req[] = new String[7];
 		for (int i = 0; i < index.length; i++) {
 			String tok = "Bearer " + token;
 			LocalDate currentDate = LocalDate.now();
 			LocalDate day = LocalDate.now().minus(numdays, ChronoUnit.DAYS);
 			OkHttpClient client = new OkHttpClient();
 			Request request = new Request.Builder()
-					.url("https://management.azure.com"+resid+"/providers/microsoft.insights/metrics?api-version=2016-09-01&$filter=(name.value eq 'Percentage CPU' or name.value eq 'Network In' or name.value eq 'Network Out' or name.value eq 'Disk Read Bytes' or name.value eq 'Disk Write Bytes' or name.value eq 'Disk Read Operations/Sec' or name.value eq 'Disk Write Operations/Sec') and timeGrain eq duration'PT1H' and startTime eq "+day+" and endTime eq "+currentDate)
-					.addHeader("Authorization", tok)
-					.addHeader("Content-type", CONTENT)
-					.build();
+					.url("https://management.azure.com" + resid
+							+ "/providers/microsoft.insights/metrics?api-version=2016-09-01&$filter=(name.value eq 'Percentage CPU' or name.value eq 'Network In' or name.value eq 'Network Out' or name.value eq 'Disk Read Bytes' or name.value eq 'Disk Write Bytes' or name.value eq 'Disk Read Operations/Sec' or name.value eq 'Disk Write Operations/Sec') and timeGrain eq duration'PT1H' and startTime eq "
+							+ day + " and endTime eq " + currentDate)
+					.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 			try {
 				Response response = client.newCall(request).execute();
 				JsonElement je = new JsonParser().parse(response.body().string());
 				JsonObject jo = je.getAsJsonObject();
-				JsonArray ja = jo.getAsJsonArray("value").get(0).getAsJsonObject().getAsJsonArray("data");
-				req = ja.toString();
+				JsonArray ja1 = jo.getAsJsonArray("value");
+				for (int j = 0; j < ja1.size(); j++) {
+					JsonArray ja = jo.getAsJsonArray("value").get(j).getAsJsonObject().getAsJsonArray("data");
+					req[j] = ja.toString();
+				}
 			} catch (Exception e) {
 				return null;
 			}
@@ -69,20 +73,19 @@ public class VirtualMachine {
 	public static String getDetails(String token) {
 		final String CONTENT = "application/json";
 		int index[] = getIndex(token);
-		JsonElement je = new JsonParser().parse(getvm(token));
-		JsonArray ja = je.getAsJsonArray();
+
 		JsonArray ja1 = new JsonArray();
 		for (int i = 0; i < index.length; i++) {
 			String resid = Resources.getResid(token, index[i]);
-			String tok = "Bearer "+token;
+			String tok = "Bearer " + token;
 
 			OkHttpClient client = new OkHttpClient();
 			Request request = new Request.Builder()
-					.url("https://management.azure.com"+resid+"?api-version=2017-03-30")
+					.url("https://management.azure.com" + resid + "?api-version=2017-03-30")
 					.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 			try {
 				Response response = client.newCall(request).execute();
-				
+
 				Gson gson = new GsonBuilder().create();
 
 				JsonObject job = gson.fromJson(response.body().string(), JsonObject.class);
@@ -102,24 +105,25 @@ public class VirtualMachine {
 				while (m.find()) {
 					str = m.group(1);
 				}
-				for(int j=0;j<ja.size();j++){
-					JsonObject jo = new JsonObject();
-					jo.addProperty("VmID", vm);
-					jo.addProperty("Resource Type", str);
-					jo.addProperty("OS type", os);
-					jo.addProperty("VMSize", vmSz);
-					jo.addProperty("Location",loc);
-					jo.addProperty("Timestamp",ja.get(j).getAsJsonObject().get("timeStamp").getAsString());
-					
-					
-					try{
-					jo.addProperty("Average",ja.get(j).getAsJsonObject().get("average").getAsBigDecimal());
+				String[] par = getvm(token, resid);
+				for (int j = 0; j < par.length; j++) {
+					JsonElement je = new JsonParser().parse(par[j]);
+					JsonArray ja = je.getAsJsonArray();
+					for (int k = 0; k < numdays * 24; k++) {
+						JsonObject jo = new JsonObject();
+						jo.addProperty("VmID", vm);
+						jo.addProperty("Resource Type", str);
+						jo.addProperty("OS type", os);
+						jo.addProperty("VMSize", vmSz);
+						jo.addProperty("Location", loc);
+						jo.addProperty("Timestamp", ja.get(k).getAsJsonObject().get("timeStamp").getAsString());
+						try {
+							jo.addProperty("Average", ja.get(k).getAsJsonObject().get("average").getAsBigDecimal());
+						} catch (Exception e) {
+							jo.addProperty("Average", 0);
+						}
+						ja1.add(jo);
 					}
-					catch(Exception e){
-						jo.addProperty("Average",0);
-					}
-					ja1.add(jo);
-					
 				}
 			}
 
@@ -129,6 +133,5 @@ public class VirtualMachine {
 		}
 		return ja1.toString();
 	}
-
 
 }
