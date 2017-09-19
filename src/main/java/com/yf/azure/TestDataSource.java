@@ -302,7 +302,29 @@ public class TestDataSource extends AbstractDataSource {
         						sdfmad.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
        							System.out.println("Asia/Kolkata:  " + sdfmad.format(sdfgmt.parse(inpt)));
 							
+						}else if (columns.get(j).getColumnName().equals("Percentage CPU")) {
+							val = tt.read("$.['vmdetails'].[" + i + "].['Percentage CPU']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Network IN")) {
+							val = tt.read("$.['vmdetails'].[" + i + "].['Network IN']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Network Out")){
+							val = tt.read("$.['vmdetails'].[" + i + "].['Network Out']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Disk Read")){
+							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Read']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Disk Write")){
+							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Write']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Disk Read Operations")){
+							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Read Operations']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Disk Write Operations")){
+							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Write Operations']");
+							data[i][j] = val.toString();
 						}
+							
 					}
 				}
 
@@ -422,7 +444,32 @@ public class TestDataSource extends AbstractDataSource {
 						} else if (columns.get(j).getColumnName().equals("Location")) {
 							val = tt.read("$.['vmdetails'].[" + i + "].['Location']");
 							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("TimeStamp")) {
+							val = tt.read("$.['vmdetails'].[" + i + "].['TimeStamp']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Percentage CPU")) {
+							val = tt.read("$.['vmdetails'].[" + i + "].['Percentage CPU']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Network IN")) {
+							val = tt.read("$.['vmdetails'].[" + i + "].['Network IN']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Network Out")){
+							val = tt.read("$.['vmdetails'].[" + i + "].['Network Out']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Disk Read")){
+							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Read']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Disk Write")){
+							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Write']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Disk Read Operations")){
+							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Read Operations']");
+							data[i][j] = val.toString();
+						}else if (columns.get(j).getColumnName().equals("Disk Write Operations")){
+							val = tt.read("$.['vmdetails'].[" + i + "].['Disk Write Operations']");
+							data[i][j] = val.toString();
 						}
+						
 					}
 				}
 
