@@ -28,10 +28,12 @@ import okhttp3.Request.Builder;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+
+
 public class VirtualMachine {
 	static Logger LOGGER = Logger.getLogger(VirtualMachine.class.getName());
 	static int numdays = 14;
-
+	/*This function returns the number of virtual machines from azure*/
 	public static ArrayList<Integer> getIndex(String token) {
 		String[] type = Resources.getType(token);
 		int i = 0;
@@ -70,7 +72,6 @@ public class VirtualMachine {
 		} catch (Exception e) {
 			return null;
 		}
-		int j;
 		return req;
 	}
 
