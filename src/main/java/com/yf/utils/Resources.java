@@ -28,7 +28,7 @@ public class Resources {
 			return response.body().string();
 		} catch (Exception e) {
 		}
-		return "";
+		return null;
 	}
 
 	public static String[] getType(String token) {
