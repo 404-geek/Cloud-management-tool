@@ -39,7 +39,7 @@ public class VirtualMachine {
 		String[] type = Resources.getType(token);
 		int i = 0;
 		ArrayList<Integer> list = new ArrayList();
-		for (i = 0; i < type.length; i++) {
+		for (i = 0; i < type.length; i++) {																																																																																																		
 			if (type[i].equals("Microsoft.Compute/virtualMachines")) {
 				list.add(Integer.valueOf(i));
 			}
