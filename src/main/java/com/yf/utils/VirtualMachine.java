@@ -34,6 +34,7 @@ public class VirtualMachine {
 	static Logger LOGGER = Logger.getLogger(VirtualMachine.class.getName());
 	static int numdays = 14;
 	/*This function returns the number of virtual machines from azure*/
+	
 	public static ArrayList<Integer> getIndex(String token) {
 		String[] type = Resources.getType(token);
 		int i = 0;
@@ -45,7 +46,9 @@ public class VirtualMachine {
 		}
 		return list;
 	}
-
+	
+	/*This function returns the metrics of azure virtual machine's'*/
+	
 	public static String[] getvm(String token, String resid) {
 		String CONTENT = "application/json";
 		String[] req = new String[7];
