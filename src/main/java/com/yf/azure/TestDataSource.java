@@ -558,6 +558,38 @@ public class TestDataSource extends AbstractDataSource {
 		} catch (Exception e) {
 			p.put("ERROR", "Please Enter the Authentication Code");
 		}
+
+		/*
+		 * Map<String,Object> p = new HashMap<String, Object>();
+		 * 
+		 * String authCode=(String)getAttribute("CODE"); JsonElement je = new
+		 * JsonParser().parse(new AzureAuth().getResponse(authCode)); JsonObject
+		 * jo = je.getAsJsonObject();
+		 * 
+		 * String accessToken = jo.get("access_token").getAsString(); String
+		 * refreshToken = jo.get("refresh_token").getAsString();
+		 * 
+		 * if(new AzureAuth().authCheck(authCode)==200){
+		 * 
+		 * //System.out.
+		 * println("RESSSSSSSSSSSSSSSSSSS PONSSSSSSSSSSSSSSEEEEEEEEEE");
+		 * //System.out.println(accessToken);
+		 * //System.out.println(refreshToken); saveBlob("accessToken",
+		 * accessToken.getBytes()); saveBlob("refreshToken",
+		 * refreshToken.getBytes()); } if(new AzureAuth().authCheck(authCode)
+		 * !=200) { try { String refreshTok = new String(loadBlob("URL"));
+		 * String accessTok = Refresher.refreshToken(refreshTok);
+		 * saveBlob("accessToken", accessTok.getBytes());
+		 * saveBlob("refreshToken", refreshToken.getBytes());
+		 * 
+		 * } catch (IOException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 * 
+		 * }
+		 * 
+		 * 
+		 * else{ p.put("ERROR DS", "Invalid Authentication Code"); }
+		 */
 		return p;
 	}
 
