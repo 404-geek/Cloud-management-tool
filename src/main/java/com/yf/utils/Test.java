@@ -18,7 +18,7 @@ public class Test
     Date date = null;
     try
     {
-      date = utcFormat.parse("2017-09-14T10:00:00Z");
+      date = utcFormat.parse("2016-03-01T00:00:00Z");
     }
     catch (ParseException e)
     {
