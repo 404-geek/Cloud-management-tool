@@ -11,7 +11,7 @@ public class Timezone
   
   public static ArrayList<String> getZone()
   {
-    ArrayList<String> sortedZones = new ArrayList(ZoneId.getAvailableZoneIds());
+    ArrayList<String> sortedZones = new ArrayList<String>(ZoneId.getAvailableZoneIds());
     Collections.sort(sortedZones);
     return sortedZones;
   }

@@ -57,7 +57,7 @@ public class TestDataSource extends AbstractDataSource {
 		p.add(virtualMachine());
 		p.add(database());
 		p.add(virtualMachineLive());
-		p.add(RateCard());
+		p.add(Billing());
 
 		return p;
 	}
@@ -520,7 +520,7 @@ public class TestDataSource extends AbstractDataSource {
 		return simpleDataSet;
 	}
 
-	private AbstractDataSet RateCard() {
+	private AbstractDataSet Billing() {
 		AbstractDataSet simpleDataSet = new AbstractDataSet() {
 			public ArrayList<FilterMetaData> getFilters() {
 				ArrayList<FilterMetaData> fm = new ArrayList();
@@ -528,24 +528,14 @@ public class TestDataSource extends AbstractDataSource {
 			}
 
 			public String getDataSetName() {
-				return "RateCard";
+				return "Billing";
 			}
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-				String zone = new String(TestDataSource.this.loadBlob("zone"));
-				cm.add(new ColumnMetaData("Currency", DataType.TEXT));
-				cm.add(new ColumnMetaData("Tax", DataType.TEXT));
-				cm.add(new ColumnMetaData("Locale", DataType.TEXT));
-				//cm.add(new ColumnMetaData("EffectiveDate(UTC)", DataType.TIMESTAMP));
-				cm.add(new ColumnMetaData("IncludedQuantity", DataType.INTEGER));
-				cm.add(new ColumnMetaData("MeterCategory", DataType.TEXT));
-				//cm.add(new ColumnMetaData("EffectiveDate(" + zone + ")", DataType.TIMESTAMP));
-				cm.add(new ColumnMetaData("MeterRegion", DataType.TEXT));
-				cm.add(new ColumnMetaData("MeterStatus", DataType.TEXT));
-				cm.add(new ColumnMetaData("MeterSubCategory", DataType.TEXT));
-				cm.add(new ColumnMetaData("MeterTags", DataType.TEXT));
-				cm.add(new ColumnMetaData("MeterRates", DataType.TEXT));
+				cm.add(new ColumnMetaData("ID", DataType.TEXT));
+				cm.add(new ColumnMetaData("Bill", DataType.NUMERIC));
+				cm.add(new ColumnMetaData("Subscription", DataType.TEXT));
 
 				return cm;
 			}
@@ -563,12 +553,11 @@ public class TestDataSource extends AbstractDataSource {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
 				String token = new String(TestDataSource.this.loadBlob("accessToken"));
-				String zone = new String(TestDataSource.this.loadBlob("zone"));
-				String RCard = Billing.getCard(token);
-				JsonElement je = new JsonParser().parse(RCard);
+				String Bill = Billing.getBilling(token);
+				JsonElement je = new JsonParser().parse(Bill);
 				JsonArray ja = je.getAsJsonArray();
-				saveBlob("RCARD", RCard.getBytes());
-				String nodeData = new String(TestDataSource.this.loadBlob("RCARD"));
+				saveBlob("BILL", Bill.getBytes());
+				String nodeData = new String(TestDataSource.this.loadBlob("BILL"));
 
 				Configuration conf = Configuration.defaultConfiguration()
 						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
@@ -581,69 +570,14 @@ public class TestDataSource extends AbstractDataSource {
 				Object val = null;
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
-						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Currency")) {
-							val = tt.read("$.[" + i + "].['Currency']");
+						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("ID")) {
+							val = tt.read("$.[" + i + "].['id']");
 							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Tax")) {
-							val = tt.read("$.[" + i + "].['Tax']");
-							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Locale")) {
-							val = tt.read("$.[" + i + "].['Locale']");
-							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("VM Size")) {
-							val = tt.read("$.[" + i + "].['VMSize']");
-							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Location")) {
-							val = tt.read("$.[" + i + "].['Location']");
-							data[i][j] = val.toString();
-						} /*else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("EffectiveDate(UTC)")) {
-							val = tt.read("$.[" + i + "].['EffectiveDate']");
-							String timestamp = val.toString();
-							SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-							try {
-								Date parsedDate = format.parse(timestamp);
-								Timestamp timeStampDate = new Timestamp(parsedDate.getTime());
-								data[i][j] = timeStampDate;
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-						}*/ /*else if (((ColumnMetaData) columns.get(j)).getColumnName()
-								.equals("EffectiveDate(" + zone + ")")) {
-							val = tt.read("$.[" + i + "].['EffectiveDate']");
-							String timestamp = val.toString();
-							DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-							utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-							Date date = null;
-							try {
-								date = utcFormat.parse(timestamp);
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-							DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
-							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
-							data[i][j] = ts;
-						} */else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("IncludedQuantity")) {
-							val = tt.read("$.[" + i + "].['IncludedQuantity']");
-							data[i][j] = Integer.parseInt(val.toString());
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("MeterCategory")) {
-							val = tt.read("$.[" + i + "].['MeterCategory']");
-							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("MeterRegion")) {
-							val = tt.read("$.[" + i + "].['MeterRegion']");
-							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("MeterStatus")) {
-							val = tt.read("$.[" + i + "].['MeterStatus']");
-							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("MeterSubCategory")) {
-							val = tt.read("$.[" + i + "].['MeterSubCategory']");
-							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("MeterTags")) {
-							val = tt.read("$.[" + i + "].['MeterTags']");
-							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("MeterRates")) {
-							val = tt.read("$.[" + i + "].['MeterRates']");
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Bill")) {
+							val = tt.read("$.[" + i + "].['BillAmount(USD)']");
+							data[i][j] = new Float(val.toString());
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription")) {
+							val = tt.read("$.[" + i + "].['SubscriptionId']");
 							data[i][j] = val.toString();
 						}
 					}
