@@ -21,6 +21,7 @@ import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.ParseContext;
 import com.jayway.jsonpath.Predicate;
 import com.yf.utils.AzureAuth;
+import com.yf.utils.Billing;
 import com.yf.utils.Databases;
 import com.yf.utils.Refresher;
 import com.yf.utils.Resources;
@@ -56,6 +57,7 @@ public class TestDataSource extends AbstractDataSource {
 		p.add(virtualMachine());
 		p.add(database());
 		p.add(virtualMachineLive());
+		p.add(Billing());
 
 		return p;
 	}
@@ -518,6 +520,74 @@ public class TestDataSource extends AbstractDataSource {
 		return simpleDataSet;
 	}
 
+	private AbstractDataSet Billing() {
+		AbstractDataSet simpleDataSet = new AbstractDataSet() {
+			public ArrayList<FilterMetaData> getFilters() {
+				ArrayList<FilterMetaData> fm = new ArrayList();
+				return fm;
+			}
+
+			public String getDataSetName() {
+				return "Billing";
+			}
+
+			public ArrayList<ColumnMetaData> getColumns() {
+				ArrayList<ColumnMetaData> cm = new ArrayList();
+				cm.add(new ColumnMetaData("ID", DataType.TEXT));
+				cm.add(new ColumnMetaData("Bill", DataType.NUMERIC));
+				cm.add(new ColumnMetaData("Subscription", DataType.TEXT));
+
+				return cm;
+			}
+
+			public boolean getAllowsDuplicateColumns() {
+				return false;
+			}
+
+			public boolean getAllowsAggregateColumns() {
+				return false;
+			}
+
+			public Object[][] execute(List<ColumnMetaData> columns, List<FilterData> filters) {
+				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
+					throw new ThirdPartyException("Database is not yet populated");
+				}
+				String token = new String(TestDataSource.this.loadBlob("accessToken"));
+				String Bill = Billing.getBilling(token);
+				JsonElement je = new JsonParser().parse(Bill);
+				JsonArray ja = je.getAsJsonArray();
+				saveBlob("BILL", Bill.getBytes());
+				String nodeData = new String(TestDataSource.this.loadBlob("BILL"));
+
+				Configuration conf = Configuration.defaultConfiguration()
+						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
+						.addOptions(new Option[] { Option.SUPPRESS_EXCEPTIONS });
+				DocumentContext tt = JsonPath.using(conf).parse(nodeData);
+
+				Object[][] data = (Object[][]) null;
+				data = new Object[ja.size()][columns.size()];
+
+				Object val = null;
+				for (int i = 0; i < ja.size(); i++) {
+					for (int j = 0; j < columns.size(); j++) {
+						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("ID")) {
+							val = tt.read("$.[" + i + "].['id']");
+							data[i][j] = val.toString();
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Bill")) {
+							val = tt.read("$.[" + i + "].['BillAmount(USD)']");
+							data[i][j] = new Float(val.toString());
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription")) {
+							val = tt.read("$.[" + i + "].['SubscriptionId']");
+							data[i][j] = val.toString();
+						}
+					}
+				}
+				return data;
+			}
+		};
+		return simpleDataSet;
+	}
+
 	public JDBCMetaData getDataSourceMetaData() {
 		return new TestSourceMetaData();
 	}
@@ -558,6 +628,38 @@ public class TestDataSource extends AbstractDataSource {
 		} catch (Exception e) {
 			p.put("ERROR", "Please Enter the Authentication Code");
 		}
+
+		/*
+		 * Map<String,Object> p = new HashMap<String, Object>();
+		 * 
+		 * String authCode=(String)getAttribute("CODE"); JsonElement je = new
+		 * JsonParser().parse(new AzureAuth().getResponse(authCode)); JsonObject
+		 * jo = je.getAsJsonObject();
+		 * 
+		 * String accessToken = jo.get("access_token").getAsString(); String
+		 * refreshToken = jo.get("refresh_token").getAsString();
+		 * 
+		 * if(new AzureAuth().authCheck(authCode)==200){
+		 * 
+		 * //System.out.
+		 * println("RESSSSSSSSSSSSSSSSSSS PONSSSSSSSSSSSSSSEEEEEEEEEE");
+		 * //System.out.println(accessToken);
+		 * //System.out.println(refreshToken); saveBlob("accessToken",
+		 * accessToken.getBytes()); saveBlob("refreshToken",
+		 * refreshToken.getBytes()); } if(new AzureAuth().authCheck(authCode)
+		 * !=200) { try { String refreshTok = new String(loadBlob("URL"));
+		 * String accessTok = Refresher.refreshToken(refreshTok);
+		 * saveBlob("accessToken", accessTok.getBytes());
+		 * saveBlob("refreshToken", refreshToken.getBytes());
+		 * 
+		 * } catch (IOException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 * 
+		 * }
+		 * 
+		 * 
+		 * else{ p.put("ERROR DS", "Invalid Authentication Code"); }
+		 */
 		return p;
 	}
 

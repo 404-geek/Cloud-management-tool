@@ -5,9 +5,11 @@ com\yf\utils\Test.class
 com\yf\azure\TestDataSource$3.class
 com\yf\azure\TestDataSource.class
 com\yf\azure\TestDataSource$4.class
+com\yf\utils\Billing.class
 com\yf\utils\AzureAuth.class
 com\yf\utils\Databases.class
 com\yf\utils\Timezone.class
+com\yf\azure\TestDataSource$5.class
 com\yf\utils\Subscriptions.class
 com\yf\utils\VirtualMachine.class
 com\yf\utils\Test2.class

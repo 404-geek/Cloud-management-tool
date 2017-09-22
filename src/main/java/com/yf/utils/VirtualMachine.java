@@ -21,23 +21,20 @@ import java.util.TimeZone;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Request.Builder;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
-
-
 
 public class VirtualMachine {
 	static Logger LOGGER = Logger.getLogger(VirtualMachine.class.getName());
 	static int numdays = 14;
-	/*This function returns the number of virtual machines from azure*/
+	static String CONTENT = "application/json";
+	/* This function returns the number of virtual machines from azure */
+
 	public static ArrayList<Integer> getIndex(String token) {
 		String[] type = Resources.getType(token);
 		int i = 0;
-		ArrayList<Integer> list = new ArrayList();
+		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (i = 0; i < type.length; i++) {
 			if (type[i].equals("Microsoft.Compute/virtualMachines")) {
 				list.add(Integer.valueOf(i));
@@ -46,8 +43,9 @@ public class VirtualMachine {
 		return list;
 	}
 
+	/* This function returns the metrics of azure virtual machine's' */
+
 	public static String[] getvm(String token, String resid) {
-		String CONTENT = "application/json";
 		String[] req = new String[7];
 		int k = 0;
 		String tok = "Bearer " + token;
@@ -59,7 +57,7 @@ public class VirtualMachine {
 				.url("https://management.azure.com" + resid
 						+ "/providers/microsoft.insights/metrics?api-version=2016-09-01&$filter=(name.value eq 'Percentage CPU' or name.value eq 'Network In' or name.value eq 'Network Out' or name.value eq 'Disk Read Bytes' or name.value eq 'Disk Write Bytes' or name.value eq 'Disk Read Operations/Sec' or name.value eq 'Disk Write Operations/Sec') and timeGrain eq duration'PT1H' and startTime eq "
 						+ day + " and endTime eq " + currentDate)
-				.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
+				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 		try {
 			Response response = client.newCall(request).execute();
 			JsonElement je = new JsonParser().parse(response.body().string());
@@ -76,7 +74,6 @@ public class VirtualMachine {
 	}
 
 	public static String[] getvmLive(String token, String resid) {
-		String CONTENT = "application/json";
 		String[] req = new String[7];
 		int k = 0;
 		String tok = "Bearer " + token;
@@ -88,7 +85,7 @@ public class VirtualMachine {
 				.url("https://management.azure.com" + resid
 						+ "/providers/microsoft.insights/metrics?api-version=2016-09-01&$filter=(name.value eq 'Percentage CPU' or name.value eq 'Network In' or name.value eq 'Network Out' or name.value eq 'Disk Read Bytes' or name.value eq 'Disk Write Bytes' or name.value eq 'Disk Read Operations/Sec' or name.value eq 'Disk Write Operations/Sec') and timeGrain eq duration'PT1H' and startTime eq "
 						+ currentDate + " and endTime eq " + day)
-				.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
+				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 		try {
 			Response response = client.newCall(request).execute();
 			JsonElement je = new JsonParser().parse(response.body().string());
@@ -101,12 +98,10 @@ public class VirtualMachine {
 		} catch (Exception e) {
 			return null;
 		}
-		int j;
 		return req;
 	}
 
 	public static String getDetails(String token) {
-		String CONTENT = "application/json";
 		ArrayList<Integer> index = getIndex(token);
 		JsonArray ja1 = new JsonArray();
 		for (int i = 0; i < index.size(); i++) {
@@ -117,7 +112,7 @@ public class VirtualMachine {
 
 			Request request = new Request.Builder()
 					.url("https://management.azure.com" + resid + "?api-version=2017-03-30")
-					.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
+					.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 			try {
 				Response response = client.newCall(request).execute();
 
@@ -217,7 +212,6 @@ public class VirtualMachine {
 	}
 
 	public static String getLiveDetails(String token) {
-		String CONTENT = "application/json";
 		ArrayList<Integer> index = getIndex(token);
 		JsonArray ja1 = new JsonArray();
 		for (int i = 0; i < index.size(); i++) {
@@ -228,7 +222,7 @@ public class VirtualMachine {
 
 			Request request = new Request.Builder()
 					.url("https://management.azure.com" + resid + "?api-version=2017-03-30")
-					.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
+					.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 			try {
 				Response response = client.newCall(request).execute();
 
@@ -268,7 +262,7 @@ public class VirtualMachine {
 				JsonArray DiskReadOp = je.getAsJsonArray();
 				je = new JsonParser().parse(det[6]);
 				JsonArray DiskWriteOp = je.getAsJsonArray();
-				ArrayList<Integer> list = new ArrayList();
+				ArrayList<Integer> list = new ArrayList<Integer>();
 				for (int j = 0; j < 24; j++) {
 					String per = percentageCPU.get(j).getAsJsonObject().get("timeStamp").getAsString();
 					DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");

@@ -1,20 +1,17 @@
 package com.yf.utils;
 
 import java.util.logging.Logger;
-import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Request.Builder;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Resources {
 	static Logger LOGGER = Logger.getLogger(Resources.class.getName());
+	static String CONTENT = "application/json";
 
 	public static String getResources(String token) {
-		String CONTENT = "application/json";
 		String id = Subscriptions.getId(token);
 		String tok = "Bearer " + token;
 
@@ -22,7 +19,7 @@ public class Resources {
 
 		Request request = new Request.Builder()
 				.url("https://management.azure.com" + id + "/resources?api-version=2017-05-10")
-				.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
+				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 		try {
 			Response response = client.newCall(request).execute();
 			return response.body().string();
@@ -32,7 +29,7 @@ public class Resources {
 	}
 
 	public static String[] getType(String token) {
-		String CONTENT = "application/json";
+
 		String id = Subscriptions.getId(token);
 		String tok = "Bearer " + token;
 
@@ -40,7 +37,7 @@ public class Resources {
 
 		Request request = new Request.Builder()
 				.url("https://management.azure.com" + id + "/resources?api-version=2017-05-10")
-				.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
+				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 		try {
 			Response response = client.newCall(request).execute();
 			JSONObject jo = new JSONObject(response.body().string());
@@ -59,7 +56,6 @@ public class Resources {
 	}
 
 	public static String getResid(String token, int arr) {
-		String CONTENT = "application/json";
 		String id = Subscriptions.getId(token);
 		String tok = "Bearer " + token;
 
@@ -67,7 +63,7 @@ public class Resources {
 
 		Request request = new Request.Builder()
 				.url("https://management.azure.com" + id + "/resources?api-version=2017-05-10")
-				.addHeader("Authorization", tok).addHeader("Content-type", "application/json").build();
+				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 		try {
 			Response response = client.newCall(request).execute();
 			JSONObject jo = new JSONObject(response.body().string());
