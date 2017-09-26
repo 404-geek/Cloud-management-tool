@@ -110,8 +110,11 @@
 			<artifactId>json</artifactId>
 			<version>20170516</version>
 		</dependency>
-
-
-
+		<!-- https://mvnrepository.com/artifact/commons-collections/commons-collections -->
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.0</version>
+		</dependency>
 	</dependencies>
 </project>
