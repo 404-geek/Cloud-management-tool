@@ -57,7 +57,7 @@ public class TestDataSource extends AbstractDataSource {
 		p.add(virtualMachine());
 		p.add(database());
 		p.add(virtualMachineLive());
-		p.add(Billing());
+		//p.add(Billing());
 
 		return p;
 	}
