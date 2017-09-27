@@ -57,7 +57,7 @@ public class TestDataSource extends AbstractDataSource {
 		p.add(virtualMachine());
 		p.add(database());
 		p.add(virtualMachineLive());
-		//p.add(Billing());
+		p.add(Billing());
 
 		return p;
 	}
@@ -535,7 +535,7 @@ public class TestDataSource extends AbstractDataSource {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
 				cm.add(new ColumnMetaData("ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Bill", DataType.NUMERIC));
-				cm.add(new ColumnMetaData("Subscription", DataType.TEXT));
+				cm.add(new ColumnMetaData("Name", DataType.TEXT));
 
 				return cm;
 			}
@@ -554,8 +554,10 @@ public class TestDataSource extends AbstractDataSource {
 				}
 				String token = new String(TestDataSource.this.loadBlob("accessToken"));
 				String Bill = Billing.getBilling(token);
+				System.out.println(Bill);
 				JsonElement je = new JsonParser().parse(Bill);
 				JsonArray ja = je.getAsJsonArray();
+				System.out.println(ja.size());
 				saveBlob("BILL", Bill.getBytes());
 				String nodeData = new String(TestDataSource.this.loadBlob("BILL"));
 
@@ -571,13 +573,13 @@ public class TestDataSource extends AbstractDataSource {
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("ID")) {
-							val = tt.read("$.[" + i + "].['id']");
+							val = tt.read("$.[" + i + "].['MeterId']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Bill")) {
-							val = tt.read("$.[" + i + "].['BillAmount(USD)']");
-							data[i][j] = new Float(val.toString());
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription")) {
-							val = tt.read("$.[" + i + "].['SubscriptionId']");
+							val = tt.read("$.[" + i + "].['MeterRates']");
+							data[i][j] = new BigDecimal(val.toString());
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Name")) {
+							val = tt.read("$.[" + i + "].['Name']");
 							data[i][j] = val.toString();
 						}
 					}
