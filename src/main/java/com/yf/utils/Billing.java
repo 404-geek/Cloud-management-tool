@@ -102,7 +102,6 @@ public class Billing {
 	}
 
 	public static String getBilling(String token) {
-		BigDecimal rate = new BigDecimal(123);
 		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
 		String id = Subscriptions.getId(token);
