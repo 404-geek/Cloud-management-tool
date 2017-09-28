@@ -3,6 +3,7 @@ package com.yf.azure;
 import com.hof.mi.interfaces.UserInputParameters.Parameter;
 import com.hof.pool.DBType;
 import com.hof.pool.JDBCMetaData;
+import com.yf.utils.Billing;
 import com.yf.utils.Timezone;
 import java.util.ArrayList;
 
@@ -38,6 +39,20 @@ public class TestSourceMetaData
       zones.addOption(zone);
     }
     addParameter(zones);
+    
+    Parameter currency = new Parameter("SELECTOR1", "Currency Selector", "Select the currency", 2, 6, null, true);
+    currency.addOption("USD");
+    currency.addOption("AUD");
+    currency.addOption("INR");
+    
+    addParameter(currency);
+    
+    Parameter months = new Parameter("SELECTOR2", "Select No of Billing Cycles Required", "Select the months", 2, 6, null, true);
+    months.addOption("1");
+    months.addOption("2");
+    months.addOption("3");
+    
+    addParameter(months);
   }
   
   public byte[] getDatasourceIcon()
@@ -53,6 +68,6 @@ public class TestSourceMetaData
   
   public String getDatasourceLongDescription()
   {
-    return "Azure";
+    return "Microsoft Azure (formerly Windows Azure) is a cloud computing service created by Microsoft for building, testing, deploying, and managing applications and services through a global network of Microsoft-managed data centers";
   }
 }

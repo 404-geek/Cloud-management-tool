@@ -532,10 +532,11 @@ public class TestDataSource extends AbstractDataSource {
 			}
 
 			public ArrayList<ColumnMetaData> getColumns() {
+				String currency = new String(TestDataSource.this.loadBlob("currency"));
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-				cm.add(new ColumnMetaData("ID", DataType.TEXT));
-				cm.add(new ColumnMetaData("Bill", DataType.NUMERIC));
-				cm.add(new ColumnMetaData("Name", DataType.TEXT));
+				cm.add(new ColumnMetaData("Reported Start Time", DataType.TEXT));
+				cm.add(new ColumnMetaData("Reported End Time", DataType.TEXT));
+				cm.add(new ColumnMetaData("Bill(" + currency + ")", DataType.NUMERIC));
 
 				return cm;
 			}
@@ -552,12 +553,12 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
+				String currency = new String(TestDataSource.this.loadBlob("currency"));
 				String token = new String(TestDataSource.this.loadBlob("accessToken"));
-				String Bill = Billing.getBilling(token);
-				System.out.println(Bill);
+				String months = new String(TestDataSource.this.loadBlob("months"));
+				String Bill = Billing.getBilling(token, currency, months);
 				JsonElement je = new JsonParser().parse(Bill);
 				JsonArray ja = je.getAsJsonArray();
-				System.out.println(ja.size());
 				saveBlob("BILL", Bill.getBytes());
 				String nodeData = new String(TestDataSource.this.loadBlob("BILL"));
 
@@ -572,15 +573,15 @@ public class TestDataSource extends AbstractDataSource {
 				Object val = null;
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
-						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("ID")) {
-							val = tt.read("$.[" + i + "].['MeterId']");
+						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Reported Start Time")) {
+							val = tt.read("$.[" + i + "].['ReportedStartedTime']");
 							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Bill")) {
-							val = tt.read("$.[" + i + "].['MeterRates']");
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Reported End Time")) {
+							val = tt.read("$.[" + i + "].['ReportedEndTime']");
+							data[i][j] = val.toString();
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Bill(" + currency + ")")) {
+							val = tt.read("$.[" + i + "].['Bill']");
 							data[i][j] = new BigDecimal(val.toString());
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Name")) {
-							val = tt.read("$.[" + i + "].['Name']");
-							data[i][j] = val.toString();
 						}
 					}
 				}
@@ -606,6 +607,8 @@ public class TestDataSource extends AbstractDataSource {
 		try {
 			String authCode = (String) getAttribute("CODE");
 			String zone = (String) getAttribute("SELECTOR");
+			String currency = (String) getAttribute("SELECTOR1");
+			String months = (String) getAttribute("SELECTOR2");
 			JsonElement je = new JsonParser().parse(AzureAuth.getResponse(authCode));
 			try {
 				new AzureAuth();
@@ -615,14 +618,18 @@ public class TestDataSource extends AbstractDataSource {
 					String refreshToken = jo.get("refresh_token").getAsString();
 					saveBlob("accessToken", accessToken.getBytes());
 					saveBlob("refreshToken", refreshToken.getBytes());
+					saveBlob("currency", currency.getBytes());
 					saveBlob("zone", zone.getBytes());
+					saveBlob("months", months.getBytes());
 				}
 				if (AzureAuth.authCheck(authCode) != 200) {
 					String ref = new String(loadBlob("refreshToken"));
 					String accessToken = Refresher.refreshToken(ref);
 					saveBlob("accessToken", accessToken.getBytes());
 					saveBlob("refreshToken", ref.getBytes());
+					saveBlob("currency", currency.getBytes());
 					saveBlob("zone", zone.getBytes());
+					saveBlob("months", months.getBytes());
 				}
 			} catch (Exception e) {
 				p.put("ERROR", "Invalid Authentication Code");
