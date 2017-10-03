@@ -17,7 +17,7 @@ import okhttp3.Response;
 public class Test2 {
 	public static void main(String[] args) {
 
-		String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyIsImtpZCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yN2M5NTA0YS1jNDY3LTQzNzYtYjI2MS04OWIxNWU4ZWJiMTcvIiwiaWF0IjoxNTA2NjAwMjY3LCJuYmYiOjE1MDY2MDAyNjcsImV4cCI6MTUwNjYwNDE2NywiYWNyIjoiMSIsImFpbyI6IkFTUUEyLzhGQUFBQTY0dnJhZVdQN0M4ZWE3S2NXMVJqbHFLaGd0NzdWdUZoMUZKa2NwZFRHL009IiwiYW1yIjpbInB3ZCJdLCJhcHBpZCI6ImIzMTQ0ZmUxLTYzMzgtNDNhMC04OTE4LWMwNTI5MWY1MTE3MCIsImFwcGlkYWNyIjoiMSIsImZhbWlseV9uYW1lIjoiSGV3aXR0IiwiZ2l2ZW5fbmFtZSI6Ikp1c3RpbiIsImdyb3VwcyI6WyJhYzc5Njc0MC1mZjVjLTQ3ZjctODlkZS1mZTkzM2JkZjUwOGQiXSwiaXBhZGRyIjoiMTQuMTQyLjExMC4yMjIiLCJuYW1lIjoiSnVzdGluIEhld2l0dCIsIm9pZCI6IjVmODkwNmQxLWVlMmQtNDIxZC1hYTcxLTA2YTgxMDljMjEzMCIsInB1aWQiOiIxMDAzM0ZGRjhEMjcyNEFDIiwic2NwIjoidXNlcl9pbXBlcnNvbmF0aW9uIiwic3ViIjoicHJZRGlfbC1HR2xPempfaUw2T2t6cEFLdEFvQ2RUZWxHMFZ1UnM5TlJtWSIsInRpZCI6IjI3Yzk1MDRhLWM0NjctNDM3Ni1iMjYxLTg5YjE1ZThlYmIxNyIsInVuaXF1ZV9uYW1lIjoianVzdGluLmhld2l0dEB5ZWxsb3dmaW4uYmkiLCJ1cG4iOiJqdXN0aW4uaGV3aXR0QHllbGxvd2Zpbi5iaSIsInV0aSI6IkgyRnZHdmUxaUV5Ukl2WHkxSTRGQUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCJdfQ.wCGPT5RsDy57cMpjHsBUGiMk8beM9U0PgfDHVSyh_BqJw3OVjMTkCTMjYHPmPrXPBxSmY3q965-SFp8GWCSKyeT516Jvv_c9AUN8MWeL21wQaShXwK12a8uQfQYB8u6PUTO8cbUhcCHVf5UFoNPkoExOm0flbqlcmMYHd5zsFrHZ_BakHUHEH-zQ_MQzdj4TZjgNXn8FSmej3waAKCljzfXfBWY_FUEfOP0XH8gYO0WT6mmyhgOHn1fIJrBaIdlymSiUHPPpoXqELAXobfDJGOtuTm65DkbNewfw5-0tAkGTKv5nzoVZNhVG0fTQiVszzCJGhgmN52ETOn7rud6Zkg";
+		String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyIsImtpZCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yN2M5NTA0YS1jNDY3LTQzNzYtYjI2MS04OWIxNWU4ZWJiMTcvIiwiaWF0IjoxNTA2OTUyNzQ5LCJuYmYiOjE1MDY5NTI3NDksImV4cCI6MTUwNjk1NjY0OSwiYWNyIjoiMSIsImFpbyI6IlkyVmdZSWgzODF3NjI5TmtkK0tEcnhGdmxGZHBYL2gvU2VKV1B2ZGE5UUtmVmZhaWJ0Y0EiLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiYjMxNDRmZTEtNjMzOC00M2EwLTg5MTgtYzA1MjkxZjUxMTcwIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJIZXdpdHQiLCJnaXZlbl9uYW1lIjoiSnVzdGluIiwiZ3JvdXBzIjpbImFjNzk2NzQwLWZmNWMtNDdmNy04OWRlLWZlOTMzYmRmNTA4ZCJdLCJpcGFkZHIiOiIxNC4xNDIuMTEwLjIyMiIsIm5hbWUiOiJKdXN0aW4gSGV3aXR0Iiwib2lkIjoiNWY4OTA2ZDEtZWUyZC00MjFkLWFhNzEtMDZhODEwOWMyMTMwIiwicHVpZCI6IjEwMDMzRkZGOEQyNzI0QUMiLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJwcllEaV9sLUdHbE96al9pTDZPa3pwQUt0QW9DZFRlbEcwVnVSczlOUm1ZIiwidGlkIjoiMjdjOTUwNGEtYzQ2Ny00Mzc2LWIyNjEtODliMTVlOGViYjE3IiwidW5pcXVlX25hbWUiOiJqdXN0aW4uaGV3aXR0QHllbGxvd2Zpbi5iaSIsInVwbiI6Imp1c3Rpbi5oZXdpdHRAeWVsbG93ZmluLmJpIiwidXRpIjoiWG0wZTJwMlhNRXlBRUNQaWhfOFlBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiNjJlOTAzOTQtNjlmNS00MjM3LTkxOTAtMDEyMTc3MTQ1ZTEwIl19.BUkoZ01-xHqJSjnizqhOLXhdAT84-NXebMbyWKsRhs0plDnuGYv2Gdx1Xsv0m081qWdKYN5KPcmKoj6e0DIWr6r__TjISktLVDQT1aBHnFTUhqRtrGvW-LLw3SiemX8saNzMEcBUDxyTCiFSuhAn65nXemW9p6pqiAjV2x2it5hOc4BAq2ZdS4BOI2NOyVB_5ZCaTzSuDIeOJsoKh7vmKljJgq0Y0596vBo3vVKhtxz_wjYAEXtl60A8Lywy7QxIv2gttqkYLlaeKMlYpUWnmGKOsFH2aPEvUTCq6mlp2316noYh1892jvUZdaI6uXAYTH8Oawl4X92ILg_4uGJxQA";
 		String CONTENT = "application/json";
 		String p = "1";
 		String currency = "AUD";
@@ -26,7 +26,6 @@ public class Test2 {
 		String tok = "Bearer " + token;
 		OkHttpClient client = new OkHttpClient();
 		String cycle = Billing.getBillingCycle(token);
-		System.out.println(cycle);
 		JsonElement je1 = new JsonParser().parse(cycle);
 		JsonArray jaa = je1.getAsJsonArray();
 		for(int k=0;k< Integer.parseInt(p); k++){
@@ -42,13 +41,11 @@ public class Test2 {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			System.out.println(dstart);
-			System.out.println(dend);
 		Request request = new Request.Builder()
 				.url("https://management.azure.com" + id
 						+ "/providers/Microsoft.Commerce/UsageAggregates?api-version=2015-06-01-preview&reportedStartTime="
 						+ dstart + "&reportedEndTime=" + dend
-						+ "&aggregationGranularity=Hourly&showDetails=True")
+						+ "&aggregationGranularity=Daily&showDetails=True")
 				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 		try {
 			Response response = client.newCall(request).execute();
@@ -74,7 +71,7 @@ public class Test2 {
 			ArrayList<BigDecimal> list = new ArrayList<BigDecimal>();
 			for (Map.Entry<String, BigDecimal> entry : hm.entrySet()) {
 				
-				//System.out.println(entry.getKey()+"             "+entry.getValue());
+				System.out.println(entry.getKey()+"             "+entry.getValue());
 /*				for (int j = 0; j < ja2.size(); j++) {
 					String ko = entry.getKey();
 					String mo = ja2.get(j).getAsJsonObject().get("MeterId").getAsString();
