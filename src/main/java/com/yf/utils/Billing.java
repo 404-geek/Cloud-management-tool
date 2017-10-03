@@ -138,8 +138,8 @@ public class Billing {
 					String mo = ja2.get(j).getAsJsonObject().get("MeterId").getAsString();
 					if (ko.equals(mo)) {
 						BigDecimal po = ja2.get(j).getAsJsonObject().get("MeterRates").getAsBigDecimal();
-						BigDecimal lo = entry.getValue();
-						re = po.multiply(lo);
+						BigDecimal lo = entry.getValue().setScale(2, BigDecimal.ROUND_HALF_EVEN);
+						re = po.multiply(lo).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 						list.add(re);
 					}
 					

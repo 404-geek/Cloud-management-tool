@@ -1,6 +1,7 @@
 package com.yf.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import okhttp3.Response;
 public class Test2 {
 	public static void main(String[] args) {
 
-		String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyIsImtpZCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yN2M5NTA0YS1jNDY3LTQzNzYtYjI2MS04OWIxNWU4ZWJiMTcvIiwiaWF0IjoxNTA2OTUyNzQ5LCJuYmYiOjE1MDY5NTI3NDksImV4cCI6MTUwNjk1NjY0OSwiYWNyIjoiMSIsImFpbyI6IlkyVmdZSWgzODF3NjI5TmtkK0tEcnhGdmxGZHBYL2gvU2VKV1B2ZGE5UUtmVmZhaWJ0Y0EiLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiYjMxNDRmZTEtNjMzOC00M2EwLTg5MTgtYzA1MjkxZjUxMTcwIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJIZXdpdHQiLCJnaXZlbl9uYW1lIjoiSnVzdGluIiwiZ3JvdXBzIjpbImFjNzk2NzQwLWZmNWMtNDdmNy04OWRlLWZlOTMzYmRmNTA4ZCJdLCJpcGFkZHIiOiIxNC4xNDIuMTEwLjIyMiIsIm5hbWUiOiJKdXN0aW4gSGV3aXR0Iiwib2lkIjoiNWY4OTA2ZDEtZWUyZC00MjFkLWFhNzEtMDZhODEwOWMyMTMwIiwicHVpZCI6IjEwMDMzRkZGOEQyNzI0QUMiLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJwcllEaV9sLUdHbE96al9pTDZPa3pwQUt0QW9DZFRlbEcwVnVSczlOUm1ZIiwidGlkIjoiMjdjOTUwNGEtYzQ2Ny00Mzc2LWIyNjEtODliMTVlOGViYjE3IiwidW5pcXVlX25hbWUiOiJqdXN0aW4uaGV3aXR0QHllbGxvd2Zpbi5iaSIsInVwbiI6Imp1c3Rpbi5oZXdpdHRAeWVsbG93ZmluLmJpIiwidXRpIjoiWG0wZTJwMlhNRXlBRUNQaWhfOFlBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiNjJlOTAzOTQtNjlmNS00MjM3LTkxOTAtMDEyMTc3MTQ1ZTEwIl19.BUkoZ01-xHqJSjnizqhOLXhdAT84-NXebMbyWKsRhs0plDnuGYv2Gdx1Xsv0m081qWdKYN5KPcmKoj6e0DIWr6r__TjISktLVDQT1aBHnFTUhqRtrGvW-LLw3SiemX8saNzMEcBUDxyTCiFSuhAn65nXemW9p6pqiAjV2x2it5hOc4BAq2ZdS4BOI2NOyVB_5ZCaTzSuDIeOJsoKh7vmKljJgq0Y0596vBo3vVKhtxz_wjYAEXtl60A8Lywy7QxIv2gttqkYLlaeKMlYpUWnmGKOsFH2aPEvUTCq6mlp2316noYh1892jvUZdaI6uXAYTH8Oawl4X92ILg_4uGJxQA";
+		String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyIsImtpZCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yN2M5NTA0YS1jNDY3LTQzNzYtYjI2MS04OWIxNWU4ZWJiMTcvIiwiaWF0IjoxNTA3MDI0NTE0LCJuYmYiOjE1MDcwMjQ1MTQsImV4cCI6MTUwNzAyODQxNCwiYWNyIjoiMSIsImFpbyI6IkFTUUEyLzhGQUFBQTJ6L05vb1YxRi9id1pMWHFJNmoyOVBTajMyaXhSNnhOSVdDK3JZWllXQ0k9IiwiYW1yIjpbInB3ZCJdLCJhcHBpZCI6ImIzMTQ0ZmUxLTYzMzgtNDNhMC04OTE4LWMwNTI5MWY1MTE3MCIsImFwcGlkYWNyIjoiMSIsImZhbWlseV9uYW1lIjoiSGV3aXR0IiwiZ2l2ZW5fbmFtZSI6Ikp1c3RpbiIsImdyb3VwcyI6WyJhYzc5Njc0MC1mZjVjLTQ3ZjctODlkZS1mZTkzM2JkZjUwOGQiXSwiaXBhZGRyIjoiMTQuMTQyLjExMC4yMjIiLCJuYW1lIjoiSnVzdGluIEhld2l0dCIsIm9pZCI6IjVmODkwNmQxLWVlMmQtNDIxZC1hYTcxLTA2YTgxMDljMjEzMCIsInB1aWQiOiIxMDAzM0ZGRjhEMjcyNEFDIiwic2NwIjoidXNlcl9pbXBlcnNvbmF0aW9uIiwic3ViIjoicHJZRGlfbC1HR2xPempfaUw2T2t6cEFLdEFvQ2RUZWxHMFZ1UnM5TlJtWSIsInRpZCI6IjI3Yzk1MDRhLWM0NjctNDM3Ni1iMjYxLTg5YjE1ZThlYmIxNyIsInVuaXF1ZV9uYW1lIjoianVzdGluLmhld2l0dEB5ZWxsb3dmaW4uYmkiLCJ1cG4iOiJqdXN0aW4uaGV3aXR0QHllbGxvd2Zpbi5iaSIsInV0aSI6InNOd1Q3NkR5ZGtlaTFzR2d2R2dyQUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCJdfQ.JTaQGEPTViEhAnS06Atex3fVy8ACinbDIypSJqOkWWscUAFUJRxuOiHJb9FVoXhS7wnnn2vAroNsHCj9i91cu-u5zkrngPD3-5TY1xMdgf-EOb1_MKF0zypinph447wFX7j_uE1K7zA0ffDqo_s7JYcR4PZzkUvv0mI4cfGzKRR__ffXsoOrPg6_g1tYkX4L9d_g7fMEj2Gr08EZJipY0YxPYfGiGPplXD_hz2-DeFSfDLCqMytWetehPYMmr7Y0kBTCdZzy2t-ORHshxWkOzGDpJ4nA5o4C7nHJz2YkyxlrGyQvCZOo_3qbfRny5ztB7UDBFMTwHxIL0A5Hj_YqWg";
 		String CONTENT = "application/json";
 		String p = "1";
 		String currency = "AUD";
@@ -62,41 +63,43 @@ public class Test2 {
 						.getAsString();
 				BigDecimal MeterQ = ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject().get("quantity")
 						.getAsBigDecimal();
-
 				BigDecimal rates = (BigDecimal) (hm.containsKey(i) ? hm.get(i) : BigDecimal.ZERO);
 				rates = rates.add(MeterQ);
 				hm.put(i, rates);
 			}
 			BigDecimal re = BigDecimal.ZERO;
 			ArrayList<BigDecimal> list = new ArrayList<BigDecimal>();
-			for (Map.Entry<String, BigDecimal> entry : hm.entrySet()) {
-				
-				System.out.println(entry.getKey()+"             "+entry.getValue());
-/*				for (int j = 0; j < ja2.size(); j++) {
+			for (Map.Entry<String, BigDecimal> entry : hm.entrySet()) {	
+/*				BigDecimal u = entry.getValue().setScale(2, BigDecimal.ROUND_HALF_EVEN);
+				//double o = u.setScale(0, RoundingMode.CEILING).doubleValue(); 
+				System.out.println(entry.getKey()+"             "+u);*/
+				for (int j = 0; j < ja2.size(); j++) {
 					String ko = entry.getKey();
 					String mo = ja2.get(j).getAsJsonObject().get("MeterId").getAsString();
 					if (ko.equals(mo)) {
 						BigDecimal po = ja2.get(j).getAsJsonObject().get("MeterRates").getAsBigDecimal();
-						BigDecimal lo = entry.getValue();
-						re = po.multiply(lo);
+								//.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+						BigDecimal lo = entry.getValue().setScale(2, BigDecimal.ROUND_HALF_EVEN);
+						re = po.multiply(lo).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 						list.add(re);
 					}
 					
-				}*/
+				}
 			}
-/*			BigDecimal sum = new BigDecimal(0);
+			BigDecimal sum = new BigDecimal(0);
 			for(BigDecimal d : list){
 			  sum = sum.add(d);
+			 //System.out.println(d);
 			}
 			JsonObject jo1 = new JsonObject();
 			jo1.addProperty("ReportedStartedTime", dstart);
 			jo1.addProperty("ReportedEndTime", dend);
 			jo1.addProperty("Bill", sum);
-			ja.add(jo1);*/
+			ja.add(jo1);
 		} catch (Exception e) {
 			System.out.println("gggg");
 		}
 		}
-		//System.out.println(ja.toString());		
+		System.out.println(ja.toString());		
 		}
 }
