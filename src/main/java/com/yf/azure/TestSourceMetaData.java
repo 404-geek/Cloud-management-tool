@@ -1,11 +1,16 @@
 package com.yf.azure;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.hof.mi.interfaces.UserInputParameters.Parameter;
 import com.hof.pool.DBType;
 import com.hof.pool.JDBCMetaData;
+import com.yf.utils.AzureAuth;
 import com.yf.utils.Billing;
 import com.yf.utils.Timezone;
 import java.util.ArrayList;
+
 
 public class TestSourceMetaData
   extends JDBCMetaData
@@ -48,11 +53,11 @@ public class TestSourceMetaData
     addParameter(currency);
     
     Parameter months = new Parameter("SELECTOR2", "Select No of Billing Cycles Required", "Select the months", 2, 6, null, true);
-    months.addOption("1");
-    months.addOption("2");
-    months.addOption("3");
-    
+     for(int j=1;j<=9;j++){
+    	 months.addOption(""+j+"");
+     } 
     addParameter(months);
+   
   }
   
   public byte[] getDatasourceIcon()
@@ -68,6 +73,6 @@ public class TestSourceMetaData
   
   public String getDatasourceLongDescription()
   {
-    return "Microsoft Azure (formerly Windows Azure) is a cloud computing service created by Microsoft for building, testing, deploying, and managing applications and services through a global network of Microsoft-managed data centers";
+    return "Microsoft Azure ";
   }
 }
