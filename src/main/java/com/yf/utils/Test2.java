@@ -82,12 +82,9 @@ public class Test2 {
 						re = po.multiply(lo).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 						list.add(re);
 					}
-<<<<<<< HEAD
 				}
-=======
 					
 				}*/
->>>>>>> 69dc301667b3b9c0120ca98a86a7f7d4fcad75b2
 			}
 			System.out.println("            ");
 /*			BigDecimal sum = new BigDecimal(0);
