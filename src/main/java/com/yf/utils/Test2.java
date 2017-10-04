@@ -1,7 +1,6 @@
 package com.yf.utils;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,7 +82,6 @@ public class Test2 {
 						re = po.multiply(lo).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 						list.add(re);
 					}
-					
 				}
 			}
 			BigDecimal sum = new BigDecimal(0);
