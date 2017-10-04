@@ -81,6 +81,36 @@ public class Billing {
 		}
 		return ja.toString();
 	}
+	
+	public static int getBillingCycleNo(String token) {
+		String CONTENT = "application/json";
+		JsonArray ja = new JsonArray();
+		String id = Subscriptions.getId(token);
+		String tok = "Bearer " + token;
+		OkHttpClient client = new OkHttpClient();
+		Request request = new Request.Builder()
+				.url("https://management.azure.com" + id
+						+ "/providers/Microsoft.Billing/invoices?api-version=2017-04-24-preview")
+				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
+		try {
+			Response response = client.newCall(request).execute();
+			JsonElement je = new JsonParser().parse(response.body().string());
+			JsonObject jo = je.getAsJsonObject();
+			JsonArray ja1 = jo.getAsJsonArray("value");
+			for (int j = 0; j < ja1.size(); j++) {
+				JsonObject jo1 = new JsonObject();
+				jo1.addProperty("InvoicePeriodEndDate", ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject()
+						.get("invoicePeriodEndDate").getAsString());
+				jo1.addProperty("InvoicePeriodStartDate", ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject()
+						.get("invoicePeriodStartDate").getAsString());
+				ja.add(jo1);
+			}
+
+		} catch (Exception e) {
+			return 0;
+		}
+		return ja.size();
+	}
 
 	public static String getBilling(String token,String currency,String p) {
 		String CONTENT = "application/json";
@@ -142,7 +172,6 @@ public class Billing {
 						re = po.multiply(lo).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 						list.add(re);
 					}
-					
 				}
 			}
 			BigDecimal sum = new BigDecimal(0);

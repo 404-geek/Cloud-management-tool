@@ -535,8 +535,8 @@ public class TestDataSource extends AbstractDataSource {
 				String currency = new String(TestDataSource.this.loadBlob("currency"));
 				ArrayList<ColumnMetaData> cm = new ArrayList();
 				cm.add(new ColumnMetaData("Reported Start Time", DataType.TEXT));
-				cm.add(new ColumnMetaData("Reported End Time", DataType.TEXT));
-				cm.add(new ColumnMetaData("Bill(" + currency + ")", DataType.NUMERIC));
+				cm.add(new ColumnMetaData("Reported End Time", DataType.DATE));
+				cm.add(new ColumnMetaData("Bill(" + currency + ")", DataType.TEXT));
 
 				return cm;
 			}
@@ -575,9 +575,31 @@ public class TestDataSource extends AbstractDataSource {
 					for (int j = 0; j < columns.size(); j++) {
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Reported Start Time")) {
 							val = tt.read("$.[" + i + "].['ReportedStartedTime']");
+/*							DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+							SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yy");
+							Date today = null;
+							try {
+								today = df.parse(val.toString());
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							String stringDate= format2.format(today);
+							Date sqlDate=  java.sql.Date.valueOf(stringDate);*/
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Reported End Time")) {
 							val = tt.read("$.[" + i + "].['ReportedEndTime']");
+/*							DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+							SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yy");
+							Date today = null;
+							try {
+								today = df.parse(val.toString());
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							String stringDate= format2.format(today);
+							Date sqlDate=  java.sql.Date.valueOf(stringDate);*/
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Bill(" + currency + ")")) {
 							val = tt.read("$.[" + i + "].['Bill']");

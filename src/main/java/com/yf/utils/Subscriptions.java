@@ -1,16 +1,19 @@
 package com.yf.utils;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Subscriptions {
 	static Logger LOGGER = Logger.getLogger(Subscriptions.class.getName());
 	static String CONTENT = "application/json";
 
-	public static String subscriptions(String token) {
+/*	public static String subscriptions(String token) {
 
 		String tok = "Bearer " + token;
 		OkHttpClient client = new OkHttpClient();
@@ -23,9 +26,9 @@ public class Subscriptions {
 		} catch (Exception e) {
 		}
 		return "";
-	}
+	}*/
 
-	public static String getId(String token) {
+	public static ArrayList<String> getId(String token) {
 		String tok = "Bearer " + token;
 
 		OkHttpClient client = new OkHttpClient();
@@ -35,11 +38,15 @@ public class Subscriptions {
 		try {
 			Response response = client.newCall(request).execute();
 			JSONObject jo = new JSONObject(response.body().string());
-			JSONObject je = jo.getJSONArray("value").getJSONObject(0);
-
-			return je.getString("id");
+			JSONArray ja = jo.getJSONArray("value");
+			ArrayList<String> list = new ArrayList<String>();
+			for(int j=0;j<ja.length();j++){
+				String id = jo.getJSONArray("value").getJSONObject(j).getString("id");	
+				list.add(id);
+			}
+			return list;
 		} catch (Exception e) {
+			return null;
 		}
-		return "";
 	}
 }

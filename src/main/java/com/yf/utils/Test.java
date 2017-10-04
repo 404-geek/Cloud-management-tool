@@ -27,7 +27,7 @@ public class Test
     Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
     
     System.out.println(ts);*/
-	  String ds1 = "2017-08-25";
+/*	  String ds1 = "2017-08-25";
 	  SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 	  SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
 	  String ds2 = null;
@@ -37,6 +37,21 @@ public class Test
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	  System.out.println(ds2);
+	  System.out.println(ds2);*/
+	    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+	    SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+
+	    Date today = null;
+		try {
+			today = df.parse("04/26/2017");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    //System.out.println("Today = " + df.format(today));
+		String stringDate= format2.format(today);
+		java.sql.Date sqlDate=  java.sql.Date.valueOf(stringDate);
+		System.out.println(sqlDate);
+
   }
 }
