@@ -17,6 +17,8 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -32,13 +34,14 @@ public class VirtualMachine {
 	/* This function returns the number of virtual machines from azure */
 
 	public static ArrayList<Integer> getIndex(String token) {
-		String[] type = Resources.getType(token);
-		int i = 0;
+		LinkedHashMap<String, String> type = Resources.getType(token);
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		for (i = 0; i < type.length; i++) {
-			if (type[i].equals("Microsoft.Compute/virtualMachines")) {
+		int i = 0;
+		for (Map.Entry<String, String> entry : type.entrySet()) {
+			if (entry.getValue().equals("Microsoft.Compute/virtualMachines")) {
 				list.add(Integer.valueOf(i));
 			}
+			i++;
 		}
 		return list;
 	}
