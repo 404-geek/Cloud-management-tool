@@ -52,7 +52,20 @@ public class TestSourceMetaData
     
     addParameter(currency);
     
-    Parameter months = new Parameter("SELECTOR2", "Select No of Billing Cycles Required", "Select the months", 2, 6, null, true);
+    Parameter Locale = new Parameter("SELECTOR2", "Locale Selector", "Select the locale", 2, 6, null, true);
+    Locale.addOption("en-US");
+    Locale.addOption("en-AU");
+    
+    addParameter(Locale);
+    
+    Parameter Region = new Parameter("SELECTOR3", "Region Selector", "Select the region", 2, 6, null, true);
+    Region.addOption("UK");
+    Region.addOption("AU");
+    Region.addOption("US");
+    
+    addParameter(Region);
+    
+    Parameter months = new Parameter("SELECTOR4", "Select No of Billing Cycles Required", "Select the months", 2, 6, null, true);
      for(int j=1;j<=9;j++){
     	 months.addOption(""+j+"");
      } 

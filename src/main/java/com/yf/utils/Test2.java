@@ -17,15 +17,18 @@ import okhttp3.Response;
 public class Test2 {
 	public static void main(String[] args) {
 
-/*		String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyIsImtpZCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yN2M5NTA0YS1jNDY3LTQzNzYtYjI2MS04OWIxNWU4ZWJiMTcvIiwiaWF0IjoxNTA3MDk3MDU2LCJuYmYiOjE1MDcwOTcwNTYsImV4cCI6MTUwNzEwMDk1NiwiYWNyIjoiMSIsImFpbyI6IkFTUUEyLzhGQUFBQUdqTTR3bXNnU3lTb1hhcTZ4Yi9yV2lXT2tkVHZqdmpOK0RnUlhzaG5HKzA9IiwiYW1yIjpbInB3ZCJdLCJhcHBpZCI6ImIzMTQ0ZmUxLTYzMzgtNDNhMC04OTE4LWMwNTI5MWY1MTE3MCIsImFwcGlkYWNyIjoiMSIsImZhbWlseV9uYW1lIjoiSGV3aXR0IiwiZ2l2ZW5fbmFtZSI6Ikp1c3RpbiIsImdyb3VwcyI6WyJhYzc5Njc0MC1mZjVjLTQ3ZjctODlkZS1mZTkzM2JkZjUwOGQiXSwiaXBhZGRyIjoiMTQuMTQyLjExMC4yMjIiLCJuYW1lIjoiSnVzdGluIEhld2l0dCIsIm9pZCI6IjVmODkwNmQxLWVlMmQtNDIxZC1hYTcxLTA2YTgxMDljMjEzMCIsInB1aWQiOiIxMDAzM0ZGRjhEMjcyNEFDIiwic2NwIjoidXNlcl9pbXBlcnNvbmF0aW9uIiwic3ViIjoicHJZRGlfbC1HR2xPempfaUw2T2t6cEFLdEFvQ2RUZWxHMFZ1UnM5TlJtWSIsInRpZCI6IjI3Yzk1MDRhLWM0NjctNDM3Ni1iMjYxLTg5YjE1ZThlYmIxNyIsInVuaXF1ZV9uYW1lIjoianVzdGluLmhld2l0dEB5ZWxsb3dmaW4uYmkiLCJ1cG4iOiJqdXN0aW4uaGV3aXR0QHllbGxvd2Zpbi5iaSIsInV0aSI6IkhKRkN3dDREdjBlTDlVZnpDWVlyQUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCJdfQ.ZDSNat1pnJDn67BhXSG-VYt1GUSp3GModEzl2WraYKgudcE46pdC4a3hUyky-G3MF8nrRKCrcA8NIQjL6GPYxrPzHDeDB9tKNySI6EYBWF22oQIlrf_GZIoL_GVushbU-kU0dX0_VkzFk9sqTo3w1M-50aWFUGR17aoOHpfs0heWKnqjItN1Bs0qc3nfguVh0EBPaT7-YL9jIgQeE-mqygq2t_1zjxplkLPxDaOKoOL6Ojs1cHaiv0kHD1lErdtCpkndBL0xFpO0d53ZS1IEIPCxXoHGya3VehjCMCyMa0BBAxqBAQ-F69rHm2h6Lv2eYOjbPdbetkghNgx0VvyUQA";
+		String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyIsImtpZCI6IkhIQnlLVS0wRHFBcU1aaDZaRlBkMlZXYU90ZyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yN2M5NTA0YS1jNDY3LTQzNzYtYjI2MS04OWIxNWU4ZWJiMTcvIiwiaWF0IjoxNTA3MjI2NzA0LCJuYmYiOjE1MDcyMjY3MDQsImV4cCI6MTUwNzIzMDYwNCwiYWNyIjoiMSIsImFpbyI6IlkyVmdZR0F2WEJxMmpOc3c2dCtsbUVKdTJTK0Jta0hKdm10U0p5VUlKcXVmRDdYNnZCMEEiLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiYjMxNDRmZTEtNjMzOC00M2EwLTg5MTgtYzA1MjkxZjUxMTcwIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJIZXdpdHQiLCJnaXZlbl9uYW1lIjoiSnVzdGluIiwiZ3JvdXBzIjpbImFjNzk2NzQwLWZmNWMtNDdmNy04OWRlLWZlOTMzYmRmNTA4ZCJdLCJpcGFkZHIiOiIxNC4xNDIuMTEwLjIyMiIsIm5hbWUiOiJKdXN0aW4gSGV3aXR0Iiwib2lkIjoiNWY4OTA2ZDEtZWUyZC00MjFkLWFhNzEtMDZhODEwOWMyMTMwIiwicHVpZCI6IjEwMDMzRkZGOEQyNzI0QUMiLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJwcllEaV9sLUdHbE96al9pTDZPa3pwQUt0QW9DZFRlbEcwVnVSczlOUm1ZIiwidGlkIjoiMjdjOTUwNGEtYzQ2Ny00Mzc2LWIyNjEtODliMTVlOGViYjE3IiwidW5pcXVlX25hbWUiOiJqdXN0aW4uaGV3aXR0QHllbGxvd2Zpbi5iaSIsInVwbiI6Imp1c3Rpbi5oZXdpdHRAeWVsbG93ZmluLmJpIiwidXRpIjoiTG8yOW94cFh1a3V2dTlRcHQ4TTFBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiNjJlOTAzOTQtNjlmNS00MjM3LTkxOTAtMDEyMTc3MTQ1ZTEwIl19.Luj9sgvEj9i3x4oXFu2nndpApGBU1F1Hz8XJ8jP__3IJ4QhMY8BTc4bHNp-AuYbIByBoUJn0thq9v4fbqwX8BbwlHJ410wb_cXE1RsiMjo4iOFZmg0PyWCJ_V37v6A6RpIIfhuSve0TbD4gibHlNnNIexdt9fxszcSCGPvxpOLhORK5EQXGYz0CEdWyT6O7E6H9ci2XvnFh3jllBKYLy-_k9YlIFC3MfaJ9_w3y9hGp7nZ_DpiVMsAf0Bbu_zhjGJycJGIV0lRf4P6BZjKd-FQ-Dcxi2Ho5rDXzSWFFvoW-AM1uYGcvsKx6j4ttL82Tas-V8jvB38VvOqP_vLdLuyA";
 		String CONTENT = "application/json";
 		String p = "4";
-		String currency = "AUD";
+		String currency = "USD";
+		String Loc = "en-US";
+		String reg = "US";
 		JsonArray ja = new JsonArray();
-		String id = Subscriptions.getId(token);
 		String tok = "Bearer " + token;
 		OkHttpClient client = new OkHttpClient();
-		String cycle = Billing.getBillingCycle(token);
+		ArrayList<String> idl = Subscriptions.getId(token);
+		for (String id : idl) {
+		String cycle = Billing.getBillingCycle(token,id);
 		JsonElement je1 = new JsonParser().parse(cycle);
 		JsonArray jaa = je1.getAsJsonArray();
 		for(int k=0;k< Integer.parseInt(p); k++){
@@ -54,7 +57,7 @@ public class Test2 {
 			JsonArray ja1 = jo.getAsJsonArray("value");
 			Map<String, BigDecimal> hm = new HashMap<String, BigDecimal>();
 
-			String resp = Billing.getCard(token,currency);
+			String resp = Billing.getCard(token,currency,Loc, reg);
 			JsonElement match = new JsonParser().parse(resp);
 			JsonArray ja2 = match.getAsJsonArray();
 			for (int j = 0; j < ja1.size(); j++) {
@@ -62,45 +65,39 @@ public class Test2 {
 						.getAsString();
 				BigDecimal MeterQ = ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject().get("quantity")
 						.getAsBigDecimal();
+
 				BigDecimal rates = (BigDecimal) (hm.containsKey(i) ? hm.get(i) : BigDecimal.ZERO);
 				rates = rates.add(MeterQ);
 				hm.put(i, rates);
 			}
 			BigDecimal re = BigDecimal.ZERO;
 			ArrayList<BigDecimal> list = new ArrayList<BigDecimal>();
-			for (Map.Entry<String, BigDecimal> entry : hm.entrySet()) {	
-				BigDecimal u = entry.getValue().setScale(2, BigDecimal.ROUND_HALF_EVEN);
-				//double o = u.setScale(0, RoundingMode.CEILING).doubleValue(); 
-				System.out.println(entry.getKey()+"             "+u);
+			for (Map.Entry<String, BigDecimal> entry : hm.entrySet()) {
 				for (int j = 0; j < ja2.size(); j++) {
 					String ko = entry.getKey();
 					String mo = ja2.get(j).getAsJsonObject().get("MeterId").getAsString();
 					if (ko.equals(mo)) {
 						BigDecimal po = ja2.get(j).getAsJsonObject().get("MeterRates").getAsBigDecimal();
-								//.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 						BigDecimal lo = entry.getValue().setScale(2, BigDecimal.ROUND_HALF_EVEN);
 						re = po.multiply(lo).setScale(2, BigDecimal.ROUND_HALF_EVEN);
 						list.add(re);
 					}
 				}
-					
-				}
 			}
-			System.out.println("            ");
 			BigDecimal sum = new BigDecimal(0);
 			for(BigDecimal d : list){
 			  sum = sum.add(d);
-			 //System.out.println(d);
 			}
 			JsonObject jo1 = new JsonObject();
+			jo1.addProperty("Subscription Id", id);
 			jo1.addProperty("ReportedStartedTime", dstart);
 			jo1.addProperty("ReportedEndTime", dend);
 			jo1.addProperty("Bill", sum);
 			ja.add(jo1);
 		} catch (Exception e) {
-			System.out.println("gggg");
+			return;
 		}
 		}
-		//System.out.println(ja.toString());		
-*/		}
+		}
+		System.out.println(ja.toString());			}
 }

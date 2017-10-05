@@ -2,7 +2,7 @@ package com.yf.utils;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;	
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,8 @@ import okhttp3.Response;
 
 public class Billing {
 	static Logger LOGGER = Logger.getLogger(Billing.class.getName());
-	public static String getCard(String token,String currency) {
+
+	public static String getCard(String token, String currency, String Loc, String reg) {
 		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
 		ArrayList<String> idl = Subscriptions.getId(token);
@@ -27,7 +28,8 @@ public class Billing {
 
 		Request request = new Request.Builder()
 				.url("https://management.azure.com" + id
-						+ "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&$filter=OfferDurableId eq 'MS-AZR-0003p' and Currency eq '"+currency+"' and Locale eq 'en-AU' and RegionInfo eq 'AU'")
+						+ "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&$filter=OfferDurableId eq 'MS-AZR-0003p' and Currency eq '"
+						+ currency + "' and Locale eq '" + Loc + "' and RegionInfo eq '" + reg + "'")
 				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 		try {
 			Response response = client.newCall(request).execute();
@@ -72,8 +74,8 @@ public class Billing {
 				jo1.addProperty("Subscription Id", id);
 				jo1.addProperty("InvoicePeriodEndDate", ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject()
 						.get("invoicePeriodEndDate").getAsString());
-				jo1.addProperty("InvoicePeriodStartDate", ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject()
-						.get("invoicePeriodStartDate").getAsString());
+				jo1.addProperty("InvoicePeriodStartDate", ja1.get(j).getAsJsonObject().get("properties")
+						.getAsJsonObject().get("invoicePeriodStartDate").getAsString());
 				ja.add(jo1);
 			}
 
@@ -83,84 +85,82 @@ public class Billing {
 		return ja.toString();
 	}
 
-	public static String getBilling(String token,String currency,String p) {
+	public static String getBilling(String token, String currency, String p, String Loc, String reg) {
 		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
 		String tok = "Bearer " + token;
 		OkHttpClient client = new OkHttpClient();
 		ArrayList<String> idl = Subscriptions.getId(token);
 		for (String id : idl) {
-		String cycle = Billing.getBillingCycle(token,id);
-		JsonElement je1 = new JsonParser().parse(cycle);
-		JsonArray jaa = je1.getAsJsonArray();
-		for(int k=0;k< Integer.parseInt(p); k++){
-			  String ds1 = jaa.get(k).getAsJsonObject().get("InvoicePeriodStartDate").getAsString();
-			  String ds2 = jaa.get(k).getAsJsonObject().get("InvoicePeriodEndDate").getAsString();
-			  SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-			  SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
-			  String dstart = null;
-			  String dend = null;
-			try {
-				dstart = sdf2.format(sdf1.parse(ds1));
-				dend = sdf2.format(sdf1.parse(ds2));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		Request request = new Request.Builder()
-				.url("https://management.azure.com" + id
+			String cycle = Billing.getBillingCycle(token, id);
+			JsonElement je1 = new JsonParser().parse(cycle);
+			JsonArray jaa = je1.getAsJsonArray();
+			for (int k = 0; k < Integer.parseInt(p); k++) {
+				String ds1 = jaa.get(k).getAsJsonObject().get("InvoicePeriodStartDate").getAsString();
+				String ds2 = jaa.get(k).getAsJsonObject().get("InvoicePeriodEndDate").getAsString();
+				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
+				String dstart = null;
+				String dend = null;
+				try {
+					dstart = sdf2.format(sdf1.parse(ds1));
+					dend = sdf2.format(sdf1.parse(ds2));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				Request request = new Request.Builder().url("https://management.azure.com" + id
 						+ "/providers/Microsoft.Commerce/UsageAggregates?api-version=2015-06-01-preview&reportedStartTime="
-						+ dstart + "&reportedEndTime=" + dend
-						+ "&aggregationGranularity=Daily&showDetails=True")
-				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
-		try {
-			Response response = client.newCall(request).execute();
-			JsonElement je = new JsonParser().parse(response.body().string());
-			JsonObject jo = je.getAsJsonObject();
-			JsonArray ja1 = jo.getAsJsonArray("value");
-			Map<String, BigDecimal> hm = new HashMap<String, BigDecimal>();
+						+ dstart + "&reportedEndTime=" + dend + "&aggregationGranularity=Daily&showDetails=True")
+						.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
+				try {
+					Response response = client.newCall(request).execute();
+					JsonElement je = new JsonParser().parse(response.body().string());
+					JsonObject jo = je.getAsJsonObject();
+					JsonArray ja1 = jo.getAsJsonArray("value");
+					Map<String, BigDecimal> hm = new HashMap<String, BigDecimal>();
 
-			String resp = Billing.getCard(token,currency);
-			JsonElement match = new JsonParser().parse(resp);
-			JsonArray ja2 = match.getAsJsonArray();
-			for (int j = 0; j < ja1.size(); j++) {
-				String i = ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject().get("meterId")
-						.getAsString();
-				BigDecimal MeterQ = ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject().get("quantity")
-						.getAsBigDecimal();
+					String resp = Billing.getCard(token, currency, Loc, reg);
+					JsonElement match = new JsonParser().parse(resp);
+					JsonArray ja2 = match.getAsJsonArray();
+					for (int j = 0; j < ja1.size(); j++) {
+						String i = ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject().get("meterId")
+								.getAsString();
+						BigDecimal MeterQ = ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject()
+								.get("quantity").getAsBigDecimal();
 
-				BigDecimal rates = (BigDecimal) (hm.containsKey(i) ? hm.get(i) : BigDecimal.ZERO);
-				rates = rates.add(MeterQ);
-				hm.put(i, rates);
-			}
-			BigDecimal re = BigDecimal.ZERO;
-			ArrayList<BigDecimal> list = new ArrayList<BigDecimal>();
-			for (Map.Entry<String, BigDecimal> entry : hm.entrySet()) {
-				for (int j = 0; j < ja2.size(); j++) {
-					String ko = entry.getKey();
-					String mo = ja2.get(j).getAsJsonObject().get("MeterId").getAsString();
-					if (ko.equals(mo)) {
-						BigDecimal po = ja2.get(j).getAsJsonObject().get("MeterRates").getAsBigDecimal();
-						BigDecimal lo = entry.getValue().setScale(2, BigDecimal.ROUND_HALF_EVEN);
-						re = po.multiply(lo).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-						list.add(re);
+						BigDecimal rates = (BigDecimal) (hm.containsKey(i) ? hm.get(i) : BigDecimal.ZERO);
+						rates = rates.add(MeterQ);
+						hm.put(i, rates);
 					}
+					BigDecimal re = BigDecimal.ZERO;
+					ArrayList<BigDecimal> list = new ArrayList<BigDecimal>();
+					for (Map.Entry<String, BigDecimal> entry : hm.entrySet()) {
+						for (int j = 0; j < ja2.size(); j++) {
+							String ko = entry.getKey();
+							String mo = ja2.get(j).getAsJsonObject().get("MeterId").getAsString();
+							if (ko.equals(mo)) {
+								BigDecimal po = ja2.get(j).getAsJsonObject().get("MeterRates").getAsBigDecimal();
+								BigDecimal lo = entry.getValue().setScale(2, BigDecimal.ROUND_HALF_EVEN);
+								re = po.multiply(lo).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+								list.add(re);
+							}
+						}
+					}
+					BigDecimal sum = new BigDecimal(0);
+					for (BigDecimal d : list) {
+						sum = sum.add(d);
+					}
+					JsonObject jo1 = new JsonObject();
+					jo1.addProperty("Subscription Id", id);
+					jo1.addProperty("ReportedStartedTime", dstart);
+					jo1.addProperty("ReportedEndTime", dend);
+					jo1.addProperty("Bill", sum);
+					ja.add(jo1);
+				} catch (Exception e) {
+					return null;
 				}
 			}
-			BigDecimal sum = new BigDecimal(0);
-			for(BigDecimal d : list){
-			  sum = sum.add(d);
-			}
-			JsonObject jo1 = new JsonObject();
-			jo1.addProperty("Subscription Id", id);
-			jo1.addProperty("ReportedStartedTime", dstart);
-			jo1.addProperty("ReportedEndTime", dend);
-			jo1.addProperty("Bill", sum);
-			ja.add(jo1);
-		} catch (Exception e) {
-			return null;
 		}
-		}
-		}
-		return ja.toString();	
+		return ja.toString();
 	}
 }

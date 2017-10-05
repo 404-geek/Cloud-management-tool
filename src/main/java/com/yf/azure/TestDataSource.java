@@ -212,10 +212,10 @@ public class TestDataSource extends AbstractDataSource {
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
 
-				cm.add(new ColumnMetaData("id", DataType.TEXT));
-				cm.add(new ColumnMetaData("name", DataType.TEXT));
-				cm.add(new ColumnMetaData("type", DataType.TEXT));
-				cm.add(new ColumnMetaData("location", DataType.TEXT));
+				cm.add(new ColumnMetaData("Subscription ID", DataType.TEXT));
+				cm.add(new ColumnMetaData("Name", DataType.TEXT));
+				cm.add(new ColumnMetaData("Type", DataType.TEXT));
+				cm.add(new ColumnMetaData("Location", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Group String", DataType.TEXT));
 
 				return cm;
@@ -253,16 +253,16 @@ public class TestDataSource extends AbstractDataSource {
 				Object val = null;
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
-						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("id")) {
+						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription ID")) {
 							val = tt.read("$.['value'].[" + i + "].['id']");
 							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("name")) {
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Name")) {
 							val = tt.read("$.['value'].[" + i + "].['name']");
 							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("type")) {
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Type")) {
 							val = tt.read("$.['value'].[" + i + "].['type']");
 							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("location")) {
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Location")) {
 							val = tt.read("$.['value'].[" + i + "].['location']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Group String")) {
@@ -433,11 +433,12 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-
+				String zone = new String(TestDataSource.this.loadBlob("zone"));
 				cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Group", DataType.TEXT));
 				cm.add(new ColumnMetaData("Database Name", DataType.TEXT));
-				cm.add(new ColumnMetaData("Timestamp", DataType.TIMESTAMP));
+				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
+				cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage DTU", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("CPU percentage", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Log IO percentage", DataType.NUMERIC));
@@ -458,6 +459,7 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
+				String zone = new String(TestDataSource.this.loadBlob("zone"));
 				String token = new String(loadBlob("accessToken"));
 				String database = Databases.getDetails(token);
 				JsonElement je = new JsonParser().parse(database);
@@ -499,11 +501,10 @@ public class TestDataSource extends AbstractDataSource {
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Data IO percentage")) {
 							val = tt.read("$.[" + i + "].['Data IO percentage']");
 							data[i][j] = new Float(val.toString());
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp")) {
+						}  else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp(UTC)")) {
 							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
 							SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-							format.setTimeZone(TimeZone.getTimeZone("Asia/Calcutta"));
 							try {
 								Date parsedDate = format.parse(timestamp);
 								Timestamp timeStampDate = new Timestamp(parsedDate.getTime());
@@ -511,6 +512,22 @@ public class TestDataSource extends AbstractDataSource {
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName()
+								.equals("Timestamp(" + zone + ")")) {
+							val = tt.read("$.[" + i + "].['Timestamp']");
+							String timestamp = val.toString();
+							DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+							utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+							Date date = null;
+							try {
+								date = utcFormat.parse(timestamp);
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+							DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
+							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
+							data[i][j] = ts;
 						}
 					}
 				}
@@ -534,8 +551,9 @@ public class TestDataSource extends AbstractDataSource {
 			public ArrayList<ColumnMetaData> getColumns() {
 				String currency = new String(TestDataSource.this.loadBlob("currency"));
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-				cm.add(new ColumnMetaData("Reported Start Time", DataType.TEXT));
-				cm.add(new ColumnMetaData("Reported End Time", DataType.TEXT));
+				cm.add(new ColumnMetaData("Reported Start Time", DataType.DATE));
+				cm.add(new ColumnMetaData("Reported End Time", DataType.DATE));
+				cm.add(new ColumnMetaData("Subscription ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Bill(" + currency + ")", DataType.NUMERIC));
 
 				return cm;
@@ -556,7 +574,10 @@ public class TestDataSource extends AbstractDataSource {
 				String currency = new String(TestDataSource.this.loadBlob("currency"));
 				String token = new String(TestDataSource.this.loadBlob("accessToken"));
 				String months = new String(TestDataSource.this.loadBlob("months"));
-				String Bill = Billing.getBilling(token, currency, months);
+				String locale = new String(TestDataSource.this.loadBlob("Locale"));
+				String region = new String(TestDataSource.this.loadBlob("Region"));
+				String Bill = Billing.getBilling(token, currency, months, locale, region);
+				System.out.println(Bill);
 				JsonElement je = new JsonParser().parse(Bill);
 				JsonArray ja = je.getAsJsonArray();
 				saveBlob("BILL", Bill.getBytes());
@@ -575,35 +596,34 @@ public class TestDataSource extends AbstractDataSource {
 					for (int j = 0; j < columns.size(); j++) {
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Reported Start Time")) {
 							val = tt.read("$.[" + i + "].['ReportedStartedTime']");
-/*							DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-							SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yy");
-							Date today = null;
+							SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+							Date parsed = null;
 							try {
-								today = df.parse(val.toString());
-							} catch (ParseException e) {
+								parsed = sdf.parse(val.toString());
+							} catch (ParseException e1) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								e1.printStackTrace();
 							}
-							String stringDate= format2.format(today);
-							Date sqlDate=  java.sql.Date.valueOf(stringDate);*/
-							data[i][j] = val.toString();
+							java.sql.Date date = new java.sql.Date(parsed.getTime());
+							data[i][j] = date;
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Reported End Time")) {
 							val = tt.read("$.[" + i + "].['ReportedEndTime']");
-/*							DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-							SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yy");
-							Date today = null;
+							SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+							Date parsed = null;
 							try {
-								today = df.parse(val.toString());
-							} catch (ParseException e) {
+								parsed = sdf.parse(val.toString());
+							} catch (ParseException e1) {
 								// TODO Auto-generated catch block
-								e.printStackTrace();
+								e1.printStackTrace();
 							}
-							String stringDate= format2.format(today);
-							Date sqlDate=  java.sql.Date.valueOf(stringDate);*/
-							data[i][j] = val.toString();
+							java.sql.Date date = new java.sql.Date(parsed.getTime());
+							data[i][j] = date;
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Bill(" + currency + ")")) {
 							val = tt.read("$.[" + i + "].['Bill']");
 							data[i][j] = new BigDecimal(val.toString());
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription ID")) {
+							val = tt.read("$.[" + i + "].['Subscription Id']");
+							data[i][j] = val.toString();
 						}
 					}
 				}
@@ -630,7 +650,9 @@ public class TestDataSource extends AbstractDataSource {
 			String authCode = (String) getAttribute("CODE");
 			String zone = (String) getAttribute("SELECTOR");
 			String currency = (String) getAttribute("SELECTOR1");
-			String months = (String) getAttribute("SELECTOR2");
+			String months = (String) getAttribute("SELECTOR4");
+			String Locale = (String) getAttribute("SELECTOR2");
+			String Region = (String) getAttribute("SELECTOR3");
 			JsonElement je = new JsonParser().parse(AzureAuth.getResponse(authCode));
 			try {
 				new AzureAuth();
@@ -643,6 +665,8 @@ public class TestDataSource extends AbstractDataSource {
 					saveBlob("currency", currency.getBytes());
 					saveBlob("zone", zone.getBytes());
 					saveBlob("months", months.getBytes());
+					saveBlob("Locale", Locale.getBytes());
+					saveBlob("Region", Region.getBytes());
 				}
 				if (AzureAuth.authCheck(authCode) != 200) {
 					String ref = new String(loadBlob("refreshToken"));
@@ -652,6 +676,8 @@ public class TestDataSource extends AbstractDataSource {
 					saveBlob("currency", currency.getBytes());
 					saveBlob("zone", zone.getBytes());
 					saveBlob("months", months.getBytes());
+					saveBlob("Locale", Locale.getBytes());
+					saveBlob("Region", Region.getBytes());
 				}
 			} catch (Exception e) {
 				p.put("ERROR", "Invalid Authentication Code");
