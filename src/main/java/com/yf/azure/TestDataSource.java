@@ -535,8 +535,8 @@ public class TestDataSource extends AbstractDataSource {
 				String currency = new String(TestDataSource.this.loadBlob("currency"));
 				ArrayList<ColumnMetaData> cm = new ArrayList();
 				cm.add(new ColumnMetaData("Reported Start Time", DataType.TEXT));
-				cm.add(new ColumnMetaData("Reported End Time", DataType.DATE));
-				cm.add(new ColumnMetaData("Bill(" + currency + ")", DataType.TEXT));
+				cm.add(new ColumnMetaData("Reported End Time", DataType.TEXT));
+				cm.add(new ColumnMetaData("Bill(" + currency + ")", DataType.NUMERIC));
 
 				return cm;
 			}

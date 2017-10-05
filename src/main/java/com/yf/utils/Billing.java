@@ -20,7 +20,8 @@ public class Billing {
 	public static String getCard(String token,String currency) {
 		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
-		String id = Subscriptions.getId(token);
+		ArrayList<String> idl = Subscriptions.getId(token);
+		String id = idl.get(0);
 		String tok = "Bearer " + token;
 		OkHttpClient client = new OkHttpClient();
 
@@ -52,10 +53,9 @@ public class Billing {
 		return ja.toString();
 	}
 
-	public static String getBillingCycle(String token) {
+	public static String getBillingCycle(String token, String id) {
 		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
-		String id = Subscriptions.getId(token);
 		String tok = "Bearer " + token;
 		OkHttpClient client = new OkHttpClient();
 		Request request = new Request.Builder()
@@ -69,6 +69,7 @@ public class Billing {
 			JsonArray ja1 = jo.getAsJsonArray("value");
 			for (int j = 0; j < ja1.size(); j++) {
 				JsonObject jo1 = new JsonObject();
+				jo1.addProperty("Subscription Id", id);
 				jo1.addProperty("InvoicePeriodEndDate", ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject()
 						.get("invoicePeriodEndDate").getAsString());
 				jo1.addProperty("InvoicePeriodStartDate", ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject()
@@ -81,44 +82,15 @@ public class Billing {
 		}
 		return ja.toString();
 	}
-	
-	public static int getBillingCycleNo(String token) {
-		String CONTENT = "application/json";
-		JsonArray ja = new JsonArray();
-		String id = Subscriptions.getId(token);
-		String tok = "Bearer " + token;
-		OkHttpClient client = new OkHttpClient();
-		Request request = new Request.Builder()
-				.url("https://management.azure.com" + id
-						+ "/providers/Microsoft.Billing/invoices?api-version=2017-04-24-preview")
-				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
-		try {
-			Response response = client.newCall(request).execute();
-			JsonElement je = new JsonParser().parse(response.body().string());
-			JsonObject jo = je.getAsJsonObject();
-			JsonArray ja1 = jo.getAsJsonArray("value");
-			for (int j = 0; j < ja1.size(); j++) {
-				JsonObject jo1 = new JsonObject();
-				jo1.addProperty("InvoicePeriodEndDate", ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject()
-						.get("invoicePeriodEndDate").getAsString());
-				jo1.addProperty("InvoicePeriodStartDate", ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject()
-						.get("invoicePeriodStartDate").getAsString());
-				ja.add(jo1);
-			}
-
-		} catch (Exception e) {
-			return 0;
-		}
-		return ja.size();
-	}
 
 	public static String getBilling(String token,String currency,String p) {
 		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
-		String id = Subscriptions.getId(token);
 		String tok = "Bearer " + token;
 		OkHttpClient client = new OkHttpClient();
-		String cycle = Billing.getBillingCycle(token);
+		ArrayList<String> idl = Subscriptions.getId(token);
+		for (String id : idl) {
+		String cycle = Billing.getBillingCycle(token,id);
 		JsonElement je1 = new JsonParser().parse(cycle);
 		JsonArray jaa = je1.getAsJsonArray();
 		for(int k=0;k< Integer.parseInt(p); k++){
@@ -179,12 +151,14 @@ public class Billing {
 			  sum = sum.add(d);
 			}
 			JsonObject jo1 = new JsonObject();
+			jo1.addProperty("Subscription Id", id);
 			jo1.addProperty("ReportedStartedTime", dstart);
 			jo1.addProperty("ReportedEndTime", dend);
 			jo1.addProperty("Bill", sum);
 			ja.add(jo1);
 		} catch (Exception e) {
 			return null;
+		}
 		}
 		}
 		return ja.toString();	

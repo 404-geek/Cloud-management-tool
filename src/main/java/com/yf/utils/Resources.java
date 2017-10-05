@@ -1,5 +1,8 @@
 package com.yf.utils;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -12,9 +15,10 @@ public class Resources {
 	static String CONTENT = "application/json";
 
 	public static String getResources(String token) {
-		String id = Subscriptions.getId(token);
 		String tok = "Bearer " + token;
-
+		ArrayList<String> subs = Subscriptions.getId(token);
+		//for (int j=0;j<subs.size();j++) {
+		String id = subs.get(0);	
 		OkHttpClient client = new OkHttpClient();
 
 		Request request = new Request.Builder()
@@ -24,13 +28,15 @@ public class Resources {
 			Response response = client.newCall(request).execute();
 			return response.body().string();
 		} catch (Exception e) {
+			return null;
 		}
-		return null;
+		//}		
 	}
 
-	public static String[] getType(String token) {
-
-		String id = Subscriptions.getId(token);
+	public static LinkedHashMap<String, String> getType(String token) {
+		ArrayList<String> subs = Subscriptions.getId(token);
+		LinkedHashMap<String, String> hm = new LinkedHashMap<String, String>();
+		for (String id : subs) {
 		String tok = "Bearer " + token;
 
 		OkHttpClient client = new OkHttpClient();
@@ -42,42 +48,30 @@ public class Resources {
 			Response response = client.newCall(request).execute();
 			JSONObject jo = new JSONObject(response.body().string());
 			JSONArray ja = jo.getJSONArray("value");
-			String[] crits = new String[ja.length()];
 			int n = 0;
 			for (n = 0; n < ja.length(); n++) {
 				JSONObject je = ja.getJSONObject(n);
 				String Type = je.getString("type");
-				crits[n] = Type;
+				String uid = je.getString("id");
+				hm.put(uid, Type);
 			}
-			return crits;
 		} catch (Exception e) {
+			return null;
 		}
-		return null;
+		}
+		return hm;
 	}
 
 	public static String getResid(String token, int arr) {
-		String id = Subscriptions.getId(token);
-		String tok = "Bearer " + token;
-
-		OkHttpClient client = new OkHttpClient();
-
-		Request request = new Request.Builder()
-				.url("https://management.azure.com" + id + "/resources?api-version=2017-05-10")
-				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
+		LinkedHashMap<String, String> type = getType(token);
+		ArrayList<String> list = new ArrayList<String>();
 		try {
-			Response response = client.newCall(request).execute();
-			JSONObject jo = new JSONObject(response.body().string());
-			JSONArray ja = jo.getJSONArray("value");
-			String[] crits = new String[ja.length()];
-			int n = 0;
-			for (n = 0; n < ja.length(); n++) {
-				JSONObject je = ja.getJSONObject(n);
-				String Type = je.getString("id");
-				crits[n] = Type;
+			for (Map.Entry<String, String> entry : type.entrySet()) {
+				list.add(entry.getKey());
 			}
-			return crits[arr];
+			return list.get(arr);
 		} catch (Exception e) {
+			return null;
 		}
-		return null;
 	}
 }
