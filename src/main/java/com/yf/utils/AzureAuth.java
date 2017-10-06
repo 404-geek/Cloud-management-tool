@@ -55,7 +55,7 @@ public class AzureAuth {
 			return response.body().string();
 		} catch (Exception e) {
 
-			return null;
+			return "OK";
 		}
 
 	}

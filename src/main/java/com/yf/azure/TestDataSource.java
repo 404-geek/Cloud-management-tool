@@ -576,8 +576,8 @@ public class TestDataSource extends AbstractDataSource {
 				String months = new String(TestDataSource.this.loadBlob("months"));
 				String locale = new String(TestDataSource.this.loadBlob("Locale"));
 				String region = new String(TestDataSource.this.loadBlob("Region"));
-				String Bill = Billing.getBilling(token, currency, months, locale, region);
-				System.out.println(Bill);
+				String offer = new String(TestDataSource.this.loadBlob("Offer"));
+				String Bill = Billing.getBilling(token, currency, months, locale, region, offer);
 				JsonElement je = new JsonParser().parse(Bill);
 				JsonArray ja = je.getAsJsonArray();
 				saveBlob("BILL", Bill.getBytes());
@@ -653,6 +653,7 @@ public class TestDataSource extends AbstractDataSource {
 			String months = (String) getAttribute("SELECTOR4");
 			String Locale = (String) getAttribute("SELECTOR2");
 			String Region = (String) getAttribute("SELECTOR3");
+			String Offer = (String) getAttribute("SELECTOR5");
 			JsonElement je = new JsonParser().parse(AzureAuth.getResponse(authCode));
 			try {
 				new AzureAuth();
@@ -660,6 +661,7 @@ public class TestDataSource extends AbstractDataSource {
 					JsonObject jo = je.getAsJsonObject();
 					String accessToken = jo.get("access_token").getAsString();
 					String refreshToken = jo.get("refresh_token").getAsString();
+					if(Billing.getCode(accessToken, currency, Locale, Region, Offer) == 200){
 					saveBlob("accessToken", accessToken.getBytes());
 					saveBlob("refreshToken", refreshToken.getBytes());
 					saveBlob("currency", currency.getBytes());
@@ -667,6 +669,12 @@ public class TestDataSource extends AbstractDataSource {
 					saveBlob("months", months.getBytes());
 					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
+					saveBlob("Offer", Offer.getBytes());
+					}
+					else{
+						String ret = Billing.getStr(accessToken, currency, Locale, Region, Offer);
+						p.put("ERROR", ret);
+					}
 				}
 				if (AzureAuth.authCheck(authCode) != 200) {
 					String ref = new String(loadBlob("refreshToken"));
@@ -678,6 +686,7 @@ public class TestDataSource extends AbstractDataSource {
 					saveBlob("months", months.getBytes());
 					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
+					saveBlob("Offer", Offer.getBytes());
 				}
 			} catch (Exception e) {
 				p.put("ERROR", "Invalid Authentication Code");

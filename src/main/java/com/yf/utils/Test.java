@@ -41,15 +41,7 @@ public class Test
 		e.printStackTrace();
 	}
 	  System.out.println(ds2);*/
-	  SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-	    Date parsed = null;
-	    try {
-	        parsed = sdf.parse("08/26/2017");
-	    } catch (ParseException e1) {
-	        // TODO Auto-generated catch block
-	        e1.printStackTrace();
-	    }
-	    java.sql.Date data = new java.sql.Date(parsed.getTime());
-	    System.out.println(data);
+	  Date date3 = null; 
+	  System.out.println(date3);
   }
 }

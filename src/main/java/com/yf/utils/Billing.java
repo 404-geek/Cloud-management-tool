@@ -18,7 +18,7 @@ import okhttp3.Response;
 public class Billing {
 	static Logger LOGGER = Logger.getLogger(Billing.class.getName());
 
-	public static String getCard(String token, String currency, String Loc, String reg) {
+	public static String getCard(String token, String currency, String Loc, String reg, String offer) {
 		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
 		ArrayList<String> idl = Subscriptions.getId(token);
@@ -28,7 +28,7 @@ public class Billing {
 
 		Request request = new Request.Builder()
 				.url("https://management.azure.com" + id
-						+ "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&$filter=OfferDurableId eq 'MS-AZR-0003p' and Currency eq '"
+						+ "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&$filter=OfferDurableId eq 'MS-AZR-" + offer + "' and Currency eq '"
 						+ currency + "' and Locale eq '" + Loc + "' and RegionInfo eq '" + reg + "'")
 				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 		try {
@@ -53,6 +53,50 @@ public class Billing {
 			return null;
 		}
 		return ja.toString();
+	}
+	
+	public static int getCode(String token, String currency, String Loc, String reg, String offer) {
+		String CONTENT = "application/json";
+		ArrayList<String> idl = Subscriptions.getId(token);
+		String id = idl.get(0);
+		int responseCode = 999;
+		String tok = "Bearer " + token;
+		OkHttpClient client = new OkHttpClient();
+
+		Request request = new Request.Builder()
+				.url("https://management.azure.com" + id
+						+ "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&$filter=OfferDurableId eq 'MS-AZR-" + offer + "' and Currency eq '"
+						+ currency + "' and Locale eq '" + Loc + "' and RegionInfo eq '" + reg + "'")
+				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
+		try {
+			Response response = client.newCall(request).execute();
+			return response.code();
+
+		} catch (Exception e) {
+			return responseCode;
+		}
+	}
+	
+	public static String getStr(String token, String currency, String Loc, String reg, String offer) {
+		String CONTENT = "application/json";
+		ArrayList<String> idl = Subscriptions.getId(token);
+		String id = idl.get(0);
+		String tok = "Bearer " + token;
+		OkHttpClient client = new OkHttpClient();
+
+		Request request = new Request.Builder()
+				.url("https://management.azure.com" + id
+						+ "/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&$filter=OfferDurableId eq 'MS-AZR-" + offer + "' and Currency eq '"
+						+ currency + "' and Locale eq '" + Loc + "' and RegionInfo eq '" + reg + "'")
+				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
+		try {
+			Response response = client.newCall(request).execute();
+			JsonElement je = new JsonParser().parse(response.body().string());
+			String ret = je.getAsJsonObject().get("Message").getAsString();
+			return ret;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public static String getBillingCycle(String token, String id) {
@@ -85,7 +129,7 @@ public class Billing {
 		return ja.toString();
 	}
 
-	public static String getBilling(String token, String currency, String p, String Loc, String reg) {
+	public static String getBilling(String token, String currency, String p, String Loc, String reg, String offer) {
 		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
 		String tok = "Bearer " + token;
@@ -96,6 +140,7 @@ public class Billing {
 			JsonElement je1 = new JsonParser().parse(cycle);
 			JsonArray jaa = je1.getAsJsonArray();
 			for (int k = 0; k < Integer.parseInt(p); k++) {
+				try{
 				String ds1 = jaa.get(k).getAsJsonObject().get("InvoicePeriodStartDate").getAsString();
 				String ds2 = jaa.get(k).getAsJsonObject().get("InvoicePeriodEndDate").getAsString();
 				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -119,7 +164,7 @@ public class Billing {
 					JsonArray ja1 = jo.getAsJsonArray("value");
 					Map<String, BigDecimal> hm = new HashMap<String, BigDecimal>();
 
-					String resp = Billing.getCard(token, currency, Loc, reg);
+					String resp = Billing.getCard(token, currency, Loc, reg, offer);
 					JsonElement match = new JsonParser().parse(resp);
 					JsonArray ja2 = match.getAsJsonArray();
 					for (int j = 0; j < ja1.size(); j++) {
@@ -158,6 +203,15 @@ public class Billing {
 					ja.add(jo1);
 				} catch (Exception e) {
 					return null;
+				}
+				}catch (Exception e) {
+					BigDecimal re = BigDecimal.ZERO;
+					JsonObject jo1 = new JsonObject();
+					jo1.addProperty("Subscription Id", id);
+					jo1.addProperty("ReportedStartedTime", "0");
+					jo1.addProperty("ReportedEndTime", "0");
+					jo1.addProperty("Bill", re);
+					ja.add(jo1);
 				}
 			}
 		}

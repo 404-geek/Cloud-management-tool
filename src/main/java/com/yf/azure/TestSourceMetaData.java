@@ -44,6 +44,38 @@ public class TestSourceMetaData
       zones.addOption(zone);
     }
     addParameter(zones);
+   
+    Parameter offer = new Parameter("SELECTOR5", "Subscription Offer Selector", "Select the subscription", 2, 6, null, true);
+    offer.addOption("0003P");
+    offer.addOption("0041P");
+    offer.addOption("0042P");
+    offer.addOption("0043P");
+    offer.addOption("0044P");
+    offer.addOption("0059P");
+    offer.addOption("0042P");
+    offer.addOption("0060P");
+    offer.addOption("0062P");
+    offer.addOption("0063P");
+    offer.addOption("0064P");
+    offer.addOption("0029P");
+    offer.addOption("0022P");
+    offer.addOption("0023P");
+    offer.addOption("0148P");
+    offer.addOption("0025P");
+    offer.addOption("0036P");
+    offer.addOption("0120P-0130P");
+    offer.addOption("0144P");
+    offer.addOption("0149P");
+    offer.addOption("0145P");
+    offer.addOption("DE-0145P");
+    offer.addOption("0044P");
+    offer.addOption("DE-0003P");
+    offer.addOption("DE-0041P");
+    offer.addOption("DE-0042P");
+    offer.addOption("DE-0043P");
+    
+    addParameter(offer);
+    
     
     Parameter currency = new Parameter("SELECTOR1", "Currency Selector", "Select the currency", 2, 6, null, true);
     currency.addOption("USD");
@@ -66,7 +98,7 @@ public class TestSourceMetaData
     addParameter(Region);
     
     Parameter months = new Parameter("SELECTOR4", "Select No of Billing Cycles Required", "Select the months", 2, 6, null, true);
-     for(int j=1;j<=9;j++){
+     for(int j=1;j<=3;j++){
     	 months.addOption(""+j+"");
      } 
     addParameter(months);
@@ -81,11 +113,11 @@ public class TestSourceMetaData
   
   public String getDatasourceShortDescription()
   {
-    return "Azure";
+    return "Azure Connector";
   }
   
   public String getDatasourceLongDescription()
   {
-    return "Microsoft Azure ";
+    return "Microsoft Azure is a cloud computing service created by Microsoft for building, testing, deploying, and managing applications.";
   }
 }
