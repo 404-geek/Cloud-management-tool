@@ -58,6 +58,7 @@ public class TestDataSource extends AbstractDataSource {
 		p.add(database());
 		p.add(virtualMachineLive());
 		p.add(Billing());
+		p.add(databaseLive());
 
 		return p;
 	}
@@ -462,6 +463,123 @@ public class TestDataSource extends AbstractDataSource {
 				String zone = new String(TestDataSource.this.loadBlob("zone"));
 				String token = new String(loadBlob("accessToken"));
 				String database = Databases.getDetails(token);
+				JsonElement je = new JsonParser().parse(database);
+				JsonArray ja = je.getAsJsonArray();
+				TestDataSource.this.saveBlob("DATA", database.getBytes());
+				String nodeData = new String(TestDataSource.this.loadBlob("DATA"));
+
+				Configuration conf = Configuration.defaultConfiguration()
+						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
+						.addOptions(new Option[] { Option.SUPPRESS_EXCEPTIONS });
+				DocumentContext tt = JsonPath.using(conf).parse(nodeData);
+
+				Object[][] data = (Object[][]) null;
+				data = new Object[ja.size()][columns.size()];
+
+				Object val = null;
+				for (int i = 0; i < ja.size(); i++) {
+					for (int j = 0; j < columns.size(); j++) {
+						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource ID")) {
+							val = tt.read("$.[" + i + "].['Resource ID']");
+							data[i][j] = val.toString();
+						}
+						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Group")) {
+							val = tt.read("$.[" + i + "].['Resource Group']");
+							data[i][j] = val.toString();
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage DTU")) {
+							val = tt.read("$.[" + i + "].['DTU Percentage']");
+							data[i][j] = new Float(val.toString());
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Database Name")) {
+							val = tt.read("$.[" + i + "].['Resource ID']");
+							String str = val.toString();
+							data[i][j] = str.substring(str.lastIndexOf("/") + 1);
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("CPU percentage")) {
+							val = tt.read("$.[" + i + "].['CPU percentage']");
+							data[i][j] = new Float(val.toString());
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Log IO percentage")) {
+							val = tt.read("$.[" + i + "].['Log IO percentage']");
+							data[i][j] = new Float(val.toString());
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Data IO percentage")) {
+							val = tt.read("$.[" + i + "].['Data IO percentage']");
+							data[i][j] = new Float(val.toString());
+						}  else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp(UTC)")) {
+							val = tt.read("$.[" + i + "].['Timestamp']");
+							String timestamp = val.toString();
+							SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+							try {
+								Date parsedDate = format.parse(timestamp);
+								Timestamp timeStampDate = new Timestamp(parsedDate.getTime());
+								data[i][j] = timeStampDate;
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName()
+								.equals("Timestamp(" + zone + ")")) {
+							val = tt.read("$.[" + i + "].['Timestamp']");
+							String timestamp = val.toString();
+							DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+							utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+							Date date = null;
+							try {
+								date = utcFormat.parse(timestamp);
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+							DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
+							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
+							data[i][j] = ts;
+						}
+					}
+				}
+				return data;
+			}
+		};
+		return simpleDataSet;
+	}
+
+	private AbstractDataSet databaseLive() {
+		AbstractDataSet simpleDataSet = new AbstractDataSet() {
+			public ArrayList<FilterMetaData> getFilters() {
+				ArrayList<FilterMetaData> fm = new ArrayList();
+				return fm;
+			}
+
+			public String getDataSetName() {
+				return "Databases Live";
+			}
+
+			public ArrayList<ColumnMetaData> getColumns() {
+				ArrayList<ColumnMetaData> cm = new ArrayList();
+				String zone = new String(TestDataSource.this.loadBlob("zone"));
+				cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
+				cm.add(new ColumnMetaData("Resource Group", DataType.TEXT));
+				cm.add(new ColumnMetaData("Database Name", DataType.TEXT));
+				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
+				cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
+				cm.add(new ColumnMetaData("Percentage DTU", DataType.NUMERIC));
+				cm.add(new ColumnMetaData("CPU percentage", DataType.NUMERIC));
+				cm.add(new ColumnMetaData("Log IO percentage", DataType.NUMERIC));
+				cm.add(new ColumnMetaData("Data IO percentage", DataType.NUMERIC));
+
+				return cm;
+			}
+
+			public boolean getAllowsAggregateColumns() {
+				return false;
+			}
+
+			public boolean getAllowsDuplicateColumns() {
+				return false;
+			}
+
+			public Object[][] execute(List<ColumnMetaData> columns, List<FilterData> filters) {
+				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
+					throw new ThirdPartyException("Database is not yet populated");
+				}
+				String zone = new String(TestDataSource.this.loadBlob("zone"));
+				String token = new String(loadBlob("accessToken"));
+				String database = Databases.getLiveDetails(token);
 				JsonElement je = new JsonParser().parse(database);
 				JsonArray ja = je.getAsJsonArray();
 				TestDataSource.this.saveBlob("DATA", database.getBytes());
