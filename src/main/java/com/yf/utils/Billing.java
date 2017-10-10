@@ -3,6 +3,8 @@ package com.yf.utils;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +19,8 @@ import okhttp3.Response;
 
 public class Billing {
 	static Logger LOGGER = Logger.getLogger(Billing.class.getName());
-
+	static String CONTENT = "application/json";
 	public static String getCard(String token, String currency, String Loc, String reg, String offer) {
-		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
 		ArrayList<String> idl = Subscriptions.getId(token);
 		String id = idl.get(0);
@@ -40,6 +41,7 @@ public class Billing {
 				JsonObject jo1 = new JsonObject();
 				jo1.addProperty("MeterId", ja1.get(j).getAsJsonObject().get("MeterId").getAsString());
 				jo1.addProperty("Metername", ja1.get(j).getAsJsonObject().get("MeterName").getAsString());
+				jo1.addProperty("MeterSub", ja1.get(j).getAsJsonObject().get("MeterSubCategory").getAsString());
 				try {
 					jo1.addProperty("MeterRates",
 							ja1.get(j).getAsJsonObject().get("MeterRates").getAsJsonObject().get("0").getAsFloat());
@@ -56,7 +58,6 @@ public class Billing {
 	}
 	
 	public static int getCode(String token, String currency, String Loc, String reg, String offer) {
-		String CONTENT = "application/json";
 		ArrayList<String> idl = Subscriptions.getId(token);
 		String id = idl.get(0);
 		int responseCode = 999;
@@ -78,7 +79,6 @@ public class Billing {
 	}
 	
 	public static String getStr(String token, String currency, String Loc, String reg, String offer) {
-		String CONTENT = "application/json";
 		ArrayList<String> idl = Subscriptions.getId(token);
 		String id = idl.get(0);
 		String tok = "Bearer " + token;
@@ -100,7 +100,6 @@ public class Billing {
 	}
 
 	public static String getBillingCycle(String token, String id) {
-		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
 		String tok = "Bearer " + token;
 		OkHttpClient client = new OkHttpClient();
@@ -130,7 +129,6 @@ public class Billing {
 	}
 
 	public static String getBilling(String token, String currency, String p, String Loc, String reg, String offer) {
-		String CONTENT = "application/json";
 		JsonArray ja = new JsonArray();
 		String tok = "Bearer " + token;
 		OkHttpClient client = new OkHttpClient();
@@ -217,8 +215,8 @@ public class Billing {
 		}
 		return ja.toString();
 	}
-		public static String getRBilling(String token, String currency, String p, String Loc, String reg, String offer) {
-			String CONTENT = "application/json";
+	
+		public static String getRBilling(String token, String currency, String Loc, String reg, String offer) {
 			JsonArray ja = new JsonArray();
 			String tok = "Bearer " + token;
 			OkHttpClient client = new OkHttpClient();
@@ -227,17 +225,17 @@ public class Billing {
 				String cycle = Billing.getBillingCycle(token, id);
 				JsonElement je1 = new JsonParser().parse(cycle);
 				JsonArray jaa = je1.getAsJsonArray();
-				for (int k = 0; k < Integer.parseInt(p); k++) {
 					try{
-					String ds1 = jaa.get(k).getAsJsonObject().get("InvoicePeriodStartDate").getAsString();
-					String ds2 = jaa.get(k).getAsJsonObject().get("InvoicePeriodEndDate").getAsString();
+					String a = LocalDate.now().toString();
+					String ds2 = jaa.get(0).getAsJsonObject().get("InvoicePeriodEndDate").getAsString();
+					//String monthBegin = LocalDate.now().withDayOfMonth(1).toString();
 					SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 					SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
 					String dstart = null;
 					String dend = null;
 					try {
-						dstart = sdf2.format(sdf1.parse(ds1));
-						dend = sdf2.format(sdf1.parse(ds2));
+						dstart = sdf2.format(sdf1.parse(ds2));
+						dend = sdf2.format(sdf1.parse(a));
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
@@ -252,9 +250,6 @@ public class Billing {
 						JsonArray ja1 = jo.getAsJsonArray("value");
 						Map<String, BigDecimal> hm = new HashMap<String, BigDecimal>();
 
-						String resp = Billing.getCard(token, currency, Loc, reg, offer);
-						JsonElement match = new JsonParser().parse(resp);
-						JsonArray ja2 = match.getAsJsonArray();
 						for (int j = 0; j < ja1.size(); j++) {
 							String i = ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject().get("meterId")
 									.getAsString();
@@ -265,8 +260,10 @@ public class Billing {
 							rates = rates.add(MeterQ);
 							hm.put(i, rates);
 						}
+						String resp = Billing.getCard(token, currency, Loc, reg, offer);
+						JsonElement match = new JsonParser().parse(resp);
+						JsonArray ja2 = match.getAsJsonArray();
 						BigDecimal re = BigDecimal.ZERO;
-						ArrayList<BigDecimal> list = new ArrayList<BigDecimal>();
 						for (Map.Entry<String, BigDecimal> entry : hm.entrySet()) {
 							for (int j = 0; j < ja2.size(); j++) {
 								String ko = entry.getKey();
@@ -274,21 +271,21 @@ public class Billing {
 								if (ko.equals(mo)) {
 									BigDecimal po = ja2.get(j).getAsJsonObject().get("MeterRates").getAsBigDecimal();
 									BigDecimal lo = entry.getValue().setScale(2, BigDecimal.ROUND_HALF_EVEN);
+									String name = ja2.get(j).getAsJsonObject().get("Metername").getAsString();
+									String sub = ja2.get(j).getAsJsonObject().get("MeterSub").getAsString();
 									re = po.multiply(lo).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-									list.add(re);
+									JsonObject jo1 = new JsonObject();
+									jo1.addProperty("Subscription Id", id);
+									jo1.addProperty("Resource Name", name+"-"+sub);
+									jo1.addProperty("Id", ko);
+									jo1.addProperty("Consumed Units", lo);
+									jo1.addProperty("Billable Units", lo);
+									jo1.addProperty("Pre-Tax Cost", re);
+									ja.add(jo1);
 								}
+								
 							}
 						}
-						BigDecimal sum = new BigDecimal(0);
-						for (BigDecimal d : list) {
-							sum = sum.add(d);
-						}
-						JsonObject jo1 = new JsonObject();
-						jo1.addProperty("Subscription Id", id);
-						jo1.addProperty("ReportedStartedTime", dstart);
-						jo1.addProperty("ReportedEndTime", dend);
-						jo1.addProperty("Bill", sum);
-						ja.add(jo1);
 					} catch (Exception e) {
 						return null;
 					}
@@ -296,14 +293,14 @@ public class Billing {
 						BigDecimal re = BigDecimal.ZERO;
 						JsonObject jo1 = new JsonObject();
 						jo1.addProperty("Subscription Id", id);
-						jo1.addProperty("ReportedStartedTime", "0");
-						jo1.addProperty("ReportedEndTime", "0");
-						jo1.addProperty("Bill", re);
+						jo1.addProperty("Resource Name", "No Data");
+						jo1.addProperty("Id", "No Data");
+						jo1.addProperty("Consumed Units", re);
+						jo1.addProperty("Billable Units", re);
+						jo1.addProperty("Pre-Tax Cost", re);
 						ja.add(jo1);
 					}
 				}
-			}
 			return ja.toString();
-
 	}
 }

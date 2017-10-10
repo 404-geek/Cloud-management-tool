@@ -59,6 +59,7 @@ public class TestDataSource extends AbstractDataSource {
 		p.add(virtualMachineLive());
 		p.add(Billing());
 		p.add(databaseLive());
+		p.add(RBilling());
 
 		return p;
 	}
@@ -750,6 +751,92 @@ public class TestDataSource extends AbstractDataSource {
 		};
 		return simpleDataSet;
 	}
+	
+	private AbstractDataSet RBilling() {
+		AbstractDataSet simpleDataSet = new AbstractDataSet() {
+			public ArrayList<FilterMetaData> getFilters() {
+				ArrayList<FilterMetaData> fm = new ArrayList();
+				return fm;
+			}
+
+			public String getDataSetName() {
+				return "Resource Billing";
+			}
+
+			public ArrayList<ColumnMetaData> getColumns() {
+				String currency = new String(TestDataSource.this.loadBlob("currency"));
+				ArrayList<ColumnMetaData> cm = new ArrayList();
+				cm.add(new ColumnMetaData("Subscription Id", DataType.TEXT));
+				cm.add(new ColumnMetaData("Resource Name", DataType.TEXT));
+				cm.add(new ColumnMetaData("Resource GUID", DataType.TEXT));
+				cm.add(new ColumnMetaData("Consumed Units", DataType.NUMERIC));
+				cm.add(new ColumnMetaData("Billable Units", DataType.NUMERIC));
+				cm.add(new ColumnMetaData("Pre-Tax Cost(" + currency + ")", DataType.NUMERIC));
+
+				return cm;
+			}
+
+			public boolean getAllowsDuplicateColumns() {
+				return false;
+			}
+
+			public boolean getAllowsAggregateColumns() {
+				return false;
+			}
+
+			public Object[][] execute(List<ColumnMetaData> columns, List<FilterData> filters) {
+				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
+					throw new ThirdPartyException("Database is not yet populated");
+				}
+				String currency = new String(TestDataSource.this.loadBlob("currency"));
+				String token = new String(TestDataSource.this.loadBlob("accessToken"));
+				String locale = new String(TestDataSource.this.loadBlob("Locale"));
+				String region = new String(TestDataSource.this.loadBlob("Region"));
+				String offer = new String(TestDataSource.this.loadBlob("Offer"));
+				String RBill = Billing.getRBilling(token, currency, locale, region, offer);
+				JsonElement je = new JsonParser().parse(RBill);
+				JsonArray ja = je.getAsJsonArray();
+				saveBlob("RBILL", RBill.getBytes());
+				String nodeData = new String(TestDataSource.this.loadBlob("RBILL"));
+
+				Configuration conf = Configuration.defaultConfiguration()
+						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
+						.addOptions(new Option[] { Option.SUPPRESS_EXCEPTIONS });
+				DocumentContext tt = JsonPath.using(conf).parse(nodeData);
+
+				Object[][] data = (Object[][]) null;
+				data = new Object[ja.size()][columns.size()];
+
+				Object val = null;
+				for (int i = 0; i < ja.size(); i++) {
+					for (int j = 0; j < columns.size(); j++) {
+						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription Id")) {
+							val = tt.read("$.[" + i + "].['Subscription Id']");
+							data[i][j] = val.toString();
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Name")) {
+							val = tt.read("$.[" + i + "].['Resource Name']");
+							data[i][j] = val.toString();
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource GUID")) {
+							val = tt.read("$.[" + i + "].['Id']");
+							data[i][j] = val.toString();
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Consumed Units")) {
+							val = tt.read("$.[" + i + "].['Consumed Units']");
+							data[i][j] = new BigDecimal(val.toString());
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Billable Units")) {
+							val = tt.read("$.[" + i + "].['Billable Units']");
+							data[i][j] = new BigDecimal(val.toString());
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Pre-Tax Cost(" + currency + ")")) {
+							val = tt.read("$.[" + i + "].['Pre-Tax Cost']");
+							data[i][j] = new BigDecimal(val.toString());
+						} 
+					}
+				}
+				return data;
+			}
+		};
+		return simpleDataSet;
+	}
+
 
 	public JDBCMetaData getDataSourceMetaData() {
 		return new TestSourceMetaData();
