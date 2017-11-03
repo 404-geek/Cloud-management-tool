@@ -167,6 +167,16 @@ public class Databases {
 		for (int i = 0; i < index.size(); i++) {
 			String resid = Resources.getResid(token, ((Integer) index.get(i)).intValue());
 			try {
+				OkHttpClient client = new OkHttpClient();
+
+				Request request = new Request.Builder()
+				  .url("https://management.azure.com/subscriptions/5744cda7-2ba6-4f43-b407-acf9a0be2822/resourceGroups/RG_1/providers/Microsoft.Sql/servers/yftestserver/databases/YF_DB?api-version=2014-01-01")
+				  .get()
+				  .addHeader("authorization", "Bearer "+token)
+				  .addHeader("content-type", CONTENT)
+				  .build();
+
+				Response response = client.newCall(request).execute();
 				String[] det = getdbLive(token, resid);
 				JsonElement je = new JsonParser().parse(det[0]);
 				JsonArray dtu = je.getAsJsonArray();

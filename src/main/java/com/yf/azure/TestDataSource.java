@@ -83,6 +83,7 @@ public class TestDataSource extends AbstractDataSource {
 				cm.add(new ColumnMetaData("OS Type", DataType.TEXT));
 				cm.add(new ColumnMetaData("VM Size", DataType.TEXT));
 				cm.add(new ColumnMetaData("Location", DataType.TEXT));
+				cm.add(new ColumnMetaData("Status", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage CPU", DataType.NUMERIC));
@@ -141,6 +142,9 @@ public class TestDataSource extends AbstractDataSource {
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Location")) {
 							val = tt.read("$.[" + i + "].['Location']");
+							data[i][j] = val.toString();
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Status")) {
+							val = tt.read("$.[" + i + "].['Status']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp(UTC)")) {
 							val = tt.read("$.[" + i + "].['Timestamp']");

@@ -214,10 +214,6 @@ public class VirtualMachine {
 		return ja1.toString();
 	}
 	
-	public static String getStatus(String token) {
-		
-		
-	}
 
 	public static String getLiveDetails(String token) {
 		ArrayList<Integer> index = getIndex(token);
@@ -229,7 +225,7 @@ public class VirtualMachine {
 			OkHttpClient client = new OkHttpClient();
 
 			Request request = new Request.Builder()
-					.url("https://management.azure.com" + resid + "?api-version=2017-03-30")
+					.url("https://management.azure.com" + resid + "?api-version=2017-03-30&$expand=instanceView")
 					.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
 			try {
 				Response response = client.newCall(request).execute();
@@ -245,6 +241,8 @@ public class VirtualMachine {
 
 				JsonObject obj2 = job.get("properties").getAsJsonObject().getAsJsonObject().get("storageProfile")
 						.getAsJsonObject().get("osDisk").getAsJsonObject();
+				String stats = job.get("properties").getAsJsonObject().get("instanceView")
+						.getAsJsonObject().get("statuses").getAsJsonArray().get(1).getAsJsonObject().get("displayStatus").getAsString();
 				String vm = obj.get("vmId").getAsString();
 				String vmSz = obj1.get("vmSize").getAsString();
 				String os = obj2.get("osType").getAsString();
@@ -298,6 +296,7 @@ public class VirtualMachine {
 				jo.addProperty("OS type", os);
 				jo.addProperty("VMSize", vmSz);
 				jo.addProperty("Location", loc);
+				jo.addProperty("Status", stats);
 				jo.addProperty("Timestamp", percentageCPU.get(size).getAsJsonObject().get("timeStamp").getAsString());
 				try {
 					jo.addProperty("Percentage CPU",
