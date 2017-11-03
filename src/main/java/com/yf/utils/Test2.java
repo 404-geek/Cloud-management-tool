@@ -38,7 +38,7 @@ import okhttp3.Response;
 public class Test2 {
 	public static void main(String[] args) {
 
-		String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJLVmN1enFBaWRPTHFXU2FvbDd3Z0ZSR0NZbyIsImtpZCI6IjJLVmN1enFBaWRPTHFXU2FvbDd3Z0ZSR0NZbyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yN2M5NTA0YS1jNDY3LTQzNzYtYjI2MS04OWIxNWU4ZWJiMTcvIiwiaWF0IjoxNTA5NzEwMzQyLCJuYmYiOjE1MDk3MTAzNDIsImV4cCI6MTUwOTcxNDI0MiwiYWNyIjoiMSIsImFpbyI6IlkyTmdZRGdqMk5BZXR1aDVoTDVEOW9wSEg3cGU4TndOZlJsUm9LRVM4c295cCtUeG56QUEiLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiYjMxNDRmZTEtNjMzOC00M2EwLTg5MTgtYzA1MjkxZjUxMTcwIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJIZXdpdHQiLCJnaXZlbl9uYW1lIjoiSnVzdGluIiwiZ3JvdXBzIjpbImFjNzk2NzQwLWZmNWMtNDdmNy04OWRlLWZlOTMzYmRmNTA4ZCJdLCJpcGFkZHIiOiIxNC4xNDIuMTEwLjIyMiIsIm5hbWUiOiJKdXN0aW4gSGV3aXR0Iiwib2lkIjoiNWY4OTA2ZDEtZWUyZC00MjFkLWFhNzEtMDZhODEwOWMyMTMwIiwicHVpZCI6IjEwMDMzRkZGOEQyNzI0QUMiLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJwcllEaV9sLUdHbE96al9pTDZPa3pwQUt0QW9DZFRlbEcwVnVSczlOUm1ZIiwidGlkIjoiMjdjOTUwNGEtYzQ2Ny00Mzc2LWIyNjEtODliMTVlOGViYjE3IiwidW5pcXVlX25hbWUiOiJqdXN0aW4uaGV3aXR0QHllbGxvd2Zpbi5iaSIsInVwbiI6Imp1c3Rpbi5oZXdpdHRAeWVsbG93ZmluLmJpIiwidXRpIjoiYmQ1UW9sZlE4MHFLQWUzVC1Ec1lBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiNjJlOTAzOTQtNjlmNS00MjM3LTkxOTAtMDEyMTc3MTQ1ZTEwIl19.bW_ZBR8gCIlj2V3Uy3969IWTSvR2-XS-V4_sv708eFoMQEW3v9T_r3Jx91LgFmB50cyj22W_RY2XE77hMzirVPpd1pkBAzqKE2Cpeajg3bl2JoKKghrMPNMFGTy_yZvVacr8jMpIiKm50cWYrpXmsuPu14Fd4Sh3hdMDdXcXLij3iFiOz6X7W6w4L1IPlffwnFfB3KjS1wDuvrWmNm29Ugs9WNnOmV66J7G4Ll9N-UlQcTsKJi6eg6UH8S5XrApvTiWTP-AdtVPcyeK750cIgJ6RTJQ9IOb6u1FCDOSzxO5unlN9aCLpoQfOl-M6YmZxv5t_orevWRyYDvsSoY3rFA";
+		String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJLVmN1enFBaWRPTHFXU2FvbDd3Z0ZSR0NZbyIsImtpZCI6IjJLVmN1enFBaWRPTHFXU2FvbDd3Z0ZSR0NZbyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yN2M5NTA0YS1jNDY3LTQzNzYtYjI2MS04OWIxNWU4ZWJiMTcvIiwiaWF0IjoxNTA5NzMxNzY4LCJuYmYiOjE1MDk3MzE3NjgsImV4cCI6MTUwOTczNTY2OCwiYWNyIjoiMSIsImFpbyI6IkFTUUEyLzhHQUFBQU5VNGFuL0RWTmJxYzJQYUtCdEg1N3VVTStORVl2L1U5RUNzSnJFTlkrM3c9IiwiYW1yIjpbInB3ZCJdLCJhcHBpZCI6ImIzMTQ0ZmUxLTYzMzgtNDNhMC04OTE4LWMwNTI5MWY1MTE3MCIsImFwcGlkYWNyIjoiMSIsImZhbWlseV9uYW1lIjoiSGV3aXR0IiwiZ2l2ZW5fbmFtZSI6Ikp1c3RpbiIsImdyb3VwcyI6WyJhYzc5Njc0MC1mZjVjLTQ3ZjctODlkZS1mZTkzM2JkZjUwOGQiXSwiaXBhZGRyIjoiMTA2LjIwMC4xOTkuMzMiLCJuYW1lIjoiSnVzdGluIEhld2l0dCIsIm9pZCI6IjVmODkwNmQxLWVlMmQtNDIxZC1hYTcxLTA2YTgxMDljMjEzMCIsInB1aWQiOiIxMDAzM0ZGRjhEMjcyNEFDIiwic2NwIjoidXNlcl9pbXBlcnNvbmF0aW9uIiwic3ViIjoicHJZRGlfbC1HR2xPempfaUw2T2t6cEFLdEFvQ2RUZWxHMFZ1UnM5TlJtWSIsInRpZCI6IjI3Yzk1MDRhLWM0NjctNDM3Ni1iMjYxLTg5YjE1ZThlYmIxNyIsInVuaXF1ZV9uYW1lIjoianVzdGluLmhld2l0dEB5ZWxsb3dmaW4uYmkiLCJ1cG4iOiJqdXN0aW4uaGV3aXR0QHllbGxvd2Zpbi5iaSIsInV0aSI6IjMtVlV1Tmhxc0VHTkdESVhrMUlBQUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCJdfQ.2dnlDROpNJPKlOxLaYN-WEaFjmHDBuFzGj_ctuf1GLoAgH_9Mh6w0fv0sa7lrkhJ2bCgUhclwbnJ6-bZsf4InHEXNpeMLr6WxoN-rtj9iV9ce3_9g0ZHZ6nfHlXVKrCqGR_7R7EUZDUo1pA5Ss7aFK-a8gUVYefroMYNSgDLaqXK7KA3nCni2nYRCqlYRpABNQN-8htQmqSdoqszZUcd7ouFhKz87OHPhQWEYdw-tF24L_NCV2LL40jVqh89RFCXWbQkmwlOY8_m2jegp3CeYSHmt3Okdwh8xlMx04dnyRpwDUZHoimAdCGDxGA-9xi-WV4QQMp3kbyZ8fz32m-Fcg";
 		String CONTENT = "application/json";
 /*		String currency = "AUD";
 		String Loc = "en-AU";
@@ -49,7 +49,6 @@ public class Test2 {
 		JsonArray ja1 = new JsonArray();
 		for (int i = 0; i < index.size(); i++) {
 			String resid = Resources.getResid(token, ((Integer) index.get(i)).intValue());
-			System.out.println(resid);
 			try {
 				OkHttpClient client = new OkHttpClient();
 
@@ -59,14 +58,15 @@ public class Test2 {
 				  .build();
 
 				Response response = client.newCall(request).execute();
-				System.out.println(response.body().string());
+				JsonElement jer = new JsonParser().parse(response.body().string());
+				String status = jer.getAsJsonObject().get("properties").getAsJsonObject().get("status").getAsString();
 /*	            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	            DocumentBuilder builder = factory.newDocumentBuilder();
 	            Document doc = builder.parse(new ByteArrayInputStream(response.body().bytes()));
 	            XPath xPath = XPathFactory.newInstance().newXPath();
 	            String expression = "//d:status/text()";
 	            String status = xPath.compile(expression).evaluate(doc, XPathConstants.STRING).toString();
-	            System.out.println(status);
+	            System.out.println(status);*/
 				String[] det = Databases.getdbLive(token, resid);
 				JsonElement je = new JsonParser().parse(det[0]);
 				JsonArray dtu = je.getAsJsonArray();
@@ -106,6 +106,7 @@ public class Test2 {
 					str = m.group(1);
 				}
 				jo.addProperty("Resource Group", str);
+				jo.addProperty("Status", status);
 				jo.addProperty("Timestamp", dtu.get(size).getAsJsonObject().get("timeStamp").getAsString());
 				try {
 					jo.addProperty("DTU Percentage",
@@ -131,11 +132,11 @@ public class Test2 {
 				} catch (Exception e) {
 					jo.addProperty("Data IO percentage", Integer.valueOf(0));
 				}
-				ja1.add(jo);*/
+				ja1.add(jo);
 			} catch (Exception e) {
 				return;
 			}
 		}
-		//System.out.println(ja1.toString());
+		System.out.println(ja1.toString());
 	}
 }

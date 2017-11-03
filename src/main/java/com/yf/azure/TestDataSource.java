@@ -560,6 +560,7 @@ public class TestDataSource extends AbstractDataSource {
 				cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Group", DataType.TEXT));
 				cm.add(new ColumnMetaData("Database Name", DataType.TEXT));
+				cm.add(new ColumnMetaData("Status", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage DTU", DataType.NUMERIC));
@@ -615,6 +616,9 @@ public class TestDataSource extends AbstractDataSource {
 							val = tt.read("$.[" + i + "].['Resource ID']");
 							String str = val.toString();
 							data[i][j] = str.substring(str.lastIndexOf("/") + 1);
+						}else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Status")) {
+							val = tt.read("$.[" + i + "].['Status']");
+							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("CPU percentage")) {
 							val = tt.read("$.[" + i + "].['CPU percentage']");
 							data[i][j] = new Float(val.toString());

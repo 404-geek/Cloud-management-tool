@@ -170,13 +170,13 @@ public class Databases {
 				OkHttpClient client = new OkHttpClient();
 
 				Request request = new Request.Builder()
-				  .url("https://management.azure.com/subscriptions/5744cda7-2ba6-4f43-b407-acf9a0be2822/resourceGroups/RG_1/providers/Microsoft.Sql/servers/yftestserver/databases/YF_DB?api-version=2014-01-01")
-				  .get()
-				  .addHeader("authorization", "Bearer "+token)
-				  .addHeader("content-type", CONTENT)
+				  .url("https://management.azure.com"+resid+"?api-version=2014-01-01")
+				  .addHeader("Authorization", "Bearer "+token)
 				  .build();
 
 				Response response = client.newCall(request).execute();
+				JsonElement jer = new JsonParser().parse(response.body().string());
+				String status = jer.getAsJsonObject().get("properties").getAsJsonObject().get("status").getAsString();
 				String[] det = getdbLive(token, resid);
 				JsonElement je = new JsonParser().parse(det[0]);
 				JsonArray dtu = je.getAsJsonArray();
@@ -210,6 +210,7 @@ public class Databases {
 				int size = list.size() - 1;
 				JsonObject jo = new JsonObject();
 				jo.addProperty("Resource ID", resid);
+				jo.addProperty("Status", status);
 				Pattern pat = Pattern.compile("resourceGroups/(.*?)/providers");
 				Matcher m = pat.matcher(resid);
 				while (m.find()) {
