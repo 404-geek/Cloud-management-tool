@@ -213,6 +213,11 @@ public class VirtualMachine {
 		}
 		return ja1.toString();
 	}
+	
+	public static String getStatus(String token) {
+		
+		
+	}
 
 	public static String getLiveDetails(String token) {
 		ArrayList<Integer> index = getIndex(token);
