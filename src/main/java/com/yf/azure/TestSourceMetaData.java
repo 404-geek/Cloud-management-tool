@@ -1,7 +1,5 @@
 package com.yf.azure;
 
-
-
 import com.hof.pool.DBType;
 import com.hof.pool.JDBCMetaData;
 import com.yf.utils.Timezone;
@@ -94,7 +92,7 @@ public class TestSourceMetaData
     addParameter(Region);
     
     Parameter months = new Parameter("SELECTOR4", "Select No of Billing Cycles Required", "Select the months", 2, 6, null, true);
-     for(int j=1;j<=3;j++){
+     for(int j=1;j<=8;j++){
     	 months.addOption(""+j+"");
      } 
     addParameter(months);

@@ -135,6 +135,7 @@ public class VirtualMachine {
 				String os = obj2.get("osType").getAsString();
 				String loc = job.get("location").getAsString();
 				String str = obj3.get("id").getAsString();
+				String name = job.get("name").getAsString();
 				Pattern pat = Pattern.compile("resourceGroups/(.*?)/providers");
 				Matcher m = pat.matcher(str);
 				while (m.find()) {
@@ -162,6 +163,7 @@ public class VirtualMachine {
 					jo.addProperty("OS type", os);
 					jo.addProperty("VMSize", vmSz);
 					jo.addProperty("Location", loc);
+					jo.addProperty("Name", name);
 					jo.addProperty("Timestamp", percentageCPU.get(j).getAsJsonObject().get("timeStamp").getAsString());
 					try {
 						jo.addProperty("Percentage CPU",
@@ -248,6 +250,7 @@ public class VirtualMachine {
 				String os = obj2.get("osType").getAsString();
 				String loc = job.get("location").getAsString();
 				String str = obj3.get("id").getAsString();
+				String name = job.get("name").getAsString();
 				Pattern pat = Pattern.compile("resourceGroups/(.*?)/providers");
 				Matcher m = pat.matcher(str);
 				while (m.find()) {
@@ -297,6 +300,7 @@ public class VirtualMachine {
 				jo.addProperty("VMSize", vmSz);
 				jo.addProperty("Location", loc);
 				jo.addProperty("Status", stats);
+				jo.addProperty("Name", name);
 				jo.addProperty("Timestamp", percentageCPU.get(size).getAsJsonObject().get("timeStamp").getAsString());
 				try {
 					jo.addProperty("Percentage CPU",
