@@ -28,19 +28,14 @@ import okhttp3.Response;
 
 public class Test2 {
 	public static void main(String[] args) {
-<<<<<<< HEAD
 		String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJLVmN1enFBaWRPTHFXU2FvbDd3Z0ZSR0NZbyIsImtpZCI6IjJLVmN1enFBaWRPTHFXU2FvbDd3Z0ZSR0NZbyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yN2M5NTA0YS1jNDY3LTQzNzYtYjI2MS04OWIxNWU4ZWJiMTcvIiwiaWF0IjoxNTA5Nzc1MTAyLCJuYmYiOjE1MDk3NzUxMDIsImV4cCI6MTUwOTc3OTAwMiwiYWNyIjoiMSIsImFpbyI6IkFTUUEyLzhHQUFBQTBNaUFCY3N0NWJDSFdWak9HZ3hXa3JRYVd0UkkwSXJxUE83THhySFI2cUU9IiwiYW1yIjpbInB3ZCJdLCJhcHBpZCI6ImIzMTQ0ZmUxLTYzMzgtNDNhMC04OTE4LWMwNTI5MWY1MTE3MCIsImFwcGlkYWNyIjoiMSIsImZhbWlseV9uYW1lIjoiSGV3aXR0IiwiZ2l2ZW5fbmFtZSI6Ikp1c3RpbiIsImdyb3VwcyI6WyJhYzc5Njc0MC1mZjVjLTQ3ZjctODlkZS1mZTkzM2JkZjUwOGQiXSwiaXBhZGRyIjoiMTA2LjIwMC4xOTkuMzMiLCJuYW1lIjoiSnVzdGluIEhld2l0dCIsIm9pZCI6IjVmODkwNmQxLWVlMmQtNDIxZC1hYTcxLTA2YTgxMDljMjEzMCIsInB1aWQiOiIxMDAzM0ZGRjhEMjcyNEFDIiwic2NwIjoidXNlcl9pbXBlcnNvbmF0aW9uIiwic3ViIjoicHJZRGlfbC1HR2xPempfaUw2T2t6cEFLdEFvQ2RUZWxHMFZ1UnM5TlJtWSIsInRpZCI6IjI3Yzk1MDRhLWM0NjctNDM3Ni1iMjYxLTg5YjE1ZThlYmIxNyIsInVuaXF1ZV9uYW1lIjoianVzdGluLmhld2l0dEB5ZWxsb3dmaW4uYmkiLCJ1cG4iOiJqdXN0aW4uaGV3aXR0QHllbGxvd2Zpbi5iaSIsInV0aSI6IkxfX08wcklWZmtLU0l4R1dxc1FBQUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCJdfQ.GCdn63Zx_I-LUEhHgwHpxrBZwbIDLPzi4RckICvQMBIStjnawukHeVRwr7fg4x-R4YYAihWoPNyhz9y7KcUqp12wQ3hGkK4U2Cl9vcfrl-084QyH4JGxLSLrlTAH6O4Q7sWX8Rx_D4_Ibr7-4tEsVcJ_8qf-Ou-egXKJ7Dj7O33ElNWoNHRCRixvpaqL_bnEQ6Wqd_oSm-vzoF1q9_7xxnT-0MyJbDSGXD7_xMIfuhy0HeGJKJjSb9XDBbZiYyRg8cTRnpE3DYE3mEDKb2L6RuLooKupS-6T6PDUP42zv82CcYUapwHPpK6WOCX3lXApBmWpLTcaCqrvNL7hjLnGWg";
-=======
-
-		String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjJLVmN1enFBaWRPTHFXU2FvbDd3Z0ZSR0NZbyIsImtpZCI6IjJLVmN1enFBaWRPTHFXU2FvbDd3Z0ZSR0NZbyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuY29yZS53aW5kb3dzLm5ldC8iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yN2M5NTA0YS1jNDY3LTQzNzYtYjI2MS04OWIxNWU4ZWJiMTcvIiwiaWF0IjoxNTA5OTcwNTk5LCJuYmYiOjE1MDk5NzA1OTksImV4cCI6MTUwOTk3NDQ5OSwiYWNyIjoiMSIsImFpbyI6IlkyTmdZTWk3dHE0ZzB1OWpCNnR0VWRLQmVaZTZMNVNFL3I5NDRVUHdUZjFrKzBzK1Z5SUEiLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiYjMxNDRmZTEtNjMzOC00M2EwLTg5MTgtYzA1MjkxZjUxMTcwIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJIZXdpdHQiLCJnaXZlbl9uYW1lIjoiSnVzdGluIiwiZ3JvdXBzIjpbImFjNzk2NzQwLWZmNWMtNDdmNy04OWRlLWZlOTMzYmRmNTA4ZCJdLCJpcGFkZHIiOiIxNC4xNDIuMTEwLjIyMiIsIm5hbWUiOiJKdXN0aW4gSGV3aXR0Iiwib2lkIjoiNWY4OTA2ZDEtZWUyZC00MjFkLWFhNzEtMDZhODEwOWMyMTMwIiwicHVpZCI6IjEwMDMzRkZGOEQyNzI0QUMiLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJwcllEaV9sLUdHbE96al9pTDZPa3pwQUt0QW9DZFRlbEcwVnVSczlOUm1ZIiwidGlkIjoiMjdjOTUwNGEtYzQ2Ny00Mzc2LWIyNjEtODliMTVlOGViYjE3IiwidW5pcXVlX25hbWUiOiJqdXN0aW4uaGV3aXR0QHllbGxvd2Zpbi5iaSIsInVwbiI6Imp1c3Rpbi5oZXdpdHRAeWVsbG93ZmluLmJpIiwidXRpIjoiTHo4QU9TNDdSMGF2bHhrRVNXb2xBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiNjJlOTAzOTQtNjlmNS00MjM3LTkxOTAtMDEyMTc3MTQ1ZTEwIl19.UapR4ouP2jlJUhfwB5vQQWB7Dma8suqrgP3ewhrSDghmmsBRHLlmVkNOaDdYKeVQIedYk7UPjqmgrIxJI8IkYtXWyjL9qYzU1V1A-TfPjLWWidKz0XgTvffQdKhdQKglNzyFaIHVfEFFwMBxU9a_h4GHQKZ--FwmfbBmqNtW7Sja-2aSy8EudFr-Q0U38p4IdSeKc7VywiaMcU2xB6t021nTGdYl10a7EHh99j4IFdRRBs8HZF3n4d5CrURQIiG3W1Ad5Zh0jrWsFo69uJ3kvocKTtc6vORkQ8ZZwexX0shNnrVn2A0MBAtdsVB05tOEixFc2Z2uimNKu0i8SECiYw";
->>>>>>> a2eb53a553b748a5e106053f6cb27d4fa01d9080
 		String CONTENT = "application/json";
 		String p = "3";
 		String currency = "AUD";
 		String Loc = "en-AU";
 		String reg = "AU";
-<<<<<<< HEAD
-		String offer = "0003P";*/
+
+		String offer = "0003P";
 		ArrayList<Integer> index = VirtualMachine.getIndex(token);
 		JsonArray ja1 = new JsonArray();
 		for (int i = 0; i < index.size(); i++) {
@@ -143,13 +138,13 @@ public class Test2 {
 								.getAsString();
 						BigDecimal MeterQ = ja1.get(j).getAsJsonObject().get("properties").getAsJsonObject()
 								.get("quantity").getAsBigDecimal();
->>>>>>> a2eb53a553b748a5e106053f6cb27d4fa01d9080
+
 
 						BigDecimal rates = (BigDecimal) (hm.containsKey(i) ? hm.get(i) : BigDecimal.ZERO);
 						rates = rates.add(MeterQ);
 						hm.put(i, rates);
 					}
-<<<<<<< HEAD
+
 					DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					pstFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 					Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
@@ -217,7 +212,7 @@ public class Test2 {
 			}
 		}
 		//System.out.println(ja1.toString());
-=======
+
 					BigDecimal re = BigDecimal.ZERO;
 					ArrayList<BigDecimal> list = new ArrayList<BigDecimal>();
 					for (Map.Entry<String, BigDecimal> entry : hm.entrySet()) {
@@ -257,6 +252,5 @@ public class Test2 {
 			}
 		}
 		System.out.println(ja.toString());
->>>>>>> a2eb53a553b748a5e106053f6cb27d4fa01d9080
 	}
 }

@@ -451,12 +451,12 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-<<<<<<< HEAD
+
 				String zone = new String(TestDataSource.this.loadBlob("zone"));
-=======
+
 				//String zone = new String(TestDataSource.this.loadBlob("zone"));
 				cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
->>>>>>> a2eb53a553b748a5e106053f6cb27d4fa01d9080
+
 				cm.add(new ColumnMetaData("Resource Group", DataType.TEXT));
 				cm.add(new ColumnMetaData("Database Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
@@ -884,21 +884,6 @@ public class TestDataSource extends AbstractDataSource {
 					JsonObject jo = je.getAsJsonObject();
 					String accessToken = jo.get("access_token").getAsString();
 					String refreshToken = jo.get("refresh_token").getAsString();
-<<<<<<< HEAD
-					if (Billing.getCode(accessToken, currency, Locale, Region, Offer) == 200) {
-						saveBlob("accessToken", accessToken.getBytes());
-						saveBlob("refreshToken", refreshToken.getBytes());
-						saveBlob("currency", currency.getBytes());
-						saveBlob("zone", zone.getBytes());
-						saveBlob("months", months.getBytes());
-						saveBlob("Locale", Locale.getBytes());
-						saveBlob("Region", Region.getBytes());
-						saveBlob("Offer", Offer.getBytes());
-					} else {
-						String ret = Billing.getStr(accessToken, currency, Locale, Region, Offer);
-						p.put("ERROR", ret);
-					}
-=======
 					saveBlob("accessToken", accessToken.getBytes());
 					saveBlob("refreshToken", refreshToken.getBytes());
 //					saveBlob("currency", currency.getBytes());
@@ -906,9 +891,7 @@ public class TestDataSource extends AbstractDataSource {
 					saveBlob("months", months.getBytes());
 /*					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
-					saveBlob("Offer", Offer.getBytes());*/
-					
->>>>>>> a2eb53a553b748a5e106053f6cb27d4fa01d9080
+					saveBlob("Offer", Offer.getBytes());*/	
 				}
 				if (AzureAuth.authCheck(authCode) != 200) {
 					String ref = new String(loadBlob("refreshToken"));
