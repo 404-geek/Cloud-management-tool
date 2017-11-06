@@ -33,13 +33,13 @@ public class TestSourceMetaData
     
     addParameter(pq);
     
-    Parameter zones = new Parameter("SELECTOR", "Timezone Selector", "Select the timezone", 2, 6, null, true);
+/*    Parameter zones = new Parameter("SELECTOR", "Timezone Selector", "Select the timezone", 2, 6, null, true);
     for (String zone : this.sortedZones) {
       zones.addOption(zone);
     }
-    addParameter(zones);
+    addParameter(zones);*/
    
-    Parameter offer = new Parameter("SELECTOR5", "Subscription Offer Selector", "Select the subscription", 2, 6, null, true);
+/*    Parameter offer = new Parameter("SELECTOR5", "Subscription Offer Selector", "Select the subscription", 2, 6, null, true);
     offer.addOption("0003P");
     offer.addOption("0041P");
     offer.addOption("0042P");
@@ -89,7 +89,7 @@ public class TestSourceMetaData
     Region.addOption("AU");
     Region.addOption("US");
     
-    addParameter(Region);
+    addParameter(Region);*/
     
     Parameter months = new Parameter("SELECTOR4", "Select No of Billing Cycles Required", "Select the months", 2, 6, null, true);
      for(int j=1;j<=8;j++){

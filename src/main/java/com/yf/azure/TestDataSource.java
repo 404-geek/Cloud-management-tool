@@ -23,6 +23,7 @@ import com.jayway.jsonpath.Predicate;
 import com.yf.utils.AzureAuth;
 import com.yf.utils.Billing;
 import com.yf.utils.Databases;
+import com.yf.utils.NewBilling;
 import com.yf.utils.Refresher;
 import com.yf.utils.Resources;
 import com.yf.utils.VirtualMachine;
@@ -77,7 +78,7 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-				String zone = new String(TestDataSource.this.loadBlob("zone"));
+				//String zone = new String(TestDataSource.this.loadBlob("zone"));
 				cm.add(new ColumnMetaData("VmID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Type", DataType.TEXT));
 				cm.add(new ColumnMetaData("OS Type", DataType.TEXT));
@@ -86,7 +87,7 @@ public class TestDataSource extends AbstractDataSource {
 				cm.add(new ColumnMetaData("Status", DataType.TEXT));
 				cm.add(new ColumnMetaData("Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
-				cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
+				//cm.add(new ColumnMetaData("Timestamp(" + zone + ")", Dat./,aType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage CPU", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Network In", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Network Out", DataType.NUMERIC));
@@ -111,7 +112,8 @@ public class TestDataSource extends AbstractDataSource {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
 				String token = new String(TestDataSource.this.loadBlob("accessToken"));
-				String zone = new String(TestDataSource.this.loadBlob("zone"));
+	
+			//String zone = new String(TestDataSource.this.loadBlob("zone"));
 				String VMachine = VirtualMachine.getLiveDetails(token);
 				JsonElement je = new JsonParser().parse(VMachine);
 				JsonArray ja = je.getAsJsonArray();
@@ -161,7 +163,7 @@ public class TestDataSource extends AbstractDataSource {
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName()
+						} /*else if (((ColumnMetaData) columns.get(j)).getColumnName()
 								.equals("Timestamp(" + zone + ")")) {
 							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
@@ -178,7 +180,7 @@ public class TestDataSource extends AbstractDataSource {
 							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
 							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
 							data[i][j] = ts;
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage CPU")) {
+						}*/ else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage CPU")) {
 							val = tt.read("$.[" + i + "].['Percentage CPU']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Network In")) {
@@ -222,7 +224,7 @@ public class TestDataSource extends AbstractDataSource {
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
 
-				cm.add(new ColumnMetaData("Subscription ID", DataType.TEXT));
+				//cm.add(new ColumnMetaData("Subscription ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Type", DataType.TEXT));
 				cm.add(new ColumnMetaData("Location", DataType.TEXT));
@@ -263,15 +265,17 @@ public class TestDataSource extends AbstractDataSource {
 				Object val = null;
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
-						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription ID")) {
+/*						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription ID")) {
 							val = tt.read("$.['value'].[" + i + "].['id']");
 							data[i][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Name")) {
+						}*/if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Name")) {
 							val = tt.read("$.['value'].[" + i + "].['name']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Type")) {
 							val = tt.read("$.['value'].[" + i + "].['type']");
-							data[i][j] = val.toString();
+							String str = val.toString().substring(val.toString().lastIndexOf("/") + 1);
+							String output = str.substring(0, 1).toUpperCase() + str.substring(1);
+							data[i][j] = output;
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Location")) {
 							val = tt.read("$.['value'].[" + i + "].['location']");
 							data[i][j] = val.toString();
@@ -306,7 +310,7 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-				String zone = new String(TestDataSource.this.loadBlob("zone"));
+				//String zone = new String(TestDataSource.this.loadBlob("zone"));
 				cm.add(new ColumnMetaData("VmID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Type", DataType.TEXT));
 				cm.add(new ColumnMetaData("OS Type", DataType.TEXT));
@@ -314,7 +318,7 @@ public class TestDataSource extends AbstractDataSource {
 				cm.add(new ColumnMetaData("Location", DataType.TEXT));
 				cm.add(new ColumnMetaData("Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
-				cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
+				//cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage CPU", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Network In", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Network Out", DataType.NUMERIC));
@@ -339,7 +343,7 @@ public class TestDataSource extends AbstractDataSource {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
 				String token = new String(TestDataSource.this.loadBlob("accessToken"));
-				String zone = new String(TestDataSource.this.loadBlob("zone"));
+				//String zone = new String(TestDataSource.this.loadBlob("zone"));
 				new VirtualMachine();
 				String VMachine = VirtualMachine.getDetails(token);
 				JsonElement je = new JsonParser().parse(VMachine);
@@ -387,7 +391,7 @@ public class TestDataSource extends AbstractDataSource {
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName()
+						} /*else if (((ColumnMetaData) columns.get(j)).getColumnName()
 								.equals("Timestamp(" + zone + ")")) {
 							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
@@ -404,7 +408,7 @@ public class TestDataSource extends AbstractDataSource {
 							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
 							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
 							data[i][j] = ts;
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage CPU")) {
+						}*/ else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage CPU")) {
 							val = tt.read("$.[" + i + "].['Percentage CPU']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Network In")) {
@@ -447,11 +451,16 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
+<<<<<<< HEAD
 				String zone = new String(TestDataSource.this.loadBlob("zone"));
+=======
+				//String zone = new String(TestDataSource.this.loadBlob("zone"));
+				cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
+>>>>>>> a2eb53a553b748a5e106053f6cb27d4fa01d9080
 				cm.add(new ColumnMetaData("Resource Group", DataType.TEXT));
 				cm.add(new ColumnMetaData("Database Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
-				cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
+				//cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage DTU", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("CPU percentage", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Log IO percentage", DataType.NUMERIC));
@@ -472,7 +481,7 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
-				String zone = new String(TestDataSource.this.loadBlob("zone"));
+				//String zone = new String(TestDataSource.this.loadBlob("zone"));
 				String token = new String(loadBlob("accessToken"));
 				String database = Databases.getDetails(token);
 				JsonElement je = new JsonParser().parse(database);
@@ -521,7 +530,7 @@ public class TestDataSource extends AbstractDataSource {
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName()
+						}/* else if (((ColumnMetaData) columns.get(j)).getColumnName()
 								.equals("Timestamp(" + zone + ")")) {
 							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
@@ -537,7 +546,7 @@ public class TestDataSource extends AbstractDataSource {
 							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
 							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
 							data[i][j] = ts;
-						}
+						}*/
 					}
 				}
 				return data;
@@ -559,13 +568,13 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-				String zone = new String(TestDataSource.this.loadBlob("zone"));
+				//String zone = new String(TestDataSource.this.loadBlob("zone"));
 				cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Group", DataType.TEXT));
 				cm.add(new ColumnMetaData("Database Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Status", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
-				cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
+				//cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage DTU", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("CPU percentage", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Log IO percentage", DataType.NUMERIC));
@@ -586,7 +595,7 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
-				String zone = new String(TestDataSource.this.loadBlob("zone"));
+				//String zone = new String(TestDataSource.this.loadBlob("zone"));
 				String token = new String(loadBlob("accessToken"));
 				String database = Databases.getLiveDetails(token);
 				JsonElement je = new JsonParser().parse(database);
@@ -642,7 +651,7 @@ public class TestDataSource extends AbstractDataSource {
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName()
+						} /*else if (((ColumnMetaData) columns.get(j)).getColumnName()
 								.equals("Timestamp(" + zone + ")")) {
 							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
@@ -658,7 +667,7 @@ public class TestDataSource extends AbstractDataSource {
 							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
 							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
 							data[i][j] = ts;
-						}
+						}*/
 					}
 				}
 				return data;
@@ -679,12 +688,11 @@ public class TestDataSource extends AbstractDataSource {
 			}
 
 			public ArrayList<ColumnMetaData> getColumns() {
-				String currency = new String(TestDataSource.this.loadBlob("currency"));
 				ArrayList<ColumnMetaData> cm = new ArrayList();
 				cm.add(new ColumnMetaData("Reported Start Time", DataType.DATE));
 				cm.add(new ColumnMetaData("Reported End Time", DataType.DATE));
 				cm.add(new ColumnMetaData("Subscription ID", DataType.TEXT));
-				cm.add(new ColumnMetaData("Bill(" + currency + ")", DataType.NUMERIC));
+				cm.add(new ColumnMetaData("Bill", DataType.NUMERIC));
 
 				return cm;
 			}
@@ -701,13 +709,10 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
-				String currency = new String(TestDataSource.this.loadBlob("currency"));
+				
 				String token = new String(TestDataSource.this.loadBlob("accessToken"));
 				String months = new String(TestDataSource.this.loadBlob("months"));
-				String locale = new String(TestDataSource.this.loadBlob("Locale"));
-				String region = new String(TestDataSource.this.loadBlob("Region"));
-				String offer = new String(TestDataSource.this.loadBlob("Offer"));
-				String Bill = Billing.getBilling(token, currency, months, locale, region, offer);
+				String Bill = NewBilling.getBilling(token, months);
 				JsonElement je = new JsonParser().parse(Bill);
 				JsonArray ja = je.getAsJsonArray();
 				saveBlob("BILL", Bill.getBytes());
@@ -748,12 +753,13 @@ public class TestDataSource extends AbstractDataSource {
 							}
 							java.sql.Date date = new java.sql.Date(parsed.getTime());
 							data[i][j] = date;
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Bill(" + currency + ")")) {
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Bill")) {
 							val = tt.read("$.[" + i + "].['Bill']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription ID")) {
 							val = tt.read("$.[" + i + "].['Subscription Id']");
-							data[i][j] = val.toString();
+							String str = val.toString().substring(val.toString().lastIndexOf("/") + 1);
+							data[i][j] = str;
 						}
 					}
 				}
@@ -823,7 +829,8 @@ public class TestDataSource extends AbstractDataSource {
 					for (int j = 0; j < columns.size(); j++) {
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription Id")) {
 							val = tt.read("$.[" + i + "].['Subscription Id']");
-							data[i][j] = val.toString();
+							String str = val.toString().substring(val.toString().lastIndexOf("/") + 1);
+							data[i][j] = str;
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Name")) {
 							val = tt.read("$.[" + i + "].['Resource Name']");
 							data[i][j] = val.toString();
@@ -864,12 +871,12 @@ public class TestDataSource extends AbstractDataSource {
 		Map<String, Object> p = new HashMap();
 		try {
 			String authCode = (String) getAttribute("CODE");
-			String zone = (String) getAttribute("SELECTOR");
-			String currency = (String) getAttribute("SELECTOR1");
+			//String zone = (String) getAttribute("SELECTOR");
+			//String currency = (String) getAttribute("SELECTOR1");
 			String months = (String) getAttribute("SELECTOR4");
-			String Locale = (String) getAttribute("SELECTOR2");
-			String Region = (String) getAttribute("SELECTOR3");
-			String Offer = (String) getAttribute("SELECTOR5");
+			//String Locale = (String) getAttribute("SELECTOR2");
+			//String Region = (String) getAttribute("SELECTOR3");
+			//String Offer = (String) getAttribute("SELECTOR5");
 			JsonElement je = new JsonParser().parse(AzureAuth.getResponse(authCode));
 			try {
 				new AzureAuth();
@@ -877,6 +884,7 @@ public class TestDataSource extends AbstractDataSource {
 					JsonObject jo = je.getAsJsonObject();
 					String accessToken = jo.get("access_token").getAsString();
 					String refreshToken = jo.get("refresh_token").getAsString();
+<<<<<<< HEAD
 					if (Billing.getCode(accessToken, currency, Locale, Region, Offer) == 200) {
 						saveBlob("accessToken", accessToken.getBytes());
 						saveBlob("refreshToken", refreshToken.getBytes());
@@ -890,18 +898,29 @@ public class TestDataSource extends AbstractDataSource {
 						String ret = Billing.getStr(accessToken, currency, Locale, Region, Offer);
 						p.put("ERROR", ret);
 					}
+=======
+					saveBlob("accessToken", accessToken.getBytes());
+					saveBlob("refreshToken", refreshToken.getBytes());
+//					saveBlob("currency", currency.getBytes());
+					//saveBlob("zone", zone.getBytes());
+					saveBlob("months", months.getBytes());
+/*					saveBlob("Locale", Locale.getBytes());
+					saveBlob("Region", Region.getBytes());
+					saveBlob("Offer", Offer.getBytes());*/
+					
+>>>>>>> a2eb53a553b748a5e106053f6cb27d4fa01d9080
 				}
 				if (AzureAuth.authCheck(authCode) != 200) {
 					String ref = new String(loadBlob("refreshToken"));
 					String accessToken = Refresher.refreshToken(ref);
 					saveBlob("accessToken", accessToken.getBytes());
 					saveBlob("refreshToken", ref.getBytes());
-					saveBlob("currency", currency.getBytes());
-					saveBlob("zone", zone.getBytes());
+					//saveBlob("currency", currency.getBytes());
+					//saveBlob("zone", zone.getBytes());
 					saveBlob("months", months.getBytes());
-					saveBlob("Locale", Locale.getBytes());
+/*					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
-					saveBlob("Offer", Offer.getBytes());
+					saveBlob("Offer", Offer.getBytes());*/
 				}
 			} catch (Exception e) {
 				p.put("ERROR", "Invalid Authentication Code");
