@@ -463,7 +463,7 @@ public class TestDataSource extends AbstractDataSource {
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
 				//String zone = new String(TestDataSource.this.loadBlob("zone"));
-				cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
+				//cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Group", DataType.TEXT));
 				cm.add(new ColumnMetaData("Database Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
@@ -507,10 +507,10 @@ public class TestDataSource extends AbstractDataSource {
 				Object val = null;
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
-						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource ID")) {
+/*						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource ID")) {
 							val = tt.read("$.[" + i + "].['Resource ID']");
 							data[i][j] = val.toString();
-						}
+						}*/
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Group")) {
 							val = tt.read("$.[" + i + "].['Resource Group']");
 							data[i][j] = val.toString();
@@ -580,7 +580,7 @@ public class TestDataSource extends AbstractDataSource {
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
 				//String zone = new String(TestDataSource.this.loadBlob("zone"));
-				cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
+				//cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Group", DataType.TEXT));
 				cm.add(new ColumnMetaData("Database Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Status", DataType.TEXT));
@@ -625,10 +625,10 @@ public class TestDataSource extends AbstractDataSource {
 				Object val = null;
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
-						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource ID")) {
+/*						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource ID")) {
 							val = tt.read("$.[" + i + "].['Resource ID']");
 							data[i][j] = val.toString();
-						}
+						}*/
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Group")) {
 							val = tt.read("$.[" + i + "].['Resource Group']");
 							data[i][j] = val.toString();
