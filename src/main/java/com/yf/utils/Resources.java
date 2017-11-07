@@ -10,6 +10,11 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class Resources {
 	static Logger LOGGER = Logger.getLogger(Resources.class.getName());
 	static String CONTENT = "application/json";
@@ -17,20 +22,26 @@ public class Resources {
 	public static String getResources(String token) {
 		String tok = "Bearer " + token;
 		ArrayList<String> subs = Subscriptions.getId(token);
-		//for (int j=0;j<subs.size();j++) {
-		String id = subs.get(0);	
-		OkHttpClient client = new OkHttpClient();
+		JsonObject jo1 = new JsonObject();
+		for (int j=1;j <= subs.size();j++) {
+		    int k = j-1;
+			String id = subs.get(k);
+			OkHttpClient client = new OkHttpClient();
 
-		Request request = new Request.Builder()
-				.url("https://management.azure.com" + id + "/resources?api-version=2017-05-10")
-				.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
-		try {
-			Response response = client.newCall(request).execute();
-			return response.body().string();
+			Request request = new Request.Builder()
+					.url("https://management.azure.com" + id + "/resources?api-version=2017-05-10")
+					.addHeader("Authorization", tok).addHeader("Content-type", CONTENT).build();
+			try {
+				Response response = client.newCall(request).execute();
+				JsonElement je = new JsonParser().parse(response.body().string());
+				JsonObject jo = je.getAsJsonObject();
+				JsonArray ja = jo.getAsJsonArray("value");
+				jo1.add(""+j+"", ja);
 		} catch (Exception e) {
 			return null;
 		}
-		//}		
+		}
+		return jo1.toString();
 	}
 
 	public static LinkedHashMap<String, String> getType(String token) {

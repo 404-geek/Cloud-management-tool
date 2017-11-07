@@ -22,7 +22,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class NewBilling {
-	static Logger LOGGER = Logger.getLogger(Billing.class.getName());
+	static Logger LOGGER = Logger.getLogger(NewBilling.class.getName());
 	static String CONTENT = "application/json";
 	public static String getBillingCycle(String token,String id) {
 		ArrayList<String> idl = Subscriptions.getId(token);
@@ -91,18 +91,39 @@ public class NewBilling {
 					    String str=PdfTextExtractor.getTextFromPage(reader,1 );
 					    reader.close();
 					    String str1=str.replaceAll("[\r\n]+", " ");
-					    Pattern pattern = Pattern.compile("AUD(.*?)Total Amount");
-					    Matcher m = pattern.matcher(str1);
-					    String sum = "";
-					    while (m.find()) {
-					      sum = m.group(1).replaceAll("\\s+","");
-					    }
+						final String regex = "(?:\\S+\\s+\\S+\\s)?\\S*Total Amount";
+						final Pattern pattern = Pattern.compile(regex);
+						final Matcher matcher = pattern.matcher(str1);
+				        String match ="";
+						while (matcher.find()) {
+							match = matcher.group(0);
+						}
+						
+						final String regex1 = "[1-9]\\d*(\\.\\d+)";
+						final String string = match;
+						final Pattern pattern1 = Pattern.compile(regex1);
+						final Matcher matcher1 = pattern1.matcher(string);
+						String sum = "";
+						
+						while (matcher1.find()) {
+						   sum = matcher1.group(0);}
+						final String regex2 = "^\\w+";
+						final String string2 = match;
+
+						final Pattern pattern2 = Pattern.compile(regex2);
+						final Matcher matcher2 = pattern2.matcher(string2);
+						String currency = "";
+
+						while (matcher2.find()) {
+						    currency = matcher2.group(0);}
 					
 						JsonObject jo1 = new JsonObject();
 						jo1.addProperty("Subscription Id", id);
 						jo1.addProperty("ReportedStartedTime", dstart);
 						jo1.addProperty("ReportedEndTime", dend);
 						jo1.addProperty("Bill", sum);
+						jo1.addProperty("Currency", currency);
+						
 						ja.add(jo1);
 					} catch (Exception e) {
 						return null;
@@ -114,6 +135,7 @@ public class NewBilling {
 						jo1.addProperty("ReportedStartedTime", "0");
 						jo1.addProperty("ReportedEndTime", "0");
 						jo1.addProperty("Bill", re);
+						jo1.addProperty("Currency", "Nodata");
 						ja.add(jo1);
 					}
 				}

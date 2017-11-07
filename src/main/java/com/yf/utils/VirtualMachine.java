@@ -130,6 +130,8 @@ public class VirtualMachine {
 
 				JsonObject obj2 = job.get("properties").getAsJsonObject().getAsJsonObject().get("storageProfile")
 						.getAsJsonObject().get("osDisk").getAsJsonObject();
+				String name = job.get("properties").getAsJsonObject().get("osProfile")
+						.getAsJsonObject().get("computerName").getAsString();
 				String vm = obj.get("vmId").getAsString();
 				String vmSz = obj1.get("vmSize").getAsString();
 				String os = obj2.get("osType").getAsString();
@@ -162,6 +164,7 @@ public class VirtualMachine {
 					jo.addProperty("OS type", os);
 					jo.addProperty("VMSize", vmSz);
 					jo.addProperty("Location", loc);
+					jo.addProperty("Name", name);
 					jo.addProperty("Timestamp", percentageCPU.get(j).getAsJsonObject().get("timeStamp").getAsString());
 					try {
 						jo.addProperty("Percentage CPU",
@@ -243,6 +246,8 @@ public class VirtualMachine {
 						.getAsJsonObject().get("osDisk").getAsJsonObject();
 				String stats = job.get("properties").getAsJsonObject().get("instanceView")
 						.getAsJsonObject().get("statuses").getAsJsonArray().get(1).getAsJsonObject().get("displayStatus").getAsString();
+				String name = job.get("properties").getAsJsonObject().get("osProfile")
+						.getAsJsonObject().get("computerName").getAsString();
 				String vm = obj.get("vmId").getAsString();
 				String vmSz = obj1.get("vmSize").getAsString();
 				String os = obj2.get("osType").getAsString();
@@ -297,6 +302,7 @@ public class VirtualMachine {
 				jo.addProperty("VMSize", vmSz);
 				jo.addProperty("Location", loc);
 				jo.addProperty("Status", stats);
+				jo.addProperty("Name", name);
 				jo.addProperty("Timestamp", percentageCPU.get(size).getAsJsonObject().get("timeStamp").getAsString());
 				try {
 					jo.addProperty("Percentage CPU",
