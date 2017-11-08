@@ -888,7 +888,7 @@ public class TestDataSource extends AbstractDataSource {
 			String authCode = (String) getAttribute("CODE");
 			//String zone = (String) getAttribute("SELECTOR");
 			//String currency = (String) getAttribute("SELECTOR1");
-			String months = (String) getAttribute("SELECTOR4");
+			String months = (String) getAttribute("MONTHS");
 			//String Locale = (String) getAttribute("SELECTOR2");
 			//String Region = (String) getAttribute("SELECTOR3");
 			//String Offer = (String) getAttribute("SELECTOR5");

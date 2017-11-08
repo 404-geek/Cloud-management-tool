@@ -19,10 +19,10 @@ public class AzureAuth {
 		OkHttpClient client = new OkHttpClient();
 
 		RequestBody formBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-				.addFormDataPart("client_id", "b3144fe1-6338-43a0-8918-c05291f51170")
+				.addFormDataPart("client_id", "05cd59f9-6e20-4928-878b-a80b7033492a")
 				.addFormDataPart("grant_type", "authorization_code").addFormDataPart("code", token)
 				.addFormDataPart("redirect_uri", "https://tpconnect.yellowfin.bi/getToken.jsp")
-				.addFormDataPart("client_secret", "L7mq5+HjRZo3NCnJ1vjR4E0FWubFkiC+KHe2+hd2xd0=")
+				.addFormDataPart("client_secret", "P3oOt9z2XWj8cE2ZjwINTLwFYZYLjzo/+d45qfFjO4k=")
 				.addFormDataPart("resource", "https://management.core.windows.net/").build();
 
 		Request request = new Request.Builder().url("https://login.microsoftonline.com/common/OAuth2/token")
@@ -42,10 +42,10 @@ public class AzureAuth {
 		OkHttpClient client = new OkHttpClient();
 
 		RequestBody formBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-				.addFormDataPart("client_id", "b3144fe1-6338-43a0-8918-c05291f51170")
+				.addFormDataPart("client_id", "05cd59f9-6e20-4928-878b-a80b7033492a")
 				.addFormDataPart("grant_type", "authorization_code").addFormDataPart("code", token)
 				.addFormDataPart("redirect_uri", "https://tpconnect.yellowfin.bi/getToken.jsp")
-				.addFormDataPart("client_secret", "L7mq5+HjRZo3NCnJ1vjR4E0FWubFkiC+KHe2+hd2xd0=")
+				.addFormDataPart("client_secret", "P3oOt9z2XWj8cE2ZjwINTLwFYZYLjzo/+d45qfFjO4k=")
 				.addFormDataPart("resource", "https://management.core.windows.net/").build();
 		Request request = new Request.Builder().url("https://login.microsoftonline.com/common/OAuth2/token")
 				.post(formBody).build();

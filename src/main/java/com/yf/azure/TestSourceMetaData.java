@@ -23,7 +23,7 @@ public class TestSourceMetaData extends JDBCMetaData {
 
 		pq.addOption("BUTTONTEXT", "Authorize Azure");
 		pq.addOption("BUTTONURL",
-				"https://login.microsoftonline.com/common/OAuth2/Authorize?client_id=b3144fe1-6338-43a0-8918-c05291f51170&response_mode=query&response_type=code&redirect_uri=https://tpconnect.yellowfin.bi/getToken.jsp&resource=https://management.core.windows.net/&domain_hint=consumers&prompt=consent&state=123456");
+				"https://login.microsoftonline.com/common/OAuth2/Authorize?client_id=05cd59f9-6e20-4928-878b-a80b7033492a&response_mode=query&response_type=code&redirect_uri=https://tpconnect.yellowfin.bi/getToken.jsp&resource=https://management.core.windows.net/&domain_hint=consumers&prompt=consent&state=123456");
 
 		addParameter(pq);
 		addParameter(new Parameter("CODE", "Enter Authentication Code",
@@ -77,12 +77,10 @@ public class TestSourceMetaData extends JDBCMetaData {
 		 * addParameter(Region);
 		 */
 
-		Parameter months = new Parameter("SELECTOR4", "Select No of Billing Cycles Required", "Select the months", 2, 6,
+		Parameter months = new Parameter("MONTHS", "Enter No of Billing Cycles Required", "Select the months", TYPE_TEXT, DISPLAY_TEXT_MED,
 				null, true);
-		for (int j = 1; j <= 7; j++) {
-			months.addOption("" + j + "");
-		}
 		addParameter(months);
+		
 
 	}
 
