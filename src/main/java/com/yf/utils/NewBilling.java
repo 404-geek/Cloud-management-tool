@@ -64,8 +64,11 @@ public class NewBilling {
 				String cycle = getBillingCycle(token, id);
 				JsonElement je1 = new JsonParser().parse(cycle);
 				JsonArray jaa = je1.getAsJsonArray();
-				for (int k = 0; k < Integer.parseInt(p); k++) {
-					try{
+				int limit = Integer.parseInt(p);
+				if(limit>jaa.size()){
+					limit = jaa.size();
+				}
+				for (int k = 0; k < limit; k++) {
 					String ds1 = jaa.get(k).getAsJsonObject().get("InvoicePeriodStartDate").getAsString();
 					String ds2 = jaa.get(k).getAsJsonObject().get("InvoicePeriodEndDate").getAsString();
 					SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -103,7 +106,7 @@ public class NewBilling {
 						final String string = match;
 						final Pattern pattern1 = Pattern.compile(regex1);
 						final Matcher matcher1 = pattern1.matcher(string);
-						String sum = "";
+						String sum = "0.00";
 						
 						while (matcher1.find()) {
 						   sum = matcher1.group(0);}
@@ -127,16 +130,6 @@ public class NewBilling {
 						ja.add(jo1);
 					} catch (Exception e) {
 						return null;
-					}
-					}catch (Exception e) {
-						BigDecimal re = BigDecimal.ZERO;
-						JsonObject jo1 = new JsonObject();
-						jo1.addProperty("Subscription Id", id);
-						jo1.addProperty("ReportedStartedTime", "0");
-						jo1.addProperty("ReportedEndTime", "0");
-						jo1.addProperty("Bill", re);
-						jo1.addProperty("Currency", "Nodata");
-						ja.add(jo1);
 					}
 				}
 			}
