@@ -722,13 +722,9 @@ public class TestDataSource extends AbstractDataSource {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
 				
-				String token = new String(TestDataSource.this.loadBlob("accessToken"));
-				String months = new String(TestDataSource.this.loadBlob("months"));
-				String Bill = NewBilling.getBilling(token, months);
-				JsonElement je = new JsonParser().parse(Bill);
-				JsonArray ja = je.getAsJsonArray();
-				saveBlob("BILL", Bill.getBytes());
 				String nodeData = new String(TestDataSource.this.loadBlob("BILL"));
+				JsonElement je = new JsonParser().parse(nodeData);
+				JsonArray ja = je.getAsJsonArray();
 
 				Configuration conf = Configuration.defaultConfiguration()
 						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
@@ -907,7 +903,8 @@ public class TestDataSource extends AbstractDataSource {
 /*					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
 					saveBlob("Offer", Offer.getBytes());*/
-					
+					if(saveBlob("accessToken", accessToken.getBytes()) && saveBlob("months", months.getBytes())){
+						autoRun();} 		
 				}
 				if (AzureAuth.authCheck(authCode) != 200) {
 					String ref = new String(loadBlob("refreshToken"));
@@ -917,17 +914,19 @@ public class TestDataSource extends AbstractDataSource {
 					//saveBlob("currency", currency.getBytes());
 					//saveBlob("zone", zone.getBytes());
 					saveBlob("months", months.getBytes());
+					if(saveBlob("accessToken", accessToken.getBytes()) && saveBlob("months", months.getBytes())){
+						autoRun();} 
 /*					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
 					saveBlob("Offer", Offer.getBytes());*/
 				}
+
 			} catch (Exception e) {
 				p.put("ERROR", "Invalid Authentication Code");
 			}
 		} catch (Exception e) {
 			p.put("ERROR", "Please Enter the Authentication Code");
 		}
-
 		/*
 		 * Map<String,Object> p = new HashMap<String, Object>();
 		 * 
@@ -964,11 +963,11 @@ public class TestDataSource extends AbstractDataSource {
 
 	public boolean autoRun() {
 		System.out.println("Auto running Test data source");
-
-		String aToken = "aaa";
-		saveBlob("ACCESS_TOKEN", aToken.getBytes());
-		aToken = new String(loadBlob("ACCESS_TOKEN"));
-
+		String token = new String(TestDataSource.this.loadBlob("accessToken"));
+		String months = new String(TestDataSource.this.loadBlob("months"));
+		String Bill = NewBilling.getBilling(token, months);
+		saveBlob("BILL", Bill.getBytes());
+		
 		saveBlob("LASTRUN", new Date(System.currentTimeMillis()).toLocaleString().getBytes());
 
 		return true;
