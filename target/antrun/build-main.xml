@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <project name="maven-antrun-" default="main"  >
 <target name="main">
-  <copy file="C:\Users\lenovo\Pranay\Azure-YFconnector/target/AZURE-0.0.1-SNAPSHOT.zip" tofile="C:\Users\lenovo\Pranay\Azure-YFconnector/target/AZURE-0.0.1-SNAPSHOT.yfp"/>
+  <copy file="C:\Users\404-geek\workspace\Azure-YFconnector/target/AZURE-0.0.1-SNAPSHOT.zip" tofile="C:\Users\404-geek\workspace\Azure-YFconnector/target/AZURE-0.0.1-SNAPSHOT.yfp"/>
 </target>
 </project>
