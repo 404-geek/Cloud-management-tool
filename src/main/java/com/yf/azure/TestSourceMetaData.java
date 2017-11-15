@@ -31,51 +31,51 @@ public class TestSourceMetaData extends JDBCMetaData {
 
 		addParameter(pq);
 
-		/*
-		 * Parameter zones = new Parameter("SELECTOR", "Timezone Selector",
-		 * "Select the timezone", 2, 6, null, true); for (String zone :
-		 * this.sortedZones) { zones.addOption(zone); } addParameter(zones);
-		 */
+/*		
+		 Parameter zones = new Parameter("SELECTOR", "Timezone Selector",
+		 "Select the timezone", 2, 6, null, true); for (String zone :
+		 this.sortedZones) { zones.addOption(zone); } addParameter(zones);*/
+		
 
-		/*
-		 * Parameter offer = new Parameter("SELECTOR5",
-		 * "Subscription Offer Selector", "Select the subscription", 2, 6, null,
-		 * true); offer.addOption("0003P"); offer.addOption("0041P");
-		 * offer.addOption("0042P"); offer.addOption("0043P");
-		 * offer.addOption("0044P"); offer.addOption("0059P");
-		 * offer.addOption("0042P"); offer.addOption("0060P");
-		 * offer.addOption("0062P"); offer.addOption("0063P");
-		 * offer.addOption("0064P"); offer.addOption("0029P");
-		 * offer.addOption("0022P"); offer.addOption("0023P");
-		 * offer.addOption("0148P"); offer.addOption("0025P");
-		 * offer.addOption("0036P"); offer.addOption("0120P-0130P");
-		 * offer.addOption("0144P"); offer.addOption("0149P");
-		 * offer.addOption("0145P"); offer.addOption("DE-0145P");
-		 * offer.addOption("0044P"); offer.addOption("DE-0003P");
-		 * offer.addOption("DE-0041P"); offer.addOption("DE-0042P");
-		 * offer.addOption("DE-0043P");
-		 * 
-		 * addParameter(offer);
-		 * 
-		 * 
-		 * Parameter currency = new Parameter("SELECTOR1", "Currency Selector",
-		 * "Select the currency", 2, 6, null, true); currency.addOption("USD");
-		 * currency.addOption("AUD"); currency.addOption("INR");
-		 * 
-		 * addParameter(currency);
-		 * 
-		 * Parameter Locale = new Parameter("SELECTOR2", "Locale Selector",
-		 * "Select the locale", 2, 6, null, true); Locale.addOption("en-US");
-		 * Locale.addOption("en-AU");
-		 * 
-		 * addParameter(Locale);
-		 * 
-		 * Parameter Region = new Parameter("SELECTOR3", "Region Selector",
-		 * "Select the region", 2, 6, null, true); Region.addOption("UK");
-		 * Region.addOption("AU"); Region.addOption("US");
-		 * 
-		 * addParameter(Region);
-		 */
+		
+		 Parameter offer = new Parameter("SELECTOR5",
+		 "Subscription Offer Selector", "Select the subscription", 2, 6, null,
+		 true); offer.addOption("0003P"); offer.addOption("0041P");
+		 offer.addOption("0042P"); offer.addOption("0043P");
+		 offer.addOption("0044P"); offer.addOption("0059P");
+		 offer.addOption("0042P"); offer.addOption("0060P");
+		 offer.addOption("0062P"); offer.addOption("0063P");
+		 offer.addOption("0064P"); offer.addOption("0029P");
+		 offer.addOption("0022P"); offer.addOption("0023P");
+		 offer.addOption("0148P"); offer.addOption("0025P");
+		 offer.addOption("0036P"); offer.addOption("0120P-0130P");
+		 offer.addOption("0144P"); offer.addOption("0149P");
+		 offer.addOption("0145P"); offer.addOption("DE-0145P");
+		 offer.addOption("0044P"); offer.addOption("DE-0003P");
+		 offer.addOption("DE-0041P"); offer.addOption("DE-0042P");
+		 offer.addOption("DE-0043P");
+		 
+		 addParameter(offer);
+		 
+		 
+		 Parameter currency = new Parameter("SELECTOR1", "Currency Selector",
+		 "Select the currency", 2, 6, null, true); currency.addOption("USD");
+		 currency.addOption("AUD"); currency.addOption("INR");
+		 
+		 addParameter(currency);
+		 
+		 Parameter Locale = new Parameter("SELECTOR2", "Locale Selector",
+		 "Select the locale", 2, 6, null, true); Locale.addOption("en-US");
+		 Locale.addOption("en-AU");
+		 
+		 addParameter(Locale);
+		 
+		 Parameter Region = new Parameter("SELECTOR3", "Region Selector",
+		 "Select the region", 2, 6, null, true); Region.addOption("UK");
+		 Region.addOption("AU"); Region.addOption("US");
+		 
+		 addParameter(Region);
+		
 
 		Parameter months = new Parameter("MONTHS", "Enter No of Billing Cycles Required", "Select the months", TYPE_TEXT, DISPLAY_TEXT_MED,
 				null, true);

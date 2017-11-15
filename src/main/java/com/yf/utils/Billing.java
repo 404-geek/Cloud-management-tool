@@ -1,4 +1,4 @@
-/*package com.yf.utils;
+package com.yf.utils;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -55,7 +55,7 @@ public class Billing {
 		}
 		return ja.toString();
 	}
-	
+	/*	
 	public static int getCode(String token, String currency, String Loc, String reg, String offer) {
 		ArrayList<String> idl = Subscriptions.getId(token);
 		String id = idl.get(0);
@@ -213,7 +213,7 @@ public class Billing {
 			}
 		}
 		return ja.toString();
-	}
+	}*/
 	
 		public static String getRBilling(String token, String currency, String Loc, String reg, String offer) {
 			JsonArray ja = new JsonArray();
@@ -221,7 +221,7 @@ public class Billing {
 			OkHttpClient client = new OkHttpClient();
 			ArrayList<String> idl = Subscriptions.getId(token);
 			for (String id : idl) {
-				String cycle = Billing.getBillingCycle(token, id);
+				String cycle = NewBilling.getBillingCycle(token, id);
 				JsonElement je1 = new JsonParser().parse(cycle);
 				JsonArray jaa = je1.getAsJsonArray();
 					try{
@@ -303,4 +303,3 @@ public class Billing {
 			return ja.toString();
 	}
 }
-*/

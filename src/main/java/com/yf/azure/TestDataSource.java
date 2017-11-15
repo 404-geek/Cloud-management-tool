@@ -59,7 +59,7 @@ public class TestDataSource extends AbstractDataSource {
 		p.add(virtualMachineLive());
 		p.add(Billing());
 		p.add(databaseLive());
-		//p.add(RBilling());
+		p.add(RBilling());
 
 		return p;
 	}
@@ -780,7 +780,7 @@ public class TestDataSource extends AbstractDataSource {
 		return simpleDataSet;
 	}
 	
-/*	private AbstractDataSet RBilling() {
+	private AbstractDataSet RBilling() {
 		AbstractDataSet simpleDataSet = new AbstractDataSet() {
 			public ArrayList<FilterMetaData> getFilters() {
 				ArrayList<FilterMetaData> fm = new ArrayList();
@@ -821,7 +821,7 @@ public class TestDataSource extends AbstractDataSource {
 				String locale = new String(TestDataSource.this.loadBlob("Locale"));
 				String region = new String(TestDataSource.this.loadBlob("Region"));
 				String offer = new String(TestDataSource.this.loadBlob("Offer"));
-				String RBill = Billing.getRBilling(token, currency, locale, region, offer);
+				String RBill = com.yf.utils.Billing.getRBilling(token, currency, locale, region, offer);
 				JsonElement je = new JsonParser().parse(RBill);
 				JsonArray ja = je.getAsJsonArray();
 				saveBlob("RBILL", RBill.getBytes());
@@ -864,7 +864,7 @@ public class TestDataSource extends AbstractDataSource {
 			}
 		};
 		return simpleDataSet;
-	}*/
+	}
 
 
 	public JDBCMetaData getDataSourceMetaData() {
@@ -883,11 +883,11 @@ public class TestDataSource extends AbstractDataSource {
 		try {
 			String authCode = (String) getAttribute("CODE");
 			//String zone = (String) getAttribute("SELECTOR");
-			//String currency = (String) getAttribute("SELECTOR1");
+			String currency = (String) getAttribute("SELECTOR1");
 			String months = (String) getAttribute("MONTHS");
-			//String Locale = (String) getAttribute("SELECTOR2");
-			//String Region = (String) getAttribute("SELECTOR3");
-			//String Offer = (String) getAttribute("SELECTOR5");
+			String Locale = (String) getAttribute("SELECTOR2");
+			String Region = (String) getAttribute("SELECTOR3");
+			String Offer = (String) getAttribute("SELECTOR5");
 			JsonElement je = new JsonParser().parse(AzureAuth.getResponse(authCode));
 			try {
 				new AzureAuth();
@@ -897,12 +897,12 @@ public class TestDataSource extends AbstractDataSource {
 					String refreshToken = jo.get("refresh_token").getAsString();
 					saveBlob("accessToken", accessToken.getBytes());
 					saveBlob("refreshToken", refreshToken.getBytes());
-//					saveBlob("currency", currency.getBytes());
+					saveBlob("currency", currency.getBytes());
 					//saveBlob("zone", zone.getBytes());
 					saveBlob("months", months.getBytes());
-/*					saveBlob("Locale", Locale.getBytes());
+					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
-					saveBlob("Offer", Offer.getBytes());*/
+					saveBlob("Offer", Offer.getBytes());
 					if(saveBlob("accessToken", accessToken.getBytes()) && saveBlob("months", months.getBytes())){
 						autoRun();} 		
 				}
@@ -911,14 +911,14 @@ public class TestDataSource extends AbstractDataSource {
 					String accessToken = Refresher.refreshToken(ref);
 					saveBlob("accessToken", accessToken.getBytes());
 					saveBlob("refreshToken", ref.getBytes());
-					//saveBlob("currency", currency.getBytes());
+					saveBlob("currency", currency.getBytes());
 					//saveBlob("zone", zone.getBytes());
 					saveBlob("months", months.getBytes());
 					if(saveBlob("accessToken", accessToken.getBytes()) && saveBlob("months", months.getBytes())){
 						autoRun();} 
-/*					saveBlob("Locale", Locale.getBytes());
+					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
-					saveBlob("Offer", Offer.getBytes());*/
+					saveBlob("Offer", Offer.getBytes());
 				}
 
 			} catch (Exception e) {
