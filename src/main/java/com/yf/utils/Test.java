@@ -48,49 +48,24 @@ public class Test {
 		 * (ParseException e) { // TODO Auto-generated catch block
 		 * e.printStackTrace(); } System.out.println(ds2);
 		 */
-		PdfReader reader = null;
-		try {
-			reader = new PdfReader(
-					"https://billinginsightsstore05.blob.core.windows.net/invoices/5744cda7-2ba6-4f43-b407-acf9a0be2822-201711-417044150449226.pdf?sv=2014-02-14&sr=b&sig=qjHU3eZZOqm%2F%2BgSMMtxkZ%2F4Foi1fXHZnJ78Q4yMnnPc%3D&se=2017-11-07T07%3A23%3A03Z&sp=r");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String str = null;
-		try {
-			str = PdfTextExtractor.getTextFromPage(reader, 1);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		reader.close();
-		String str1 = str.replaceAll("[\r\n]+", " ");
-		//System.out.println(str1);
-		final String regex = "(?:\\S+\\s+\\S+\\s)?\\S*Total Amount";
-		final Pattern pattern = Pattern.compile(regex);
-		final Matcher matcher = pattern.matcher(str1);
-        String match ="";
-		while (matcher.find()) {
-			match = matcher.group(0);
-		}
 		
-		final String regex1 = "[1-9]\\d*(\\.\\d+)";
-		final String string = match;
+		String token = "AQABAAIAAABHh4kmS_aKT5XrjzxRAtHzkTBeeW0PcUH4_twbRRw6UkWZz-WFJfWBTwOBLzpTc9yhWGvpkC5Rhm1XkZcszTr-CuQUrKy50AwmU_6hOiiC2VW1o0vOQcg7Eatofr1QQ8x5OC8cdBQYCwBtblCWqvG5f6KijIcaeMv4QoSed6BVh45bG5uYowZWVIj7nK5zNdaO1Gi776F-s71gs8Yp34lsVFREXwmNBeNIu3THmt1pGlhitC2XANRBelIk-LASgbKJ9nnIuAxaRY6WegdpFsi_ZtKJzC3qAasybG9JyNu0v-Gk0-0Y0nRjhNQk3zzmRuRm2a7jQmFdEZaqHaU2J3T4FhMh5Xcpo975yi6r1GJiOx3iTXyc8nADx00-pvAESTk0KQURQMaGhlx8CKz6DCk_tK7EDvZ3BJh3jq2CMChE9d2YN9f2zsy7GnHEYGU_LlVK3d8am-MFkhCTzfPt_K69saRK_zhaQCWdgGtQ39iBvlpZQge4i684BOgRq8yFELsBKFxX2XsJwyKamgKSGyR2fi21ynoxoL4INTCF5m7YByfnhawRutS7jS-SuBh_3dcV8Qm6t-vSQFg5BasHBJtw_nPXH2KoESMM8K44I-tCgiAA";
+		OkHttpClient client = new OkHttpClient();
 
-		final Pattern pattern1 = Pattern.compile(regex1);
-		final Matcher matcher1 = pattern1.matcher(string);
+		RequestBody formBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+				.addFormDataPart("client_id", "05cd59f9-6e20-4928-878b-a80b7033492a")
+				.addFormDataPart("grant_type", "authorization_code").addFormDataPart("code", token)
+				.addFormDataPart("redirect_uri", "https://tpconnect.yellowfin.bi/getToken.jsp")
+				.addFormDataPart("client_secret", "P3oOt9z2XWj8cE2ZjwINTLwFYZYLjzo/+d45qfFjO4k=")
+				.addFormDataPart("resource", "https://management.core.windows.net/").build();
+		Request request = new Request.Builder().url("https://login.microsoftonline.com/common/OAuth2/token")
+				.post(formBody).build();
 
-		while (matcher1.find()) {
-		    System.out.println(matcher1.group(0));}
-		
-		final String regex2 = "^\\w+";
-		final String string2 = match;
-
-		final Pattern pattern2 = Pattern.compile(regex2);
-		final Matcher matcher2 = pattern2.matcher(string2);
-
-		while (matcher2.find()) {
-		    System.out.println(matcher2.group(0));}
+		try {
+			Response response = client.newCall(request).execute();
+			System.out.println(response.body().string());
+		} catch (Exception e) {
+			
+		}
 	}
 }

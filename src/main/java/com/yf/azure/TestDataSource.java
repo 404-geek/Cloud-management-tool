@@ -38,10 +38,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TestDataSource extends AbstractDataSource {
+	
+	static Logger LOGGER = Logger.getLogger(AbstractDataSource.class.getName());
+	//static String ref = "AQABAAAAAABHh4kmS_aKT5XrjzxRAtHzSSkfsTHPh0x2caD5R3YHGBEd6CVwoO_sN9uHqwau4rR8Y42xAX4yIV_LjSPrnyfR0An5ABGlH99TmJNuvX65UE3j_s5zq6M-zmJqW00fXvH1KBlEqoE-2COvfWmgejXZtSAd5IMhmcgh5fZUBMgGoqCwyQXAHjKyhbTKZRB2zmDVUgyltKndTq_Oc_1vEInm9KB-zPGM4INV755X7O0dl26z7hu51EQ5dOXrWwGtnjAGiKH6vO4TDmX0uE0RAYUAxAnhqExXywZl5dnkN-SfrK2iQqF0W2Bj0bu2AKKXB7O3pxutf3OK9zJnX7jF3n1G5ajsiaQ1rtdAJeQPTEhTv2fBTmEbOOCpO9hQfyD9kdInTK1WgYVSdaEmkGhBrOkI2_kJWnySyCG0rI3rg8FcLqknNN_uqMAoEJmwbhryWNHFQETCTP7azgIxlthVWnl6OGK0qBWSgbdfMSaSsgxOUB8-2UTN6Rkmjpf7aZXbmgKpMFEN2vvBaaqLB-d_nKl6OfTjIjWd39KyrlLewNV3LE2qhuANZ24s5IeeOafFJ7HKSHvykLhp7L138gyRXrm7fsBkM7Dgt-kGYujjVIKGTl_NRQp4oHt9b0DKZhMTR7rgheC9pTHrDG1RL-y4sHIXA99p3HGT8JJC6YV4Y0zVXmKhr5vDdzpXKt6deelOnjtvtK3piij4NU6uOZlh0AxyPO7A218es4AbGeiqlQckBlKFB328vk9vfhQP-I4ChdmQtai29xByuPgIUJ3T2mqdO2JJy0Rit8Fxp8Lqq997FSAA";
 	public String getDataSourceName() {
 		return "Azure";
 	}
@@ -77,6 +82,7 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
+				LOGGER.log(Level.INFO, "get Columns begins");
 				//String zone = new String(TestDataSource.this.loadBlob("zone"));
 				cm.add(new ColumnMetaData("VmID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Type", DataType.TEXT));
@@ -94,7 +100,7 @@ public class TestDataSource extends AbstractDataSource {
 				cm.add(new ColumnMetaData("Disk Write Bytes", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Disk Read Operations", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Disk Write Operations", DataType.NUMERIC));
-
+				LOGGER.log(Level.INFO, "get Columns ends");
 				return cm;
 			}
 
@@ -817,15 +823,9 @@ public class TestDataSource extends AbstractDataSource {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
 				String currency = new String(TestDataSource.this.loadBlob("currency"));
-				String token = new String(TestDataSource.this.loadBlob("accessToken"));
-				String locale = new String(TestDataSource.this.loadBlob("Locale"));
-				String region = new String(TestDataSource.this.loadBlob("Region"));
-				String offer = new String(TestDataSource.this.loadBlob("Offer"));
-				String RBill = com.yf.utils.Billing.getRBilling(token, currency, locale, region, offer);
-				JsonElement je = new JsonParser().parse(RBill);
-				JsonArray ja = je.getAsJsonArray();
-				saveBlob("RBILL", RBill.getBytes());
 				String nodeData = new String(TestDataSource.this.loadBlob("RBILL"));
+				JsonElement je = new JsonParser().parse(nodeData);
+				JsonArray ja = je.getAsJsonArray();
 
 				Configuration conf = Configuration.defaultConfiguration()
 						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
@@ -907,15 +907,13 @@ public class TestDataSource extends AbstractDataSource {
 						autoRun();} 		
 				}
 				if (AzureAuth.authCheck(authCode) != 200) {
-					String ref = new String(loadBlob("refreshToken"));
-					String accessToken = Refresher.refreshToken(ref);
+					String ref = new String(TestDataSource.this.loadBlob("refreshToken"));
+					String accessToken = Refresher.accessToken(ref);
 					saveBlob("accessToken", accessToken.getBytes());
 					saveBlob("refreshToken", ref.getBytes());
 					saveBlob("currency", currency.getBytes());
 					//saveBlob("zone", zone.getBytes());
 					saveBlob("months", months.getBytes());
-					if(saveBlob("accessToken", accessToken.getBytes()) && saveBlob("months", months.getBytes())){
-						autoRun();} 
 					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
 					saveBlob("Offer", Offer.getBytes());
@@ -962,12 +960,25 @@ public class TestDataSource extends AbstractDataSource {
 	}
 
 	public boolean autoRun() {
+		
+		
 		System.out.println("Auto running Test data source");
+		try {
+		    String bill = new String(TestDataSource.this.loadBlob("BILL"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		
 		String token = new String(TestDataSource.this.loadBlob("accessToken"));
 		String months = new String(TestDataSource.this.loadBlob("months"));
+		String currency = new String(TestDataSource.this.loadBlob("currency"));
+		String locale = new String(TestDataSource.this.loadBlob("Locale"));
+		String region = new String(TestDataSource.this.loadBlob("Region"));
+		String offer = new String(TestDataSource.this.loadBlob("Offer"));
+		String RBill = com.yf.utils.Billing.getRBilling(token, currency, locale, region, offer);
 		String Bill = NewBilling.getBilling(token, months);
 		saveBlob("BILL", Bill.getBytes());
-		
+		saveBlob("RBILL", RBill.getBytes());
+		}
 		saveBlob("LASTRUN", new Date(System.currentTimeMillis()).toLocaleString().getBytes());
 
 		return true;
