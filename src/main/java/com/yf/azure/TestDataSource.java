@@ -253,7 +253,6 @@ public class TestDataSource extends AbstractDataSource {
 				String token = new String(TestDataSource.this.loadBlob("accessToken"));
 				new Resources();
 				String Inventory = Resources.getResources(token);
-				System.out.println(Inventory);
 				JsonElement je = new JsonParser().parse(Inventory);
 				JsonObject jo = je.getAsJsonObject();
 				TestDataSource.this.saveBlob("INVENTORY", Inventory.getBytes());
