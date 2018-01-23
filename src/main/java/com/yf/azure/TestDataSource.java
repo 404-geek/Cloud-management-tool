@@ -44,9 +44,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TestDataSource extends AbstractDataSource {
-	
+
 	static Logger LOGGER = Logger.getLogger(AbstractDataSource.class.getName());
-	//static String ref = "AQABAAAAAABHh4kmS_aKT5XrjzxRAtHzSSkfsTHPh0x2caD5R3YHGBEd6CVwoO_sN9uHqwau4rR8Y42xAX4yIV_LjSPrnyfR0An5ABGlH99TmJNuvX65UE3j_s5zq6M-zmJqW00fXvH1KBlEqoE-2COvfWmgejXZtSAd5IMhmcgh5fZUBMgGoqCwyQXAHjKyhbTKZRB2zmDVUgyltKndTq_Oc_1vEInm9KB-zPGM4INV755X7O0dl26z7hu51EQ5dOXrWwGtnjAGiKH6vO4TDmX0uE0RAYUAxAnhqExXywZl5dnkN-SfrK2iQqF0W2Bj0bu2AKKXB7O3pxutf3OK9zJnX7jF3n1G5ajsiaQ1rtdAJeQPTEhTv2fBTmEbOOCpO9hQfyD9kdInTK1WgYVSdaEmkGhBrOkI2_kJWnySyCG0rI3rg8FcLqknNN_uqMAoEJmwbhryWNHFQETCTP7azgIxlthVWnl6OGK0qBWSgbdfMSaSsgxOUB8-2UTN6Rkmjpf7aZXbmgKpMFEN2vvBaaqLB-d_nKl6OfTjIjWd39KyrlLewNV3LE2qhuANZ24s5IeeOafFJ7HKSHvykLhp7L138gyRXrm7fsBkM7Dgt-kGYujjVIKGTl_NRQp4oHt9b0DKZhMTR7rgheC9pTHrDG1RL-y4sHIXA99p3HGT8JJC6YV4Y0zVXmKhr5vDdzpXKt6deelOnjtvtK3piij4NU6uOZlh0AxyPO7A218es4AbGeiqlQckBlKFB328vk9vfhQP-I4ChdmQtai29xByuPgIUJ3T2mqdO2JJy0Rit8Fxp8Lqq997FSAA";
+
+	// static String ref =
+	// "AQABAAAAAABHh4kmS_aKT5XrjzxRAtHzSSkfsTHPh0x2caD5R3YHGBEd6CVwoO_sN9uHqwau4rR8Y42xAX4yIV_LjSPrnyfR0An5ABGlH99TmJNuvX65UE3j_s5zq6M-zmJqW00fXvH1KBlEqoE-2COvfWmgejXZtSAd5IMhmcgh5fZUBMgGoqCwyQXAHjKyhbTKZRB2zmDVUgyltKndTq_Oc_1vEInm9KB-zPGM4INV755X7O0dl26z7hu51EQ5dOXrWwGtnjAGiKH6vO4TDmX0uE0RAYUAxAnhqExXywZl5dnkN-SfrK2iQqF0W2Bj0bu2AKKXB7O3pxutf3OK9zJnX7jF3n1G5ajsiaQ1rtdAJeQPTEhTv2fBTmEbOOCpO9hQfyD9kdInTK1WgYVSdaEmkGhBrOkI2_kJWnySyCG0rI3rg8FcLqknNN_uqMAoEJmwbhryWNHFQETCTP7azgIxlthVWnl6OGK0qBWSgbdfMSaSsgxOUB8-2UTN6Rkmjpf7aZXbmgKpMFEN2vvBaaqLB-d_nKl6OfTjIjWd39KyrlLewNV3LE2qhuANZ24s5IeeOafFJ7HKSHvykLhp7L138gyRXrm7fsBkM7Dgt-kGYujjVIKGTl_NRQp4oHt9b0DKZhMTR7rgheC9pTHrDG1RL-y4sHIXA99p3HGT8JJC6YV4Y0zVXmKhr5vDdzpXKt6deelOnjtvtK3piij4NU6uOZlh0AxyPO7A218es4AbGeiqlQckBlKFB328vk9vfhQP-I4ChdmQtai29xByuPgIUJ3T2mqdO2JJy0Rit8Fxp8Lqq997FSAA";
 	public String getDataSourceName() {
 		return "Azure";
 	}
@@ -83,7 +85,8 @@ public class TestDataSource extends AbstractDataSource {
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
 				LOGGER.log(Level.INFO, "get Columns begins");
-				//String zone = new String(TestDataSource.this.loadBlob("zone"));
+				// String zone = new
+				// String(TestDataSource.this.loadBlob("zone"));
 				cm.add(new ColumnMetaData("VmID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Type", DataType.TEXT));
 				cm.add(new ColumnMetaData("OS Type", DataType.TEXT));
@@ -92,7 +95,8 @@ public class TestDataSource extends AbstractDataSource {
 				cm.add(new ColumnMetaData("Status", DataType.TEXT));
 				cm.add(new ColumnMetaData("Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
-				//cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
+				// cm.add(new ColumnMetaData("Timestamp(" + zone + ")",
+				// DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage CPU", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Network In", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Network Out", DataType.NUMERIC));
@@ -116,14 +120,10 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
-				String token = new String(TestDataSource.this.loadBlob("accessToken"));
-	
-			//String zone = new String(TestDataSource.this.loadBlob("zone"));
-				String VMachine = VirtualMachine.getLiveDetails(token);
-				JsonElement je = new JsonParser().parse(VMachine);
+				String nodeData = new String(TestDataSource.this.loadBlob("VMACHINEL"));
+				JsonElement je = new JsonParser().parse(nodeData);
 				JsonArray ja = je.getAsJsonArray();
-				saveBlob("VMACHINELIVE", VMachine.getBytes());
-				String nodeData = new String(TestDataSource.this.loadBlob("VMACHINELIVE"));
+				
 
 				Configuration conf = Configuration.defaultConfiguration()
 						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
@@ -168,24 +168,27 @@ public class TestDataSource extends AbstractDataSource {
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
-						} /*else if (((ColumnMetaData) columns.get(j)).getColumnName()
-								.equals("Timestamp(" + zone + ")")) {
-							val = tt.read("$.[" + i + "].['Timestamp']");
-							String timestamp = val.toString();
-							DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-							utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-							Date date = null;
-							try {
-								date = utcFormat.parse(timestamp);
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-							DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
-							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
-							data[i][j] = ts;
-						}*/ else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage CPU")) {
+						} /*
+							 * else if (((ColumnMetaData)
+							 * columns.get(j)).getColumnName()
+							 * .equals("Timestamp(" + zone + ")")) { val =
+							 * tt.read("$.[" + i + "].['Timestamp']"); String
+							 * timestamp = val.toString(); DateFormat utcFormat
+							 * = new
+							 * SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+							 * utcFormat.setTimeZone(TimeZone.getTimeZone("UTC")
+							 * );
+							 * 
+							 * Date date = null; try { date =
+							 * utcFormat.parse(timestamp); } catch
+							 * (ParseException e) { e.printStackTrace(); }
+							 * DateFormat pstFormat = new
+							 * SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							 * pstFormat.setTimeZone(TimeZone.getTimeZone(zone))
+							 * ; Timestamp ts =
+							 * Timestamp.valueOf(pstFormat.format(date));
+							 * data[i][j] = ts; }
+							 */ else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage CPU")) {
 							val = tt.read("$.[" + i + "].['Percentage CPU']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Network In")) {
@@ -228,8 +231,8 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-				
-				//cm.add(new ColumnMetaData("Subscription ID", DataType.TEXT));
+
+				// cm.add(new ColumnMetaData("Subscription ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Type", DataType.TEXT));
 				cm.add(new ColumnMetaData("Location", DataType.TEXT));
@@ -264,49 +267,52 @@ public class TestDataSource extends AbstractDataSource {
 				DocumentContext tt = JsonPath.using(conf).parse(nodeData);
 
 				Object[][] data = (Object[][]) null;
-				int y = 0,x=0;
-				for(int k = 1; k<=jo.size(); k++){
-				JsonArray ja = jo.getAsJsonArray(""+k+"");
-				y = ja.size();
-				x = y+x;
+				int y = 0, x = 0;
+				for (int k = 1; k <= jo.size(); k++) {
+					JsonArray ja = jo.getAsJsonArray("" + k + "");
+					y = ja.size();
+					x = y + x;
 				}
-				data = new Object[x][columns.size()];                  
+				data = new Object[x][columns.size()];
 
-
-			Object val = null;
-			int p = 0,i;
-			for(int k = 1; k<=jo.size(); k++){
-				JsonArray ja = jo.getAsJsonArray(""+k+"");
-				for (i=0; i < ja.size(); i++) {
-					for (int j = 0; j < columns.size(); j++) {
-/*						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Subscription ID")) {
-							val = tt.read("$.['value'].[" + i + "].['id']");
-							data[i][j] = val.toString();
-						}*/if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Name")) {
-							val = tt.read("$.['"+k+"'].[" + i + "].['name']");
-							data[p][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Type")) {
-							val = tt.read("$.['"+k+"'].[" + i + "].['type']");
-							String str = val.toString().substring(val.toString().lastIndexOf("/") + 1);
-							String output = str.substring(0, 1).toUpperCase() + str.substring(1);
-							data[p][j] = output;
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Location")) {
-							val = tt.read("$.['"+k+"'].[" + i + "].['location']");
-							data[p][j] = val.toString();
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Group String")) {
-							val = tt.read("$.['"+k+"'].[" + i + "].['id']");
-							data[p][j] = val.toString();
-							String str = val.toString();
-							Pattern pat = Pattern.compile("resourceGroups/(.*?)/providers");
-							Matcher m = pat.matcher(str);
-							while (m.find()) {
-								data[p][j] = m.group(1);
+				Object val = null;
+				int p = 0, i;
+				for (int k = 1; k <= jo.size(); k++) {
+					JsonArray ja = jo.getAsJsonArray("" + k + "");
+					for (i = 0; i < ja.size(); i++) {
+						for (int j = 0; j < columns.size(); j++) {
+							/*
+							 * if (((ColumnMetaData)
+							 * columns.get(j)).getColumnName().
+							 * equals("Subscription ID")) { val =
+							 * tt.read("$.['value'].[" + i + "].['id']");
+							 * data[i][j] = val.toString(); }
+							 */if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Name")) {
+								val = tt.read("$.['" + k + "'].[" + i + "].['name']");
+								data[p][j] = val.toString();
+							} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Type")) {
+								val = tt.read("$.['" + k + "'].[" + i + "].['type']");
+								String str = val.toString().substring(val.toString().lastIndexOf("/") + 1);
+								String output = str.substring(0, 1).toUpperCase() + str.substring(1);
+								data[p][j] = output;
+							} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Location")) {
+								val = tt.read("$.['" + k + "'].[" + i + "].['location']");
+								data[p][j] = val.toString();
+							} else if (((ColumnMetaData) columns.get(j)).getColumnName()
+									.equals("Resource Group String")) {
+								val = tt.read("$.['" + k + "'].[" + i + "].['id']");
+								data[p][j] = val.toString();
+								String str = val.toString();
+								Pattern pat = Pattern.compile("resourceGroups/(.*?)/providers");
+								Matcher m = pat.matcher(str);
+								while (m.find()) {
+									data[p][j] = m.group(1);
+								}
 							}
 						}
+						p++;
 					}
-					p++;
 				}
-			}
 				return data;
 			}
 		};
@@ -326,7 +332,8 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-				//String zone = new String(TestDataSource.this.loadBlob("zone"));
+				// String zone = new
+				// String(TestDataSource.this.loadBlob("zone"));
 				cm.add(new ColumnMetaData("VmID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Type", DataType.TEXT));
 				cm.add(new ColumnMetaData("OS Type", DataType.TEXT));
@@ -334,7 +341,8 @@ public class TestDataSource extends AbstractDataSource {
 				cm.add(new ColumnMetaData("Location", DataType.TEXT));
 				cm.add(new ColumnMetaData("Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
-				//cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
+				// cm.add(new ColumnMetaData("Timestamp(" + zone + ")",
+				// DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage CPU", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Network In", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Network Out", DataType.NUMERIC));
@@ -358,14 +366,9 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
-				String token = new String(TestDataSource.this.loadBlob("accessToken"));
-				//String zone = new String(TestDataSource.this.loadBlob("zone"));
-				new VirtualMachine();
-				String VMachine = VirtualMachine.getDetails(token);
-				JsonElement je = new JsonParser().parse(VMachine);
-				JsonArray ja = je.getAsJsonArray();
-				TestDataSource.this.saveBlob("VMACHINE", VMachine.getBytes());
 				String nodeData = new String(TestDataSource.this.loadBlob("VMACHINE"));
+				JsonElement je = new JsonParser().parse(nodeData);
+				JsonArray ja = je.getAsJsonArray();
 
 				Configuration conf = Configuration.defaultConfiguration()
 						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
@@ -393,7 +396,7 @@ public class TestDataSource extends AbstractDataSource {
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Location")) {
 							val = tt.read("$.[" + i + "].['Location']");
 							data[i][j] = val.toString();
-						}  else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Name")) {
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Name")) {
 							val = tt.read("$.[" + i + "].['Name']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp(UTC)")) {
@@ -407,24 +410,27 @@ public class TestDataSource extends AbstractDataSource {
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
-						} /*else if (((ColumnMetaData) columns.get(j)).getColumnName()
-								.equals("Timestamp(" + zone + ")")) {
-							val = tt.read("$.[" + i + "].['Timestamp']");
-							String timestamp = val.toString();
-							DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-							utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-							Date date = null;
-							try {
-								date = utcFormat.parse(timestamp);
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-							DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
-							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
-							data[i][j] = ts;
-						}*/ else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage CPU")) {
+						} /*
+							 * else if (((ColumnMetaData)
+							 * columns.get(j)).getColumnName()
+							 * .equals("Timestamp(" + zone + ")")) { val =
+							 * tt.read("$.[" + i + "].['Timestamp']"); String
+							 * timestamp = val.toString(); DateFormat utcFormat
+							 * = new
+							 * SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+							 * utcFormat.setTimeZone(TimeZone.getTimeZone("UTC")
+							 * );
+							 * 
+							 * Date date = null; try { date =
+							 * utcFormat.parse(timestamp); } catch
+							 * (ParseException e) { e.printStackTrace(); }
+							 * DateFormat pstFormat = new
+							 * SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							 * pstFormat.setTimeZone(TimeZone.getTimeZone(zone))
+							 * ; Timestamp ts =
+							 * Timestamp.valueOf(pstFormat.format(date));
+							 * data[i][j] = ts; }
+							 */ else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Percentage CPU")) {
 							val = tt.read("$.[" + i + "].['Percentage CPU']");
 							data[i][j] = new BigDecimal(val.toString());
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Network In")) {
@@ -467,12 +473,14 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-				//String zone = new String(TestDataSource.this.loadBlob("zone"));
-				//cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
+				// String zone = new
+				// String(TestDataSource.this.loadBlob("zone"));
+				// cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Group", DataType.TEXT));
 				cm.add(new ColumnMetaData("Database Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
-				//cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
+				// cm.add(new ColumnMetaData("Timestamp(" + zone + ")",
+				// DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage DTU", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("CPU percentage", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Log IO percentage", DataType.NUMERIC));
@@ -493,13 +501,9 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
-				//String zone = new String(TestDataSource.this.loadBlob("zone"));
-				String token = new String(loadBlob("accessToken"));
-				String database = Databases.getDetails(token);
-				JsonElement je = new JsonParser().parse(database);
-				JsonArray ja = je.getAsJsonArray();
-				TestDataSource.this.saveBlob("DATA", database.getBytes());
 				String nodeData = new String(TestDataSource.this.loadBlob("DATA"));
+				JsonElement je = new JsonParser().parse(nodeData);
+				JsonArray ja = je.getAsJsonArray();
 
 				Configuration conf = Configuration.defaultConfiguration()
 						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
@@ -512,10 +516,12 @@ public class TestDataSource extends AbstractDataSource {
 				Object val = null;
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
-/*						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource ID")) {
-							val = tt.read("$.[" + i + "].['Resource ID']");
-							data[i][j] = val.toString();
-						}*/
+						/*
+						 * if (((ColumnMetaData)
+						 * columns.get(j)).getColumnName().equals("Resource ID"
+						 * )) { val = tt.read("$.[" + i + "].['Resource ID']");
+						 * data[i][j] = val.toString(); }
+						 */
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Group")) {
 							val = tt.read("$.[" + i + "].['Resource Group']");
 							data[i][j] = val.toString();
@@ -535,7 +541,7 @@ public class TestDataSource extends AbstractDataSource {
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Data IO percentage")) {
 							val = tt.read("$.[" + i + "].['Data IO percentage']");
 							data[i][j] = new Float(val.toString());
-						}  else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp(UTC)")) {
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp(UTC)")) {
 							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
 							SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -546,23 +552,25 @@ public class TestDataSource extends AbstractDataSource {
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
-						}/* else if (((ColumnMetaData) columns.get(j)).getColumnName()
-								.equals("Timestamp(" + zone + ")")) {
-							val = tt.read("$.[" + i + "].['Timestamp']");
-							String timestamp = val.toString();
-							DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-							utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-							Date date = null;
-							try {
-								date = utcFormat.parse(timestamp);
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-							DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
-							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
-							data[i][j] = ts;
-						}*/
+						} /*
+							 * else if (((ColumnMetaData)
+							 * columns.get(j)).getColumnName()
+							 * .equals("Timestamp(" + zone + ")")) { val =
+							 * tt.read("$.[" + i + "].['Timestamp']"); String
+							 * timestamp = val.toString(); DateFormat utcFormat
+							 * = new
+							 * SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+							 * utcFormat.setTimeZone(TimeZone.getTimeZone("UTC")
+							 * ); Date date = null; try { date =
+							 * utcFormat.parse(timestamp); } catch
+							 * (ParseException e) { e.printStackTrace(); }
+							 * DateFormat pstFormat = new
+							 * SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							 * pstFormat.setTimeZone(TimeZone.getTimeZone(zone))
+							 * ; Timestamp ts =
+							 * Timestamp.valueOf(pstFormat.format(date));
+							 * data[i][j] = ts; }
+							 */
 					}
 				}
 				return data;
@@ -584,13 +592,15 @@ public class TestDataSource extends AbstractDataSource {
 
 			public ArrayList<ColumnMetaData> getColumns() {
 				ArrayList<ColumnMetaData> cm = new ArrayList();
-				//String zone = new String(TestDataSource.this.loadBlob("zone"));
-				//cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
+				// String zone = new
+				// String(TestDataSource.this.loadBlob("zone"));
+				// cm.add(new ColumnMetaData("Resource ID", DataType.TEXT));
 				cm.add(new ColumnMetaData("Resource Group", DataType.TEXT));
 				cm.add(new ColumnMetaData("Database Name", DataType.TEXT));
 				cm.add(new ColumnMetaData("Status", DataType.TEXT));
 				cm.add(new ColumnMetaData("Timestamp(UTC)", DataType.TIMESTAMP));
-				//cm.add(new ColumnMetaData("Timestamp(" + zone + ")", DataType.TIMESTAMP));
+				// cm.add(new ColumnMetaData("Timestamp(" + zone + ")",
+				// DataType.TIMESTAMP));
 				cm.add(new ColumnMetaData("Percentage DTU", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("CPU percentage", DataType.NUMERIC));
 				cm.add(new ColumnMetaData("Log IO percentage", DataType.NUMERIC));
@@ -611,14 +621,9 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
-				//String zone = new String(TestDataSource.this.loadBlob("zone"));
-				String token = new String(loadBlob("accessToken"));
-				String database = Databases.getLiveDetails(token);
-				JsonElement je = new JsonParser().parse(database);
+				String nodeData = new String(TestDataSource.this.loadBlob("DATAL"));
+				JsonElement je = new JsonParser().parse(nodeData);
 				JsonArray ja = je.getAsJsonArray();
-				TestDataSource.this.saveBlob("DATA", database.getBytes());
-				String nodeData = new String(TestDataSource.this.loadBlob("DATA"));
-
 				Configuration conf = Configuration.defaultConfiguration()
 						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
 						.addOptions(new Option[] { Option.SUPPRESS_EXCEPTIONS });
@@ -630,10 +635,12 @@ public class TestDataSource extends AbstractDataSource {
 				Object val = null;
 				for (int i = 0; i < ja.size(); i++) {
 					for (int j = 0; j < columns.size(); j++) {
-/*						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource ID")) {
-							val = tt.read("$.[" + i + "].['Resource ID']");
-							data[i][j] = val.toString();
-						}*/
+						/*
+						 * if (((ColumnMetaData)
+						 * columns.get(j)).getColumnName().equals("Resource ID"
+						 * )) { val = tt.read("$.[" + i + "].['Resource ID']");
+						 * data[i][j] = val.toString(); }
+						 */
 						if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Resource Group")) {
 							val = tt.read("$.[" + i + "].['Resource Group']");
 							data[i][j] = val.toString();
@@ -644,7 +651,7 @@ public class TestDataSource extends AbstractDataSource {
 							val = tt.read("$.[" + i + "].['Resource ID']");
 							String str = val.toString();
 							data[i][j] = str.substring(str.lastIndexOf("/") + 1);
-						}else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Status")) {
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Status")) {
 							val = tt.read("$.[" + i + "].['Status']");
 							data[i][j] = val.toString();
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("CPU percentage")) {
@@ -656,7 +663,7 @@ public class TestDataSource extends AbstractDataSource {
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Data IO percentage")) {
 							val = tt.read("$.[" + i + "].['Data IO percentage']");
 							data[i][j] = new Float(val.toString());
-						}  else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp(UTC)")) {
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Timestamp(UTC)")) {
 							val = tt.read("$.[" + i + "].['Timestamp']");
 							String timestamp = val.toString();
 							SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -667,23 +674,25 @@ public class TestDataSource extends AbstractDataSource {
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
-						} /*else if (((ColumnMetaData) columns.get(j)).getColumnName()
-								.equals("Timestamp(" + zone + ")")) {
-							val = tt.read("$.[" + i + "].['Timestamp']");
-							String timestamp = val.toString();
-							DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-							utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-							Date date = null;
-							try {
-								date = utcFormat.parse(timestamp);
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-							DateFormat pstFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							pstFormat.setTimeZone(TimeZone.getTimeZone(zone));
-							Timestamp ts = Timestamp.valueOf(pstFormat.format(date));
-							data[i][j] = ts;
-						}*/
+						} /*
+							 * else if (((ColumnMetaData)
+							 * columns.get(j)).getColumnName()
+							 * .equals("Timestamp(" + zone + ")")) { val =
+							 * tt.read("$.[" + i + "].['Timestamp']"); String
+							 * timestamp = val.toString(); DateFormat utcFormat
+							 * = new
+							 * SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+							 * utcFormat.setTimeZone(TimeZone.getTimeZone("UTC")
+							 * ); Date date = null; try { date =
+							 * utcFormat.parse(timestamp); } catch
+							 * (ParseException e) { e.printStackTrace(); }
+							 * DateFormat pstFormat = new
+							 * SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							 * pstFormat.setTimeZone(TimeZone.getTimeZone(zone))
+							 * ; Timestamp ts =
+							 * Timestamp.valueOf(pstFormat.format(date));
+							 * data[i][j] = ts; }
+							 */
 					}
 				}
 				return data;
@@ -726,7 +735,7 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
-				
+
 				String nodeData = new String(TestDataSource.this.loadBlob("BILL"));
 				JsonElement je = new JsonParser().parse(nodeData);
 				JsonArray ja = je.getAsJsonArray();
@@ -784,7 +793,7 @@ public class TestDataSource extends AbstractDataSource {
 		};
 		return simpleDataSet;
 	}
-	
+
 	private AbstractDataSet RBilling() {
 		AbstractDataSet simpleDataSet = new AbstractDataSet() {
 			public ArrayList<FilterMetaData> getFilters() {
@@ -853,10 +862,11 @@ public class TestDataSource extends AbstractDataSource {
 						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Billable Units")) {
 							val = tt.read("$.[" + i + "].['Billable Units']");
 							data[i][j] = new BigDecimal(val.toString());
-						} else if (((ColumnMetaData) columns.get(j)).getColumnName().equals("Pre-Tax Cost(" + currency + ")")) {
+						} else if (((ColumnMetaData) columns.get(j)).getColumnName()
+								.equals("Pre-Tax Cost(" + currency + ")")) {
 							val = tt.read("$.[" + i + "].['Pre-Tax Cost']");
 							data[i][j] = new BigDecimal(val.toString());
-						} 
+						}
 					}
 				}
 				return data;
@@ -864,7 +874,6 @@ public class TestDataSource extends AbstractDataSource {
 		};
 		return simpleDataSet;
 	}
-
 
 	public JDBCMetaData getDataSourceMetaData() {
 		return new TestSourceMetaData();
@@ -881,7 +890,7 @@ public class TestDataSource extends AbstractDataSource {
 		Map<String, Object> p = new HashMap();
 		try {
 			String authCode = (String) getAttribute("CODE");
-			//String zone = (String) getAttribute("SELECTOR");
+			// String zone = (String) getAttribute("SELECTOR");
 			String currency = (String) getAttribute("SELECTOR1");
 			String months = (String) getAttribute("MONTHS");
 			String Locale = (String) getAttribute("SELECTOR2");
@@ -897,13 +906,14 @@ public class TestDataSource extends AbstractDataSource {
 					saveBlob("accessToken", accessToken.getBytes());
 					saveBlob("refreshToken", refreshToken.getBytes());
 					saveBlob("currency", currency.getBytes());
-					//saveBlob("zone", zone.getBytes());
+					// saveBlob("zone", zone.getBytes());
 					saveBlob("months", months.getBytes());
 					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
 					saveBlob("Offer", Offer.getBytes());
-					if(saveBlob("accessToken", accessToken.getBytes()) && saveBlob("months", months.getBytes())){
-						autoRun();} 		
+					if (saveBlob("accessToken", accessToken.getBytes()) && saveBlob("months", months.getBytes())) {
+						autoRun();
+					}
 				}
 				if (AzureAuth.authCheck(authCode) != 200) {
 					String ref = new String(TestDataSource.this.loadBlob("refreshToken"));
@@ -911,7 +921,7 @@ public class TestDataSource extends AbstractDataSource {
 					saveBlob("accessToken", accessToken.getBytes());
 					saveBlob("refreshToken", ref.getBytes());
 					saveBlob("currency", currency.getBytes());
-					//saveBlob("zone", zone.getBytes());
+					// saveBlob("zone", zone.getBytes());
 					saveBlob("months", months.getBytes());
 					saveBlob("Locale", Locale.getBytes());
 					saveBlob("Region", Region.getBytes());
@@ -959,24 +969,32 @@ public class TestDataSource extends AbstractDataSource {
 	}
 
 	public boolean autoRun() {
-		
-		
+
 		System.out.println("Auto running Test data source");
 		try {
-		    String bill = new String(TestDataSource.this.loadBlob("BILL"));
+			String bill = new String(TestDataSource.this.loadBlob("BILL"));
 		} catch (Exception e) {
 			// TODO: handle exception
-		
-		String token = new String(TestDataSource.this.loadBlob("accessToken"));
-		String months = new String(TestDataSource.this.loadBlob("months"));
-		String currency = new String(TestDataSource.this.loadBlob("currency"));
-		String locale = new String(TestDataSource.this.loadBlob("Locale"));
-		String region = new String(TestDataSource.this.loadBlob("Region"));
-		String offer = new String(TestDataSource.this.loadBlob("Offer"));
-		String RBill = com.yf.utils.Billing.getRBilling(token, currency, locale, region, offer);
-		String Bill = NewBilling.getBilling(token, months);
-		saveBlob("BILL", Bill.getBytes());
-		saveBlob("RBILL", RBill.getBytes());
+
+			String token = new String(loadBlob("accessToken"));
+			String months = new String(TestDataSource.this.loadBlob("months"));
+			String currency = new String(TestDataSource.this.loadBlob("currency"));
+			String locale = new String(TestDataSource.this.loadBlob("Locale"));
+			String region = new String(TestDataSource.this.loadBlob("Region"));
+			String offer = new String(TestDataSource.this.loadBlob("Offer"));
+			String RBill = com.yf.utils.Billing.getRBilling(token, currency, locale, region, offer);
+			String Bill = NewBilling.getBilling(token, months);
+			String VMachineL = VirtualMachine.getLiveDetails(token);
+			String VMachine = VirtualMachine.getDetails(token);
+			String database = Databases.getLiveDetails(token);
+			String databaseL = Databases.getDetails(token);
+			saveBlob("BILL", Bill.getBytes());
+			saveBlob("RBILL", RBill.getBytes());
+			saveBlob("VMACHINE", VMachine.getBytes());
+			saveBlob("VMACHINEL", VMachineL.getBytes());
+            saveBlob("DATA", database.getBytes());
+            saveBlob("DATAL", databaseL.getBytes());
+            
 		}
 		saveBlob("LASTRUN", new Date(System.currentTimeMillis()).toLocaleString().getBytes());
 
