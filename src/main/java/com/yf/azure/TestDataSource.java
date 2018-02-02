@@ -971,6 +971,13 @@ public class TestDataSource extends AbstractDataSource {
 	public boolean autoRun() {
 
 		System.out.println("Auto running Test data source");
+		
+		boolean useonlyfortransform = Boolean.valueOf((String)getAttribute("USEFORTRANSFORMATIONS"));
+		if (!useonlyfortransform){
+			
+			boolean onlylatest = Boolean.valueOf((String)getAttribute("ONLYLATEST"));
+			
+		}
 		try {
 			String bill = new String(TestDataSource.this.loadBlob("BILL"));
 		} catch (Exception e) {
@@ -986,15 +993,14 @@ public class TestDataSource extends AbstractDataSource {
 			String Bill = NewBilling.getBilling(token, months);
 			String VMachineL = VirtualMachine.getLiveDetails(token);
 			String VMachine = VirtualMachine.getDetails(token);
-			String database = Databases.getLiveDetails(token);
-			String databaseL = Databases.getDetails(token);
+			String database = Databases.getDetails(token);
+			String databaseL = Databases.getLiveDetails(token);
 			saveBlob("BILL", Bill.getBytes());
 			saveBlob("RBILL", RBill.getBytes());
 			saveBlob("VMACHINE", VMachine.getBytes());
 			saveBlob("VMACHINEL", VMachineL.getBytes());
             saveBlob("DATA", database.getBytes());
-            saveBlob("DATAL", databaseL.getBytes());
-            
+            saveBlob("DATAL", databaseL.getBytes());   
 		}
 		saveBlob("LASTRUN", new Date(System.currentTimeMillis()).toLocaleString().getBytes());
 
