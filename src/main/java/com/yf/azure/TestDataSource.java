@@ -323,6 +323,20 @@ public class TestDataSource extends AbstractDataSource {
 		AbstractDataSet simpleDataSet = new AbstractDataSet() {
 			public ArrayList<FilterMetaData> getFilters() {
 				ArrayList<FilterMetaData> fm = new ArrayList();
+				boolean usefortransform = false;
+				
+				try {
+
+					usefortransform = isTransformationContext();
+
+				} catch (NoSuchMethodError e) {
+
+
+				}
+				if (usefortransform)
+				{
+                          
+				}
 				return fm;
 			}
 
@@ -459,6 +473,7 @@ public class TestDataSource extends AbstractDataSource {
 		};
 		return simpleDataSet;
 	}
+
 
 	private AbstractDataSet database() {
 		AbstractDataSet simpleDataSet = new AbstractDataSet() {
@@ -1004,6 +1019,11 @@ public class TestDataSource extends AbstractDataSource {
 		}
 		saveBlob("LASTRUN", new Date(System.currentTimeMillis()).toLocaleString().getBytes());
 
+		return true;
+	}
+	
+	public boolean isTransformationCompatible()
+	{
 		return true;
 	}
 }

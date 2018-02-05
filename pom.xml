@@ -73,13 +73,13 @@
 		<dependency>
 			<groupId>me.kamal.yf</groupId>
 			<artifactId>i4-mi</artifactId>
-			<version>7.3</version>
+			<version>7.4</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>me.kamal.yf</groupId>
 			<artifactId>i4-core</artifactId>
-			<version>7.3</version>
+			<version>7.4</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
