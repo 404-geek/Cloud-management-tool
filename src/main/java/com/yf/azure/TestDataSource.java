@@ -988,10 +988,9 @@ public class TestDataSource extends AbstractDataSource {
 		System.out.println("Auto running Test data source");
 		
 		boolean useonlyfortransform = Boolean.valueOf((String)getAttribute("USEFORTRANSFORMATIONS"));
-		if (!useonlyfortransform){
+		if (useonlyfortransform){
 			
-			boolean onlylatest = Boolean.valueOf((String)getAttribute("ONLYLATEST"));
-			
+			System.out.println("..................................Usedfortransformation..................................");
 		}
 		try {
 			String bill = new String(TestDataSource.this.loadBlob("BILL"));
@@ -1018,7 +1017,6 @@ public class TestDataSource extends AbstractDataSource {
             saveBlob("DATAL", databaseL.getBytes());   
 		}
 		saveBlob("LASTRUN", new Date(System.currentTimeMillis()).toLocaleString().getBytes());
-
 		return true;
 	}
 	
