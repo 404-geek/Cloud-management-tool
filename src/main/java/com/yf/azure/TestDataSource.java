@@ -1013,15 +1013,9 @@ public class TestDataSource extends AbstractDataSource {
 			saveBlob("BILL", Bill.getBytes());
 			saveBlob("RBILL", RBill.getBytes());
 			saveBlob("VMACHINE", VMachine.getBytes());
-<<<<<<< HEAD
-            saveBlob("DATA", database.getBytes());  
-=======
-			saveBlob("VMACHINEL", VMachineL.getBytes());
+            saveBlob("DATA", database.getBytes()); 
             saveBlob("DATA", database.getBytes());
-            saveBlob("DATAL", databaseL.getBytes());
             
-            
->>>>>>> b465b1dcd53c4fa61a3e97b4bc0c27fd43e8449a
 		}
 		saveBlob("LASTRUN", new Date(System.currentTimeMillis()).toLocaleString().getBytes());
 		return true;
