@@ -120,11 +120,13 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
+				String token = new String(loadBlob("accessToken"));
+				String vmachinel = VirtualMachine.getLiveDetails(token);
+				saveBlob("VMACHINEL", vmachinel.getBytes());
 				String nodeData = new String(TestDataSource.this.loadBlob("VMACHINEL"));
 				JsonElement je = new JsonParser().parse(nodeData);
 				JsonArray ja = je.getAsJsonArray();
-				
-
+			
 				Configuration conf = Configuration.defaultConfiguration()
 						.addOptions(new Option[] { Option.DEFAULT_PATH_LEAF_TO_NULL })
 						.addOptions(new Option[] { Option.SUPPRESS_EXCEPTIONS });
@@ -636,6 +638,9 @@ public class TestDataSource extends AbstractDataSource {
 				if (TestDataSource.this.loadBlob("LASTRUN") == null) {
 					throw new ThirdPartyException("Database is not yet populated");
 				}
+				String token = new String(loadBlob("accessToken"));
+				String datal = Databases.getLiveDetails(token);
+				saveBlob("DATAL", datal.getBytes());
 				String nodeData = new String(TestDataSource.this.loadBlob("DATAL"));
 				JsonElement je = new JsonParser().parse(nodeData);
 				JsonArray ja = je.getAsJsonArray();
@@ -1005,16 +1010,12 @@ public class TestDataSource extends AbstractDataSource {
 			String offer = new String(TestDataSource.this.loadBlob("Offer"));
 			String RBill = com.yf.utils.Billing.getRBilling(token, currency, locale, region, offer);
 			String Bill = NewBilling.getBilling(token, months);
-			String VMachineL = VirtualMachine.getLiveDetails(token);
 			String VMachine = VirtualMachine.getDetails(token);
 			String database = Databases.getDetails(token);
-			String databaseL = Databases.getLiveDetails(token);
 			saveBlob("BILL", Bill.getBytes());
 			saveBlob("RBILL", RBill.getBytes());
 			saveBlob("VMACHINE", VMachine.getBytes());
-			saveBlob("VMACHINEL", VMachineL.getBytes());
-            saveBlob("DATA", database.getBytes());
-            saveBlob("DATAL", databaseL.getBytes());   
+            saveBlob("DATA", database.getBytes());  
 		}
 		saveBlob("LASTRUN", new Date(System.currentTimeMillis()).toLocaleString().getBytes());
 		return true;
