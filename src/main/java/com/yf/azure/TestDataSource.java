@@ -47,8 +47,6 @@ public class TestDataSource extends AbstractDataSource {
 
 	static Logger LOGGER = Logger.getLogger(AbstractDataSource.class.getName());
 
-	// static String ref =
-	// "AQABAAAAAABHh4kmS_aKT5XrjzxRAtHzSSkfsTHPh0x2caD5R3YHGBEd6CVwoO_sN9uHqwau4rR8Y42xAX4yIV_LjSPrnyfR0An5ABGlH99TmJNuvX65UE3j_s5zq6M-zmJqW00fXvH1KBlEqoE-2COvfWmgejXZtSAd5IMhmcgh5fZUBMgGoqCwyQXAHjKyhbTKZRB2zmDVUgyltKndTq_Oc_1vEInm9KB-zPGM4INV755X7O0dl26z7hu51EQ5dOXrWwGtnjAGiKH6vO4TDmX0uE0RAYUAxAnhqExXywZl5dnkN-SfrK2iQqF0W2Bj0bu2AKKXB7O3pxutf3OK9zJnX7jF3n1G5ajsiaQ1rtdAJeQPTEhTv2fBTmEbOOCpO9hQfyD9kdInTK1WgYVSdaEmkGhBrOkI2_kJWnySyCG0rI3rg8FcLqknNN_uqMAoEJmwbhryWNHFQETCTP7azgIxlthVWnl6OGK0qBWSgbdfMSaSsgxOUB8-2UTN6Rkmjpf7aZXbmgKpMFEN2vvBaaqLB-d_nKl6OfTjIjWd39KyrlLewNV3LE2qhuANZ24s5IeeOafFJ7HKSHvykLhp7L138gyRXrm7fsBkM7Dgt-kGYujjVIKGTl_NRQp4oHt9b0DKZhMTR7rgheC9pTHrDG1RL-y4sHIXA99p3HGT8JJC6YV4Y0zVXmKhr5vDdzpXKt6deelOnjtvtK3piij4NU6uOZlh0AxyPO7A218es4AbGeiqlQckBlKFB328vk9vfhQP-I4ChdmQtai29xByuPgIUJ3T2mqdO2JJy0Rit8Fxp8Lqq997FSAA";
 	public String getDataSourceName() {
 		return "Azure";
 	}
@@ -1015,7 +1013,15 @@ public class TestDataSource extends AbstractDataSource {
 			saveBlob("BILL", Bill.getBytes());
 			saveBlob("RBILL", RBill.getBytes());
 			saveBlob("VMACHINE", VMachine.getBytes());
+<<<<<<< HEAD
             saveBlob("DATA", database.getBytes());  
+=======
+			saveBlob("VMACHINEL", VMachineL.getBytes());
+            saveBlob("DATA", database.getBytes());
+            saveBlob("DATAL", databaseL.getBytes());
+            
+            
+>>>>>>> b465b1dcd53c4fa61a3e97b4bc0c27fd43e8449a
 		}
 		saveBlob("LASTRUN", new Date(System.currentTimeMillis()).toLocaleString().getBytes());
 		return true;
