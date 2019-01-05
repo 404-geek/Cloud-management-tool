@@ -1,2 +1,2 @@
-# Azure-YFconnector
-Yellowfin Azure Connector
+# Azure-connector
+Azure Connector
